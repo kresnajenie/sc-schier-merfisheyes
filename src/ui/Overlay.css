@@ -1,0 +1,26 @@
+/* /src/ui/Overlay.css */
+
+.overlay {
+    position: absolute;
+    top: 60px; /* Adjust the top value so it appears below the navbar */
+    left: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    z-index: 1000;
+}
+
+#dragButton {
+    cursor: move;
+}
+
+.resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    cursor: nwse-resize;
+}
