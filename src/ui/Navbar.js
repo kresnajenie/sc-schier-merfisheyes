@@ -1,18 +1,95 @@
-import './Navbar.css';
+import { createDropdown } from "./Dropdown";
 
 export function createNavbar() {
-    // Create a navbar container
-    const navbar = document.createElement('nav');
-    navbar.id = 'main-navbar';
-    navbar.className = 'navbar';
+    const navContainer = document.createElement('nav');
+    navContainer.className = 'navbar navbar-expand-lg navbar-dark bg-dark';
 
-    // Add content to the navbar
-    const homeLink = document.createElement('a');
-    homeLink.href = '#';
-    homeLink.textContent = 'Home';
-    navbar.appendChild(homeLink);
+    const containerFluid = document.createElement('div');
+    containerFluid.className = 'container-fluid nav-container';
 
-    // Add more links or content as needed...
+    containerFluid.appendChild(createTitle());
+    containerFluid.appendChild(createToggleButton());
+    containerFluid.appendChild(createCollapseDiv());
 
-    return navbar;
+    navContainer.appendChild(containerFluid);
+
+    return navContainer;
+}
+
+function createTitle() {
+    const titleDiv = document.createElement('div');
+    titleDiv.id = 'title';
+
+    const titleLink = document.createElement('a');
+    titleLink.className = 'navbar-brand';
+    titleLink.href = '/#';
+    titleLink.innerHTML = '<b>FISHEYES</b>';
+
+    const titleParagraph = document.createElement('p');
+    titleParagraph.innerHTML = 'by <i>Bintu Lab</i>, data by <i>Schier Lab</i>';
+
+    titleDiv.appendChild(titleLink);
+    titleDiv.appendChild(titleParagraph);
+
+    return titleDiv;
+}
+
+function createToggleButton() {
+    const toggleButton = document.createElement('button');
+    toggleButton.className = 'navbar-toggler';
+    toggleButton.type = 'button';
+    toggleButton.dataset.bsToggle = 'collapse';
+    toggleButton.dataset.bsTarget = '#navbarNav';
+    toggleButton.setAttribute('aria-controls', 'navbarNav');
+    toggleButton.setAttribute('aria-expanded', 'false');
+    toggleButton.setAttribute('aria-label', 'Toggle navigation');
+    toggleButton.innerHTML = '<span class="navbar-toggler-icon"></span>';
+
+    return toggleButton;
+}
+
+function createCollapseDiv() {
+    const collapseDiv = document.createElement('div');
+    collapseDiv.className = 'collapse navbar-collapse';
+    collapseDiv.id = 'navbarNav';
+
+    const ulList = document.createElement('ul');
+    ulList.className = 'navbar-nav ml-auto';
+
+    ulList.appendChild(createDropdown());
+    ulList.appendChild(createUploadItem());
+    ulList.appendChild(createLoginItem());
+
+    collapseDiv.appendChild(ulList);
+
+    return collapseDiv;
+}
+
+function createUploadItem() {
+    const uploadLi = document.createElement('li');
+    uploadLi.className = 'nav-item';
+
+    const uploadLink = document.createElement('a');
+    uploadLink.className = 'nav-link active';
+    uploadLink.href = '#';
+    uploadLink.innerHTML = 'Upload';
+
+    uploadLi.appendChild(uploadLink);
+
+    return uploadLi;
+}
+
+function createLoginItem() {
+    const loginLi = document.createElement('li');
+    loginLi.className = 'nav-item';
+
+    const loginLink = document.createElement('a');
+    loginLink.className = 'nav-link';
+    loginLink.id = 'loginPageButton';
+    loginLink.href = 'login';
+    loginLink.innerHTML = 'Login';
+
+    loginLi.appendChild(loginLink);
+
+    return loginLi;
 }

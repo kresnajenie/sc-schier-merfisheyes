@@ -1,18 +1,8 @@
-import { SceneInitializer } from './components/SceneInitializer.js';
-import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { ApiState, updateLoadingState } from './states/GlobalState.js';
-import { createNavbar } from './ui/Navbar.js';
-import { createOverlay } from './ui/Overlay.js';
+import { SceneInitializer } from "../components/SceneInitializer.js";
+import { ApiState, updateLoadingState } from "../states/GlobalState";
+import { loadGenes, loadItems, loadPallete } from "./LoadFunctions";
 
-// Add an event listener for the hashchange event
-window.addEventListener('hashchange', () => { window.location.reload() });
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const navbar = createNavbar();
-    const overlay = createOverlay();
-
-    document.body.insertBefore(navbar, document.body.firstChild);
-    document.body.appendChild(overlay);
+export const loadAll = async () => {
 
     updateLoadingState(true); // Assume loading starts
 
@@ -40,4 +30,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         updateLoadingState(false); // Loading ends after all async operations
     }
-});
+}

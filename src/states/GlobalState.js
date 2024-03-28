@@ -1,5 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
+const hash = window.location.hash.replace("#", "");
+
 const apiData = {
     columns: [
         'X_umap0_norm',
@@ -9,8 +11,8 @@ const apiData = {
         'global_sphere2_norm',
         'clusters',
     ],
-    
-    prefix: "75pe",
+
+    prefix: hash ? hash : "50pe",
     pallete: {},
     palleteColumn: "clusters_pal",
     genes: [],
@@ -114,6 +116,26 @@ export function updateGenes(newGenes) {
     const updatedState = {
         ...currentState,
         genes: newGenes
+    };
+
+    // Emit the updated state
+    ApiState.next(updatedState);
+}
+
+/**
+ * Updates the prefix within the application's constant data state.
+ * @param {string} prefix - The new prefix to set in the state.
+ * Example Usage:
+ * updatePrefix("50pe");
+ */
+export function updatePrefix(prefix) {
+
+    const currentState = ApiState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        prefix: prefix
     };
 
     // Emit the updated state
