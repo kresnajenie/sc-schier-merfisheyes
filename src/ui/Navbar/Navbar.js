@@ -1,4 +1,6 @@
-import { createDropdown } from "./Dropdown";
+import './Navbar.css';
+
+import { createDropdown } from "../Dropdown";
 
 export function createNavbar() {
     const navContainer = document.createElement('nav');
