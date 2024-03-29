@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 const uiData = {
-    isLoading: false,
+    isLoading: true,
     theme: 'light',
 }
 

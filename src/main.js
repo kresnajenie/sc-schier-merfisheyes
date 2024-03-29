@@ -1,6 +1,8 @@
 import { SceneInitializer } from './components/SceneInitializer.js';
+import { cellSearch } from './helpers/Filtering/Celltype.js';
+import { geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { toggleCellFilter, toggleGeneFilter } from './helpers/toggleFilters.js';
+import { toggleCellFilter, toggleGeneFilter } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createFilter } from './ui/Filters/Filters.js';
@@ -21,6 +23,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // document.body.appendChild(overlay);
     document.body.appendChild(loading);
     document.body.appendChild(filter);
+
+    // for clicking on the toggles
     toggleCellFilter();
     toggleGeneFilter();
 
@@ -49,8 +53,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to load data:', err);
     } finally {
         updateLoadingState(false); // Loading ends after all async operations
-
-        loading.style.display = 'none';
-        // document.getElementById("loadingIndicator").style.display = "none";
     }
 });

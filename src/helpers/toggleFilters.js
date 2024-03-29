@@ -1,12 +1,3 @@
-
-
-const cellCheckbox = document.getElementById("cellCheckbox");
-const geneRadioContainer = document.getElementById('geneRadioContainer');
-
-const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
-const toggleGeneRadio = document.getElementById('toggleGeneRadio');
-
-// toggles the cell filter popup
 export const toggleCellFilter = () => {
 
     const cellCheckbox = document.getElementById("cellCheckbox");

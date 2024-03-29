@@ -14,6 +14,7 @@ const apiData = {
 
     prefix: hash ? hash : "50pe",
     pallete: {},
+    listPalette: [], // list version of palette
     palleteColumn: "clusters_pal",
     genes: [],
     items: []
@@ -33,10 +34,13 @@ export function updateDataPalette(newPalette) {
     // Get the current state from the BehaviorSubject
     const currentState = ApiState.getValue();
 
+    const newList = Object.keys(newPalette).map((celltype) => [celltype, newPalette[celltype]])
+
     // Update the items in the current state
     const updatedState = {
         ...currentState,
-        pallete: newPalette
+        pallete: newPalette,
+        listPalette: newList
     };
 
     // Emit the updated state
