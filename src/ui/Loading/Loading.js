@@ -27,7 +27,3 @@ export function createLoadingIndicator() {
     // Return the loading indicator container
     return loadingIndicatorContainer;
 }
-
-// To use the function and append the loading indicator to an existing element in the DOM:
-const loadingIndicator = createLoadingIndicator();
-document.body.appendChild(loadingIndicator); // Assuming you want to append it to the body

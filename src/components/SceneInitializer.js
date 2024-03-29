@@ -1,6 +1,7 @@
 // /src/components/SceneInitializer.js
 import * as THREE from 'three';
-import { ApiState, MatrixState, UIState } from '../states/GlobalState.js';
+import { MatrixState } from '../states/MatrixState.js';
+import { ApiState } from '../states/ApiState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -50,15 +51,6 @@ export class SceneInitializer {
         ).subscribe(items => {
             console.log("Prefix changed:", items);
             console.log(ApiState.value.prefix);
-        });
-        UIState.pipe(
-            map(state => state.isLoading),
-            distinctUntilChanged((prev, curr) => isEqual(prev, curr))
-        ).subscribe(items => {
-            console.log("Loading changed:", items);
-            console.log(UIState.value.isLoading);
-
-            document.getElementById("loadingIndicator").style.display = "none";
         });
     }
 

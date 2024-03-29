@@ -1,6 +1,9 @@
 import { SceneInitializer } from './components/SceneInitializer.js';
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { ApiState, UIState, updateLoadingState } from './states/GlobalState.js';
+import { toggleCellFilter, toggleGeneFilter } from './helpers/toggleFilters.js';
+import { ApiState } from './states/ApiState.js';
+import { updateLoadingState } from './states/UIState.js';
+import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createNavbar } from './ui/Navbar/Navbar.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
@@ -12,9 +15,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
     const overlay = createOverlay();
     const loading = createLoadingIndicator();
+    const filter = createFilter();
 
     document.body.insertBefore(navbar, document.body.firstChild);
-    document.body.appendChild(overlay);
+    // document.body.appendChild(overlay);
+    document.body.appendChild(loading);
+    document.body.appendChild(filter);
+    toggleCellFilter();
+    toggleGeneFilter();
 
     updateLoadingState(true); // Assume loading starts
 
@@ -41,7 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to load data:', err);
     } finally {
         updateLoadingState(false); // Loading ends after all async operations
+
         loading.style.display = 'none';
-        console.log("Loading", UIState.value.isLoading, loading.style);
+        // document.getElementById("loadingIndicator").style.display = "none";
     }
 });

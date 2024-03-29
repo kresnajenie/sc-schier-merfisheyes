@@ -19,68 +19,9 @@ const apiData = {
     items: []
 };
 
-const selectedData = {
-    selectedCelltypes: [],
-    selectedGenes: []
-}
-
-const uiData = {
-    isLoading: false,
-    theme: 'light',
-}
-
-const matrixData = {
-    items: []
-}
-
-
 
 // Create a BehaviorSubject to manage and emit state updates
-export const UIState = new BehaviorSubject(uiData);
 export const ApiState = new BehaviorSubject(apiData);
-export const SelectedState = new BehaviorSubject(selectedData);
-export const MatrixState = new BehaviorSubject(matrixData);
-
-/**
- * Updates the items within the application's data state.
- * @param {Array} newItems - The new items to set in the state.
- * Example Usage:
- * updateDataItems([{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }]);
- */
-export function updateDataItems(newItems) {
-    // Get the current state from the BehaviorSubject
-    const currentState = MatrixState.getValue();
-
-    // Update the items in the current state
-    const updatedState = {
-        ...currentState,
-        items: newItems
-    };
-
-    // Emit the updated state
-    MatrixState.next(updatedState);
-}
-
-/**
- * Updates the loading state within the UI state.
- * @param {boolean} isLoading - The new loading state to set.
- * Example Usage:
- * updateLoadingState(true); // To indicate loading has started
- * updateLoadingState(false); // To indicate loading has finished
- */
-export function updateLoadingState(isLoading) {
-    // Get the current state from the BehaviorSubject
-    const currentState = UIState.getValue();
-
-    // Update the items in the current state
-    const updatedState = {
-        ...currentState,
-        isLoading: isLoading
-    };
-
-    // Emit the updated state
-    UIState.next(updatedState);
-}
 
 /**
  * Updates the palette within the application's data state.

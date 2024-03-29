@@ -1,6 +1,8 @@
 // /src/helpers/LoadFunctions.js
 import { fetchDataFromAPI } from './APIClient';
-import { updateDataItems, updateLoadingState, updateDataPalette, updateGenes, ApiState } from '../states/GlobalState';
+import { updateDataPalette, updateGenes, ApiState } from '../states/ApiState';
+import { updateDataItems } from '../states/MatrixState';
+import { updateLoadingState } from '../states/UIState';
 
 const prefix = ApiState.value.prefix;
 

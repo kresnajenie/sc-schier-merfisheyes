@@ -1,5 +1,5 @@
 import { selectPrefix } from "../helpers/Prefix";
-import { ApiState, updatePrefix } from "../states/GlobalState";
+import { ApiState, updatePrefix } from "../states/ApiState";
 
 export function createDropdown() {
     const dropdownLi = document.createElement('li');
