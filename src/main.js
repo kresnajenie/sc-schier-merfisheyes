@@ -1,6 +1,6 @@
 import { SceneInitializer } from './components/SceneInitializer.js';
-import { cellSearch } from './helpers/Filtering/Celltype.js';
-import { geneSearch } from './helpers/Filtering/Gene.js';
+import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
+import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
 import { toggleCellFilter, toggleGeneFilter } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
@@ -42,6 +42,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadItems();
         await loadGenes();
         console.log(ApiState.value.genes);
+
+        createCellCheckboxes(ApiState.value.listPalette);
+        clearCells();
+        cellSearch()
+
+        createGeneRadio(ApiState.value.genes);
+        clearGenes();
+        geneSearch();
 
         // // Fetch additional data items
         // const data = await firstValueFrom(fetchDataFromAPI(pal_col, prefix));

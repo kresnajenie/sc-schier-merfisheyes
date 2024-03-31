@@ -1,6 +1,5 @@
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedCelltype } from "../../states/SelectedState";
-import { updateLoadingState } from "../../states/UIState";
 
 /**
  * Detects celltype input changes and sends them to be filtered
@@ -19,35 +18,35 @@ export const cellSearch = () => {
 }
 
 /**
- * Filter palette by which celltype matches the input  search query
- * @param {Array} searchQuery 
+ * Filter palette by which celltype matches the input search query
+ * @param {String} searchQuery 
  * Example Usage:
- * filterCellSearchQuery("anteri")';
+ * filterCellSearchQuery("anteri");
  */
 export function filterCellSearchQuery(searchQuery) {
 
     const cellAlert = document.getElementById('cellNotFound');
-
+    let filteredCellType = ApiState.value.listPalette;
     // if has query string
     if (searchQuery) {
 
-        const filteredCellType = ApiState.value.listPalette.filter(([celltype, color]) => {
+        filteredCellType = ApiState.value.listPalette.filter(([celltype, color]) => {
             return celltype.toLowerCase().startsWith(searchQuery); // checks if has substring
         })
 
         console.log(filteredCellType);
 
         createCellCheckboxes(filteredCellType);
-
-        // show the alert if no filtered cell type
-        if (filteredCellType.length === 0) {
-            console.log("here");
-            cellAlert.style.display = "block"
-        } else {
-            cellAlert.style.display = "none"
-        }
     } else {
         createCellCheckboxes(ApiState.value.listPalette); // reset to show all
+    }
+
+    // show the alert if no filtered cell type
+    if (filteredCellType.length === 0) {
+        console.log("here");
+        cellAlert.style.display = "block"
+    } else {
+        cellAlert.style.display = "none"
     }
 }
 
@@ -55,7 +54,7 @@ export function filterCellSearchQuery(searchQuery) {
  * Creates the cell checkboxes from toggling celtype filters based on filter
  * @param {Array} cellTypesWithColors Shown checkboxes based on filter
  * Example Usage:
- * filterCellSearchQuery(["cell1", "cell2", "cell3"]);;
+ * filterCellSearchQuery(["cell1", "cell2", "cell3"]);
  */
 export function createCellCheckboxes(cellTypesWithColors) {
     const checkboxes = document.getElementById('cellCheckboxes');
@@ -104,35 +103,66 @@ export function createCellCheckboxes(cellTypesWithColors) {
     });
 }
 
+/**
+ * Update instanced mesh based on checked items
+ * @param {String} celltype
+ * @param {boolean} isChecked
+ * Example Usage:
+ * updateCheckedItems("cell1", true);
+ */
+export async function updateCheckedItems(celltype, isChecked) {
+
+    // deep copies the selected celltype array
+    let copy = SelectedState.value.selectedCelltypes.map(i => i);
+
+    // Add celltype to the list if checked
+    if (isChecked) {
+        // deep copies the array by making it a string then back to array again
+        copy.push(celltype);
+        updateSelectedCelltype(copy);
+    } else {
+        // Remove celltype from the list if unchecked
+        copy = copy.filter(item => item !== celltype)
+        updateSelectedCelltype(copy);
+    }
+    console.log(SelectedState.value.selectedCelltypes);
+}
+
+/**
+ * Clear selected cells and search query
+ */
 export const clearCells = () => {
     const cellClearButton = document.getElementById('cellClearButton');
 
     cellClearButton.addEventListener('click', () => {
         updateSelectedCelltype([]);
-        // cellFilters.innerHTML = "No celltype filters selected";
-        // updateInstancedMesh(checkedCellTypes);
         createCellCheckboxes(ApiState.value.listPalette);
 
-        cellTextbox.value = '';
+        cellTextbox.value = ''; // clears search field
     })
 }
 
+/**
+ * Records the celltype filters in use
+ */
+export const showCellFilters = () => {
 
+    const cellFilters = document.getElementById("cellFilters");
+    cellFilters.innerHTML = "";
 
-// Function to update instanced mesh based on checked items
-export async function updateCheckedItems(celltype, isChecked) {
-    if (isChecked) {
-        // Add celltype to the list if checked
-        SelectedState.value.selectedCelltypes.push(celltype);
+    // if there are celltype filters
+    if (SelectedState.value.selectedCelltypes.length !== 0) {
+        SelectedState.value.selectedCelltypes.forEach((type) => {
+
+            const f = document.createElement("p");
+            f.style.color = ApiState.value.pallete[type];
+            f.style.fontStyle = 'italic'
+            f.innerHTML = type;
+            cellFilters.appendChild(f);
+        })
+
+    // no celltype filters
     } else {
-        // Remove celltype from the list if unchecked
-        updateSelectedCelltype(SelectedState.value.selectedCelltypes.filter(item => item !== celltype));
+        cellFilters.innerHTML = "No celltype filters selected";
     }
-    console.log(SelectedState.value.selectedCelltypes);
-    // cellFilters.innerHTML = "";
-    // showCellFilters(checkedCellTypes, pallete);
-
-    updateLoadingState(true);
-
-    updateLoadingState(false);
 }

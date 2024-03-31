@@ -40,7 +40,7 @@ export function updateSelectedGene(newGenes) {
     // Update the items in the current state
     const updatedState = {
         ...currentState,
-        selecteGenes: newGenes
+        selectedGenes: newGenes
     };
 
     // Emit the updated state

@@ -16,7 +16,12 @@ export const geneSearch = () => {
     });
 }
 
-
+/**
+ * Filter palette by which gene matches the input search query
+ * @param {String} searchQuery 
+ * Example Usage:
+ * filterGeneSearchQuery("av");
+ */
 export function filterGeneSearchQuery(searchQuery) {
 
     const geneAlert = document.getElementById('geneNotFound');
@@ -42,29 +47,6 @@ export function filterGeneSearchQuery(searchQuery) {
     } else {
         createGeneRadio(ApiState.value.genes); // reset to show all
     }
-}
-
-export async function updateRadioItem(gene, isChecked) {
-
-    updateLoadingState(true);
-
-    if (isChecked) {
-        // Add gene to the list if checked
-        // window.selectedGene = gene;
-        // const f = document.createElement('p');
-        // f.style.fontStyle = 'italic';
-        // f.style.color = 'white';
-        // f.innerHTML = gene;
-
-        // geneFilters.innerHTML = '';
-        // geneFilters.append(f);
-
-        updateSelectedGene([gene])
-
-        await this.updateInstancedMesh(gene.toLowerCase());
-    }
-
-    updateLoadingState(false);
 }
 
 export function createGeneRadio(geneList) {
@@ -110,3 +92,51 @@ export function createGeneRadio(geneList) {
     });
 }
 
+function updateRadioItem(gene, isChecked) {
+
+    if (isChecked) {
+        updateSelectedGene([gene]);
+    }
+    console.log(gene);
+    console.log(SelectedState.value.selectedGenes);
+}
+
+/**
+ * Clear selected cells and search query
+ */
+export const clearGenes = () => {
+
+    const geneClearButton = document.getElementById('geneClearButton');
+
+    geneClearButton.addEventListener('click', () => {
+        updateSelectedGene([]);
+        createGeneRadio(ApiState.value.genes)
+
+        geneTextbox.value = ''; // clears search field
+    });
+}
+
+
+/**
+ * Records the celltype filters in use
+ */
+export const showGeneFilters = () => {
+
+    const geneFilters = document.getElementById("geneFilters");
+    geneFilters.innerHTML = "";
+
+    // if there are celltype filters
+    if (SelectedState.value.selectedGenes.length !== 0) {
+        SelectedState.value.selectedGenes.forEach((type) => {
+
+            const f = document.createElement("p");
+            f.style.fontStyle = 'italic'
+            f.innerHTML = type;
+            geneFilters.appendChild(f);
+        })
+
+    // no gene filters
+    } else {
+        geneFilters.innerHTML = "No gene filters selected";
+    }
+}
