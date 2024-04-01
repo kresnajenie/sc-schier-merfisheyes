@@ -1,6 +1,6 @@
 // /src/components/SceneInitializer.js
 import * as THREE from 'three';
-import { ApiState, MatrixState } from '../states/GlobalState.js';
+import { ApiState, MatrixState, SceneState } from '../states/GlobalState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -16,7 +16,9 @@ export class SceneInitializer {
     }
 
     initScene() {
-        this.scene = new THREE.Scene();
+        // this.scene = new THREE.Scene();
+        this.scene = SceneState.value.scene;
+
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);

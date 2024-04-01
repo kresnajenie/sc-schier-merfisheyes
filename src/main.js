@@ -9,10 +9,10 @@ import { createOverlay } from './ui/Overlay'; // Adjust the path as needed
 
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
-    const overlay = createOverlay();
+    // const overlay = createOverlay();
     
     document.body.insertBefore(navbar, document.body.firstChild);
-    document.body.appendChild(overlay);
+    // document.body.appendChild(overlay);
 
     updateLoadingState(true); // Assume loading starts
 
