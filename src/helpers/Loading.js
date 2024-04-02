@@ -1,5 +1,5 @@
 export const loading = (state) => {
-    
+
     const loadingIndicator = document.getElementById('loadingIndicator')
 
     if (state) {

@@ -130,6 +130,7 @@ export const showGeneFilters = () => {
         SelectedState.value.selectedGenes.forEach((type) => {
 
             const f = document.createElement("p");
+            f.style.color = 'white';
             f.style.fontStyle = 'italic'
             f.innerHTML = type;
             geneFilters.appendChild(f);

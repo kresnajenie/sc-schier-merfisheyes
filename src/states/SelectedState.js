@@ -2,7 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 
 const selectedData = {
     selectedCelltypes: [],
-    selectedGenes: []
+    selectedGenes: [],
 }
 
 export const SelectedState = new BehaviorSubject(selectedData);
