@@ -158,3 +158,13 @@
   height: auto; /* Maintain aspect ratio */
   fill: #fff; /* Icon color */
 }
+
+.descBox {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+  width: 200px;
+  float: right;
+}

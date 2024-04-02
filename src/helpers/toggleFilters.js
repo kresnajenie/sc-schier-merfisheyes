@@ -64,3 +64,22 @@ export const toggleGeneFilter = () => {
         }
     })
 }
+
+export const toggleButton = () => {
+
+    const buttons = document.querySelectorAll('.iconBtn');
+
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            const targetId = this.dataset.target;
+            const targetBox = document.getElementById(targetId);
+            targetBox.style.display = 'block';
+        });
+
+        button.addEventListener('mouseleave', function() {
+            const targetId = this.dataset.target;
+            const targetBox = document.getElementById(targetId);
+            targetBox.style.display = 'none';
+        });
+    });
+}
