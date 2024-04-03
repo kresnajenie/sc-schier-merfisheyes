@@ -136,6 +136,7 @@ function createIcon() {
 
     const pointSize = createOtherButton("togglePointSize", "pointSizeBox", "M8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12ZM12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z", "M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z");
     const pointSizeBox = createDescBox("pointSizeBox", "Click to change point size.");
+    const pointSliderBox = createSlider("pointSizeSliderBox", "pointSizeSlider", "pointSizeSliderNumContainer", "pointSizeSliderValue", "pointSizeMinId", "pointSizeMaxId", 5, 100, 50);
     
     const genePercentile = createOtherButton("toggleGenePercentile", "genePercentileBox", "M7 3C8.86384 3 10.4299 4.27477 10.874 6H19V8H10.874C10.4299 9.72523 8.86384 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3ZM7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z", "M17 20C15.1362 20 13.5701 18.7252 13.126 17H5V15H13.126C13.5701 13.2748 15.1362 12 17 12C19.2091 12 21 13.7909 21 16C21 18.2091 19.2091 20 17 20ZM17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z");
     const genePercentileBox = createDescBox("genePercentileBox", "Click to change the gene percentile.");
@@ -151,6 +152,7 @@ function createIcon() {
     iconDiv.appendChild(zoomOutBox);
     iconDiv.appendChild(pointSize);
     iconDiv.appendChild(pointSizeBox);
+    iconDiv.appendChild(pointSliderBox);
     iconDiv.appendChild(genePercentile);
     iconDiv.appendChild(genePercentileBox);
     iconDiv.appendChild(download);
@@ -167,6 +169,49 @@ function createDescBox(id, content) {
     box.style.display = 'none';
 
     return box;
+}
+
+function createSlider(sliderContainerId, sliderId, sliderContainerId2, sliderValueId, sliderMinId, sliderMaxId, min, max, value) {
+
+    const sliderContainer = document.createElement('div');
+    sliderContainer.id = sliderContainerId;
+    sliderContainer.classList.add("slider-container")
+    sliderContainer.style.display = 'none';
+
+    const slider = document.createElement('input');
+    slider.setAttribute('type', 'range');
+    slider.setAttribute('min', min);
+    slider.setAttribute('max', max);
+    slider.setAttribute('value', value);
+    slider.classList.add('slider');
+    slider.id = sliderId;
+
+    const sliderContainer2 = document.createElement('div');
+    sliderContainer2.id = sliderContainerId2;
+    sliderContainer2.classList.add("slider-container-inner")
+
+    const sliderMin = document.createElement('div');
+    sliderMin.classList.add('slider-min-max');
+    sliderMin.id = sliderMinId;
+    sliderMin.innerText = "Min: " + min;
+
+    const sliderValue = document.createElement('div');
+    sliderValue.classList.add('slider-value');
+    sliderValue.id = sliderValueId;
+    sliderValue.innerText = value;
+
+    const sliderMax = document.createElement('div');
+    sliderMax.classList.add('slider-min-max');
+    sliderMax.id = sliderMaxId;
+    sliderMax.innerText = "Max: " + max;
+
+    sliderContainer.appendChild(slider);
+    sliderContainer2.appendChild(sliderMin);
+    sliderContainer2.appendChild(sliderValue);
+    sliderContainer2.appendChild(sliderMax);
+    sliderContainer.appendChild(sliderContainer2);
+
+    return sliderContainer;
 }
 
 // Function to create and return the zoom button elements

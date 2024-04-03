@@ -82,4 +82,21 @@ export const toggleButton = () => {
             targetBox.style.display = 'none';
         });
     });
+
+    const togglePointSize = document.getElementById("togglePointSize");
+    const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
+
+    togglePointSize.addEventListener('click', () => {
+        pointSizeSliderBox.style.display = pointSizeSliderBox.style.display === 'none' ? 'block' : 'none';
+    })
+
+    const pointSizeSlider = document.getElementById("pointSizeSlider");
+    const pointSizeSliderValue = document.getElementById("pointSizeSliderValue");
+    
+    // pointSizeSlider.addEventListener('mousedown', () => {
+    //     sliderValue.innerText = this.value;
+    // });
+    pointSizeSlider.oninput = function() {
+        pointSizeSliderValue.innerHTML = this.value;
+    }
 }
