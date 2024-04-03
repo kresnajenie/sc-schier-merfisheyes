@@ -1,3 +1,10 @@
+import { ApiState } from "../states/ApiState";
+import { fetchDataFromAPI } from "./APIClient";
+
+export function getGene(gene) {
+    return fetchDataFromAPI(gene, ApiState.value.prefix);
+}
+
 /**
  * Generates a color value in the coolwarm colormap based on the input value.
  * @param {number} value - The value for which to generate the color (between 0 and 1).

@@ -1,4 +1,4 @@
-import { ApiState, updatePrefix } from "../states/GlobalState";
+import { ApiState, updatePrefix } from "../states/ApiState";
 
 export const selectPrefix = (prefix) => {
 

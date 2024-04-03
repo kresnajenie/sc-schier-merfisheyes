@@ -1,0 +1,170 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-content: left;
+
+  gap: 7px;
+
+  position: absolute;
+  height: auto;
+  margin: 10px;
+  width: 20%;
+
+  z-index: 100;
+}
+
+#cellGroup {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Button styling */
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 5px;
+}
+
+.toggles {
+  /* background-color: rgb(97, 97, 97);
+  color: white;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  height: auto;
+  width: 10%; */
+
+  background-color: rgb(97, 97, 97);
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.toggles:hover {
+  background-color: rgb(255, 255, 255) !important;
+  color: black !important;
+}
+
+.checkbox-container {
+  display: flex;
+  gap: 5px;
+
+  background-color: rgba(0, 0, 0, 0.8);
+
+  border: rgba(58, 58, 58, 0.5) solid;
+  padding: 0px 10px 10px 10px;
+  border-radius: 5px;
+  max-height: 40vh; /* Set maximum height relative to viewport */
+  scrollbar-color: dark;
+
+  overflow: auto;
+}
+
+.checkbox-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.checkbox-container::-webkit-scrollbar-thumb {
+  background-color: rgb(65, 65, 65);
+  border-radius: 20px;
+}
+
+.input-elements {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+
+  height: 100%;
+  background-color: black;
+}
+
+.clearButton {
+  width: 100%;
+  height: 25px;
+
+  line-height: 10px;
+
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.textInput {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.box {
+  margin-right: 5px;
+}
+
+.notfound {
+  display: none;
+}
+
+.plus-jakarta-sans-regular {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400; /* Regular weight */
+  font-style: normal;
+}
+.plus-jakarta-sans-bold {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700; /* Bold weight */
+  font-style: normal;
+}
+
+.icon {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 5px;
+}
+
+.iconBtn {
+  background-color: rgb(97, 97, 97);
+  color: white;
+
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.iconBtn:hover {
+  background-color: rgb(255, 255, 255);
+  color: black;
+}
+
+.iconBtn svg {
+  width: 100%; /* Adjust size as needed */
+  height: auto; /* Maintain aspect ratio */
+  fill: #fff; /* Icon color */
+}
+
+.descBox {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+  width: 200px;
+  float: right;
+}

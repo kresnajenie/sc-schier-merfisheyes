@@ -1,4 +1,7 @@
-import { createDropdown } from "./Dropdown";
+import './Navbar.css';
+
+import { createDropdown } from "../Dropdown";
+import { createFilterIndicator } from './FilterIndicator';
 
 export function createNavbar() {
     const navContainer = document.createElement('nav');
@@ -7,8 +10,11 @@ export function createNavbar() {
     const containerFluid = document.createElement('div');
     containerFluid.className = 'container-fluid nav-container';
 
+
     containerFluid.appendChild(createTitle());
-    containerFluid.appendChild(createToggleButton());
+
+    containerFluid.appendChild(createFilterIndicator());
+
     containerFluid.appendChild(createCollapseDiv());
 
     navContainer.appendChild(containerFluid);
@@ -32,20 +38,6 @@ function createTitle() {
     titleDiv.appendChild(titleParagraph);
 
     return titleDiv;
-}
-
-function createToggleButton() {
-    const toggleButton = document.createElement('button');
-    toggleButton.className = 'navbar-toggler';
-    toggleButton.type = 'button';
-    toggleButton.dataset.bsToggle = 'collapse';
-    toggleButton.dataset.bsTarget = '#navbarNav';
-    toggleButton.setAttribute('aria-controls', 'navbarNav');
-    toggleButton.setAttribute('aria-expanded', 'false');
-    toggleButton.setAttribute('aria-label', 'Toggle navigation');
-    toggleButton.innerHTML = '<span class="navbar-toggler-icon"></span>';
-
-    return toggleButton;
 }
 
 function createCollapseDiv() {

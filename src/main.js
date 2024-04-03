@@ -1,8 +1,14 @@
 import { SceneInitializer } from './components/SceneInitializer.js';
+import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
+import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { ApiState, updateLoadingState } from './states/GlobalState.js';
-import { createNavbar } from './ui/Navbar.js';
-import { createOverlay } from './ui/Overlay.js';
+import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
+import { ApiState } from './states/ApiState.js';
+import { updateLoadingState } from './states/UIState.js';
+import { createFilter } from './ui/Filters/Filters.js';
+import { createLoadingIndicator } from './ui/Loading/Loading.js';
+import { createNavbar } from './ui/Navbar/Navbar.js';
+import { createOverlay } from './ui/Overlay/Overlay.js';
 
 // Add an event listener for the hashchange event
 window.addEventListener('hashchange', () => { window.location.reload() });
@@ -10,9 +16,18 @@ window.addEventListener('hashchange', () => { window.location.reload() });
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
     // const overlay = createOverlay();
-    
+    const loading = createLoadingIndicator();
+    const filter = createFilter();
+
     document.body.insertBefore(navbar, document.body.firstChild);
     // document.body.appendChild(overlay);
+    document.body.appendChild(loading);
+    document.body.appendChild(filter);
+
+    // for clicking on the toggles
+    toggleCellFilter();
+    toggleGeneFilter();
+    toggleButton();
 
     updateLoadingState(true); // Assume loading starts
 
@@ -28,6 +43,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadItems();
         await loadGenes();
         console.log(ApiState.value.genes);
+
+        createCellCheckboxes(ApiState.value.listPalette);
+        clearCells();
+        cellSearch()
+
+        createGeneRadio(ApiState.value.genes);
+        clearGenes();
+        geneSearch();
 
         // // Fetch additional data items
         // const data = await firstValueFrom(fetchDataFromAPI(pal_col, prefix));
