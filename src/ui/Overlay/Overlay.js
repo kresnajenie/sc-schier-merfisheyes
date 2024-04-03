@@ -1,25 +1,37 @@
 import './Overlay.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { SceneState } from '../states/GlobalState';
+import { SceneState } from '../../states/SceneState';
 
 
 
 
 export function createOverlay() {
-    // Create the overlay container
     const overlay = document.createElement('div');
     overlay.id = 'overlay';
     overlay.className = 'overlay';
 
-    // Create a button to drag the overlay
+    // Create a container for top controls
+    const topControls = document.createElement('div');
+    topControls.className = 'top-controls';
+
+    // Drag Button
     const dragButton = document.createElement('button');
     dragButton.id = 'dragButton';
     dragButton.textContent = 'Drag';
     dragButton.className = 'btn btn-primary'; 
 
-    // Append drag button to the overlay
-    overlay.appendChild(dragButton);
+    // Resize Handle
+    const resizeHandle = document.createElement('div');
+    resizeHandle.id = 'resizeHandle';
+    resizeHandle.className = 'resize-handle';
+
+    // Append drag button and resize handle to the top controls container
+    topControls.appendChild(dragButton);
+    topControls.appendChild(resizeHandle);
+
+    // Then append the top controls container to the overlay
+    overlay.appendChild(topControls);
 
     // Function to handle dragging
     let isDragging = false;
@@ -45,11 +57,7 @@ export function createOverlay() {
 
     // Add more content or functionality to the overlay as needed...
 
-    // Make overlay resizable
-    const resizeHandle = document.createElement('div');
-    resizeHandle.id = 'resizeHandle';
-    resizeHandle.className = 'resize-handle';
-    overlay.appendChild(resizeHandle);
+
 
     // Handle resizing
     resizeHandle.addEventListener('mousedown', resizeMouseDown);
@@ -68,19 +76,26 @@ export function createOverlay() {
 
     
     function resizeMouseMove(e) {
-        const newWidth = e.clientX - overlay.offsetLeft;
-        const newHeight = e.clientY - overlay.offsetTop;
-        overlay.style.width = `${newWidth}px`;
-        overlay.style.height = `${newHeight}px`;
+        const newWidth = overlay.offsetWidth + (overlay.offsetLeft - e.clientX);
+        const newHeight = overlay.offsetHeight + (overlay.offsetTop - e.clientY);
+    
+        // Apply minimum constraints to prevent the overlay from disappearing or getting too small
+        const minWidth = 100; // Minimum width
+        const minHeight = 100; // Minimum height
+    
+        overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
+        overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
+    
+        // Adjust the overlay's top and left positions to move along with the resize handle
+        overlay.style.left = `${e.clientX}px`;
+        overlay.style.top = `${e.clientY}px`;
     
         // Update camera and renderer
         camera.aspect = newWidth / newHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(newWidth, newHeight);
-        console.log(sceneContainer.offsetWidth)
-        console.log(sceneContainer.offsetHeight)
-    }
-
+    }    
+    
     function resizeMouseUp() {
         window.removeEventListener('mousemove', resizeMouseMove);
         window.removeEventListener('mouseup', resizeMouseUp);

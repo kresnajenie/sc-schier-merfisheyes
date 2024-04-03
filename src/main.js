@@ -2,20 +2,20 @@ import { SceneInitializer } from './components/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
 import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
+import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/toggleFilters.js';
 import { ApiState } from './states/ApiState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createNavbar } from './ui/Navbar/Navbar.js';
-import { createOverlay } from './ui/Overlay/Overlay.js';
+import {createOverlay} from './ui/Overlay/Overlay.js'
 
 // Add an event listener for the hashchange event
 window.addEventListener('hashchange', () => { window.location.reload() });
 
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
-    // const overlay = createOverlay();
+    createOverlay();
     const loading = createLoadingIndicator();
     const filter = createFilter();
 

@@ -1,7 +1,11 @@
 /* /src/ui/Overlay.css */
 .overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Ensure content starts from the left */
     position: absolute;
-    left: 10px; /* Position it to stick to the left */
+    right: 0px; /* Position it to stick to the left */
+    bottom: 0px;
     width: 25%; /* Set width to 25% of the screen width */
     height: 50%; /* Set height to 50% of the screen height */
     background-color: #000000;
@@ -16,20 +20,25 @@
     overflow: hidden; /* Ensure content respects the border-radius */
 }
 
+.top-controls {
+    display: flex;
+    width: 100%; /* Take up the full width of the overlay */
+    justify-content: flex-start; /* Align items to the left */
+}
+
 #dragButton {
     cursor: move;
-    padding: 5px;
     margin-bottom: 10px; /* Adjust spacing as needed */
-    z-index: 1010;
+    z-index: 0;
 }
 
 .resize-handle {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    top: 0;
+    left: 0;
     width: 20px;
     height: 20px;
-    background-color: #ccc;
+    background-color: #ffe432;
     cursor: nwse-resize;
     border-radius: 50%; /* Makes the resize handle circular */
 }

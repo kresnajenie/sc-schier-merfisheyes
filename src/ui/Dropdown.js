@@ -22,6 +22,7 @@ export function createDropdown() {
 
     dropdownMenu.appendChild(createDropdownItem('#50pe', '50pe'));
     dropdownMenu.appendChild(createDropdownItem('#75pe', '75pe'));
+    dropdownMenu.appendChild(createDropdownItem('#6s', '6s'));
 
     dropdownDiv.appendChild(dropdownButton);
     dropdownDiv.appendChild(dropdownMenu);
