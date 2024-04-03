@@ -1,6 +1,6 @@
 // /src/components/SceneInitializer.js
 import * as THREE from 'three';
-import { ApiState, MatrixState } from '../states/GlobalState.js';
+import { ApiState, MatrixState, SceneState } from '../states/GlobalState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -16,7 +16,9 @@ export class SceneInitializer {
     }
 
     initScene() {
-        this.scene = new THREE.Scene();
+        // this.scene = new THREE.Scene();
+        this.scene = SceneState.value.scene;
+
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -42,14 +44,6 @@ export class SceneInitializer {
             console.log('Items have updated:', items);
             console.log(MatrixState.value.items);
             // Here you can handle the update, e.g., update UI components to reflect the new items array
-        });
-
-        ApiState.pipe(
-            map(state => state.prefix),
-            distinctUntilChanged((prev, curr) => isEqual(prev, curr))
-        ).subscribe(items => {
-            console.log("Prefix changed:", items);
-            console.log(ApiState.value.prefix);
         });
     }
 
@@ -170,7 +164,8 @@ export class SceneInitializer {
         
             //plot projection
             // proj.position.set(jsonData[i]["global_sphere0_norm"], jsonData[i]["global_sphere1_norm"], jsonData[i]["global_sphere2_norm"]);
-            proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
+            // proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
+            proj.position.set(jsonData[i]["global_x_norm"] * mod, jsonData[i]["global_y_norm"] * mod, 0);
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);

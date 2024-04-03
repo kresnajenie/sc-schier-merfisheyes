@@ -9,10 +9,10 @@ window.addEventListener('hashchange', () => { window.location.reload() });
 
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
-    const overlay = createOverlay();
-
+    // const overlay = createOverlay();
+    
     document.body.insertBefore(navbar, document.body.firstChild);
-    document.body.appendChild(overlay);
+    // document.body.appendChild(overlay);
 
     updateLoadingState(true); // Assume loading starts
 

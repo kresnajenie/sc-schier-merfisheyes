@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 const hash = window.location.hash.replace("#", "");
+import * as THREE from 'three';
 
 const apiData = {
     columns: [
@@ -33,6 +34,10 @@ const matrixData = {
     items: []
 }
 
+const sceneData = {
+    scene: new THREE.Scene()
+}
+
 
 
 // Create a BehaviorSubject to manage and emit state updates
@@ -40,6 +45,7 @@ export const UIState = new BehaviorSubject(uiData);
 export const ApiState = new BehaviorSubject(apiData);
 export const SelectedState = new BehaviorSubject(selectedData);
 export const MatrixState = new BehaviorSubject(matrixData);
+export const SceneState = new BehaviorSubject(sceneData);
 
 /**
  * Updates the items within the application's data state.
@@ -120,6 +126,18 @@ export function updateGenes(newGenes) {
 
     // Emit the updated state
     ApiState.next(updatedState);
+}
+
+/**
+ */
+export function updateScene(newScene) {
+    // Update the items in the current state
+    const updatedState = {
+        scene: newScene
+    };
+
+    // Emit the updated state
+    SceneState.next(updatedState);
 }
 
 /**

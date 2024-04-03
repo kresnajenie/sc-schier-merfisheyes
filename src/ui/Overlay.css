@@ -1,18 +1,26 @@
 /* /src/ui/Overlay.css */
-
 .overlay {
     position: absolute;
-    top: 60px; /* Adjust the top value so it appears below the navbar */
-    left: 10px;
-    width: 300px;
-    height: 200px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
+    left: 10px; /* Position it to stick to the left */
+    width: 25%; /* Set width to 25% of the screen width */
+    height: 50%; /* Set height to 50% of the screen height */
+    background-color: #000000;
+    border: 2px solid #909090;
     z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden; /* Ensure content respects the border-radius */
 }
 
 #dragButton {
     cursor: move;
+    padding: 5px;
+    margin-bottom: 10px; /* Adjust spacing as needed */
+    z-index: 1010;
 }
 
 .resize-handle {
@@ -23,4 +31,14 @@
     height: 20px;
     background-color: #ccc;
     cursor: nwse-resize;
+    border-radius: 50%; /* Makes the resize handle circular */
+}
+
+#overlayScene {
+    flex-grow: 1; /* Make the scene container fill the rest of the overlay's space */
+    width: calc(100% - 2px); /* Adjust for border */
+    height: calc(100% - 2px); /* Adjust for border, considering any button or padding */
+    border: 1px solid #000;
+    box-sizing: border-box;
+    border-radius: 10px;
 }
