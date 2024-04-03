@@ -148,9 +148,8 @@ export class SceneInitializer {
         let color;
 
         // when plotting gene
-        let cts;
-        let ctsClipped;
-        let nmax;
+        let ctsClipped1;
+        let ctsClipped2;
 
         let mod = 100;
         let umapmod = 0.5;
@@ -159,15 +158,17 @@ export class SceneInitializer {
         let genes = SelectedState.value.selectedGenes;
 
         if (genes.length > 0) {
-            cts = jsonData.map(item => item[filterType]);
             try {
-                let cts = await getGene(genes[0]);
+                let count1 = await getGene(genes[0]);
+                if (genes.length == 2) {
+                    let count2 = await getGene(genes[1]);
+                    let nmax2 = calculate99thPercentile(count2);
+                    ctsClipped2 = normalizeArray(count2, nmax2);
+                }
                 // You can use cts here
-                nmax = calculate99thPercentile(cts);
-                // console.log(nmax);
+                let nmax1 = calculate99thPercentile(count1);
                 // console.log(cts);
-                ctsClipped = normalizeArray(cts, nmax);
-                // console.log(ctsClipped);
+                ctsClipped1 = normalizeArray(count1, nmax1);
             } catch (error) {
                 // Handle errors if the promise is rejected
                 console.error('Error fetching data:', error);
@@ -180,11 +181,21 @@ export class SceneInitializer {
             if (genes.length > 0) {
                 // no celltypes or matches celltype
                 if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
-                    let colorrgb = coolwarm(ctsClipped[i]);
+
+                    let colorrgb;
+                    let scale;
+
+                    // if there's a second gene
+                    if (ctsClipped2) {
+                        colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * 5 + 1;
+                    } else {
+                        colorrgb = coolwarm(ctsClipped1[i]);
+                        scale = ctsClipped1[i] * 5 + 1;
+                    }
+
                     // console.log(colorrgb);
                     color = new THREE.Color(colorrgb);
-
-                    let scale = ctsClipped[i] * 5 + 1;
 
                     proj.scale.set(scale, scale, scale);
                     umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
@@ -193,7 +204,7 @@ export class SceneInitializer {
                     proj.scale.set(1, 1, 1);
                     umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
                 }
-            // has celltype filters
+                // has celltype filters
             } else {
                 if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
                     // color = new THREE.Color(jsonData[i]["clusters_colors"]);

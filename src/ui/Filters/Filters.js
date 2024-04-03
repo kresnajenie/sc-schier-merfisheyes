@@ -92,7 +92,7 @@ function createGeneRadioContainer() {
     textBox.setAttribute("type", "text");
     textBox.classList.add("textInput");
     textBox.id = "geneTextbox";
-    textBox.placeholder = "Search gene";
+    textBox.placeholder = "Search gene (only 2 can be selected)";
 
     const clearButton = document.createElement("button");
     clearButton.setAttribute("type", "button");

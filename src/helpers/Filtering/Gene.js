@@ -1,7 +1,9 @@
 
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedGene } from "../../states/SelectedState";
-import { updateLoadingState } from "../../states/UIState";
+
+
+let checked = 0;
 
 // Toggle gene checkbox container
 export const geneSearch = () => {
@@ -64,7 +66,7 @@ export function createGeneRadio(geneList) {
     geneList.forEach((gene) => {
         // Create checkbox
         const radio = document.createElement('input');
-        radio.type = 'radio';
+        radio.type = 'checkbox';
         radio.className = 'box';
         radio.id = gene;
         radio.value = gene;
@@ -87,6 +89,11 @@ export function createGeneRadio(geneList) {
 
         // Attach event listener
         radio.addEventListener('change', (e) => {
+            // limits it to only 2 genes selected at a time
+            if (SelectedState.value.selectedGenes.length >= 2) {
+                // alert("Only 2 genes selected at a time") // temporary for now
+                e.target.checked = false;
+            }
             updateRadioItem(gene, e.target.checked);
         });
     });
@@ -94,10 +101,17 @@ export function createGeneRadio(geneList) {
 
 function updateRadioItem(gene, isChecked) {
 
+    // deep copies the selected genes array
+    let copy = SelectedState.value.selectedGenes.map(i => i);
+
     if (isChecked) {
-        updateSelectedGene([gene]);
+        copy.push(gene);
+        updateSelectedGene(copy);
+    } else {
+        copy = copy.filter(item => item !== gene);
+        updateSelectedGene(copy);
     }
-    console.log(gene);
+
     console.log(SelectedState.value.selectedGenes);
 }
 
@@ -127,16 +141,16 @@ export const showGeneFilters = () => {
 
     // if there are celltype filters
     if (SelectedState.value.selectedGenes.length !== 0) {
-        SelectedState.value.selectedGenes.forEach((type) => {
+        SelectedState.value.selectedGenes.forEach((type, index) => {
 
             const f = document.createElement("p");
-            f.style.color = 'white';
-            f.style.fontStyle = 'italic'
+            f.style.color = index === 0 ? 'red' : 'cyan';
+            f.style.fontStyle = 'normal'
             f.innerHTML = type;
             geneFilters.appendChild(f);
         })
 
-    // no gene filters
+        // no gene filters
     } else {
         geneFilters.innerHTML = "No gene filters selected";
     }

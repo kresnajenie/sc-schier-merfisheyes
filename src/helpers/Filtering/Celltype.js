@@ -156,7 +156,7 @@ export const showCellFilters = () => {
 
             const f = document.createElement("p");
             f.style.color = ApiState.value.pallete[type];
-            f.style.fontStyle = 'italic'
+            f.style.fontStyle = 'normal'
             f.innerHTML = type;
             cellFilters.appendChild(f);
         })
