@@ -45,6 +45,15 @@ export class SceneInitializer {
             console.log(MatrixState.value.items);
             // Here you can handle the update, e.g., update UI components to reflect the new items array
         });
+
+        ApiState.pipe(
+            map(state => state.prefix),
+            distinctUntilChanged((prev, curr) => isEqual(prev, curr))
+        ).subscribe(items => {
+            console.log("Prefix changed:", items);
+            console.log(ApiState.value.prefix);
+        });
+
     }
 
     async updateInstancedMesh(filterType = []) {
@@ -164,8 +173,8 @@ export class SceneInitializer {
         
             //plot projection
             // proj.position.set(jsonData[i]["global_sphere0_norm"], jsonData[i]["global_sphere1_norm"], jsonData[i]["global_sphere2_norm"]);
-            // proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
-            proj.position.set(jsonData[i]["global_x_norm"] * mod, jsonData[i]["global_y_norm"] * mod, 0);
+            proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
+            // proj.position.set(jsonData[i]["global_x_norm"] * mod, jsonData[i]["global_y_norm"] * mod, 0);
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);
