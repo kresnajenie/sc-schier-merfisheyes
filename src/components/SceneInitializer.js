@@ -9,6 +9,8 @@ import { UIState, updateLoadingState } from '../states/UIState.js';
 import { loading } from '../helpers/Loading.js';
 import { SelectedState, updateSelectedCelltype, updateSelectedGene } from '../states/SelectedState.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
+import { calculate99thPercentile, coolwarm, getGene, normalizeArray } from '../helpers/GeneFunctions.js';
+import { showGeneFilters } from '../helpers/Filtering/Gene.js';
 
 
 export class SceneInitializer {
@@ -71,16 +73,16 @@ export class SceneInitializer {
         SelectedState.pipe(
             map(state => state.selectedCelltypes),
             distinctUntilChanged((prev, curr) => prev.join() === curr.join())
-        ).subscribe(items => {
+        ).subscribe(async items => {
             console.log("Selected celltypes changed:", items);
             console.log(SelectedState.value.selectedCelltypes);
 
             updateLoadingState(true);
 
             if (SelectedState.value.selectedCelltypes) {
-                this.updateInstancedMesh(SelectedState.value.selectedCelltypes);
+                await this.updateInstancedMesh(SelectedState.value.selectedCelltypes);
             } else {
-                this.updateInstancedMesh([]);
+                await this.updateInstancedMesh([]);
             }
 
             showCellFilters();
@@ -91,17 +93,19 @@ export class SceneInitializer {
         SelectedState.pipe(
             map(state => state.selectedGenes),
             distinctUntilChanged((prev, curr) => prev.join() === curr.join())
-        ).subscribe(items => {
+        ).subscribe(async items => {
             console.log("Selected genes changed:", items);
             console.log(SelectedState.value.selectedGenes);
 
             updateLoadingState(true);
 
             if (SelectedState.value.selectedGenes) {
-                this.updateInstancedMesh(SelectedState.value.selectedGenes);
+                await this.updateInstancedMesh(SelectedState.value.selectedGenes);
             } else {
-                this.updateInstancedMesh([]);
+                await this.updateInstancedMesh([]);
             }
+
+            showGeneFilters();
 
             updateLoadingState(false);
         });
@@ -148,71 +152,50 @@ export class SceneInitializer {
         let ctsClipped;
         let nmax;
 
-        let filter = '';
-
-        // if (typeof filterType === 'string') { // gene filter inputted
-        //     filter = filterType;
-        // } else if (selectedGene.length !== 0) { // pre inputed gene filter
-        //     filter = selectedGene;
-        // }
-
-        // won't hit if is a list
-        // if (filter.length !== 0) {
-        //     // cts = jsonData.map(item => item[filterType]);
-        //     try {
-        //         let data = await fetchDataFromAPI(filter, prefix);
-        //         cts = JSON.parse(data["data"])
-        //         // You can use cts here
-        //         nmax = calculate99thPercentile(cts);
-        //         console.log(nmax);
-        //         console.log(cts);
-        //         ctsClipped = normalizeArray(cts, nmax);
-        //         console.log(ctsClipped);
-        //     } catch (error) {
-        //         // Handle errors if the promise is rejected
-        //         console.error('Error fetching data:', error);
-        //     }
-        // }
-
         let mod = 100;
         let umapmod = 0.5;
 
-        let checkedCellTypes = [];
-        let selectedGene = [];
+        let celltypes = SelectedState.value.selectedCelltypes;
+        let genes = SelectedState.value.selectedGenes;
+
+        if (genes.length > 0) {
+            cts = jsonData.map(item => item[filterType]);
+            try {
+                let cts = await getGene(genes[0]);
+                // You can use cts here
+                nmax = calculate99thPercentile(cts);
+                // console.log(nmax);
+                // console.log(cts);
+                ctsClipped = normalizeArray(cts, nmax);
+                // console.log(ctsClipped);
+            } catch (error) {
+                // Handle errors if the promise is rejected
+                console.error('Error fetching data:', error);
+            }
+        }
 
 
         for (let i = 0; i < count; i++) {
-            // if have cell type and gene filter
-            if (checkedCellTypes.length !== 0 && selectedGene.length !== 0) {
-                // // current i is of celltype
-                // if (checkedCellTypes.includes(jsonData[i]["clusters"])) {
-                //     let colorrgb = coolwarm(ctsClipped[i]);
-                //     // console.log(colorrgb);
-                //     color = new THREE.Color(colorrgb);
+            // if have gene filter
+            if (genes.length > 0) {
+                // no celltypes or matches celltype
+                if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
+                    let colorrgb = coolwarm(ctsClipped[i]);
+                    // console.log(colorrgb);
+                    color = new THREE.Color(colorrgb);
 
-                //     let scale = ctsClipped[i] * 5 + 1;
+                    let scale = ctsClipped[i] * 5 + 1;
 
-                //     proj.scale.set(scale, scale, scale);
-                //     umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
-
-                // } else { // don't color if not
-                //     color = new THREE.Color('#5e5e5e');
-                //     proj.scale.set(1, 1, 1);
-                //     umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
-                // }
-                console.log("here")
-                // } else if (filter.length !== 0) {
-                // let colorrgb = coolwarm(ctsClipped[i]);
-                // // console.log(colorrgb);
-                // color = new THREE.Color(colorrgb);
-
-                // let scale = ctsClipped[i] * 5 + 1;
-
-                // proj.scale.set(scale, scale, scale);
-                // umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
-                console.log("here")
+                    proj.scale.set(scale, scale, scale);
+                    umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
+                } else { // don't color if not
+                    color = new THREE.Color('#5e5e5e');
+                    proj.scale.set(1, 1, 1);
+                    umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
+                }
+            // has celltype filters
             } else {
-                if (filterType.includes(jsonData[i]["clusters"]) || filterType.length == 0) {
+                if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
                     // color = new THREE.Color(jsonData[i]["clusters_colors"]);
                     color = new THREE.Color(pallete[jsonData[i]["clusters"]]);
                     proj.scale.set(5, 5, 5);
