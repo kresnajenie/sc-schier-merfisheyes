@@ -1,8 +1,45 @@
 import { ApiState } from "../states/ApiState";
 import { fetchDataFromAPI } from "./APIClient";
+import chroma from "chroma-js"
 
 export function getGene(gene) {
     return fetchDataFromAPI(gene, ApiState.value.prefix);
+}
+
+// for two genes
+function interpolatePercentages(percent1, percent2) {
+    // Normalize percentages to range [0, 1]
+    const normalizedPercent1 = percent1 ;
+    const normalizedPercent2 = percent2 ;
+
+    // Define colors
+    const white = { r: 255, g: 255, b: 255 };
+    const red = { r: 255, g: 0, b: 0 };
+    const cyan = { r: 0, g: 255, b: 255 };
+
+    // Interpolate between red and white based on the first percentage
+    const interpolatedRed = {
+        r: Math.round(red.r + (white.r - red.r) * normalizedPercent1),
+        g: Math.round(red.g + (white.g - red.g) * normalizedPercent1),
+        b: Math.round(red.b + (white.b - red.b) * normalizedPercent1)
+    };
+
+    // Interpolate between cyan and white based on the second percentage
+    const interpolatedCyan = {
+        r: Math.round(cyan.r + (white.r - cyan.r) * normalizedPercent2),
+        g: Math.round(cyan.g + (white.g - cyan.g) * normalizedPercent2),
+        b: Math.round(cyan.b + (white.b - cyan.b) * normalizedPercent2)
+    };
+
+    // Calculate the average of the interpolated colors
+    const averageColor = {
+        r: (interpolatedRed.r + interpolatedCyan.r) / 2,
+        g: (interpolatedRed.g + interpolatedCyan.g) / 2,
+        b: (interpolatedRed.b + interpolatedCyan.b) / 2
+    };
+
+    // Return CSS color string
+    return `rgb(${Math.round(averageColor.r)}, ${Math.round(averageColor.g)}, ${Math.round(averageColor.b)})`;
 }
 
 /**
@@ -10,18 +47,23 @@ export function getGene(gene) {
  * @param {number} value - The value for which to generate the color (between 0 and 1).
  * @returns {string} - The color string in RGB format.
  */
-export function coolwarm(value) {
+export function coolwarm(value1, value2) {
     // Define start and end colors (cool: blue, warm: red)
     const startColor = { r: 0, g: 0, b: 255 }; // Blue
     const middleColor = { r: 255, g: 255, b: 255 }; // White
     const endColor = { r: 255, g: 0, b: 0 }; // Red
 
-    if (value < 0.5) { // blue to white
-        return `rgb(${Math.floor(middleColor.r * value * 2)}, ${Math.floor(middleColor.g * value * 2)}, ${startColor.b})`;
-    } else if (value === 0.5) { // white
-        return `rgb(${middleColor.r}, ${middleColor.g}, ${middleColor.b})`;
-    } else { // white to red
-        return `rgb(${endColor.r}, ${Math.floor(middleColor.g - (middleColor.g * (value - 0.5) * 2))}, ${Math.floor(middleColor.b - (middleColor.b * (value - 0.5) * 2))})`;
+    // no second gene
+    if (!value2) {
+        if (value1 < 0.5) { // blue to white
+            return `rgb(${Math.floor(middleColor.r * value1 * 2)}, ${Math.floor(middleColor.g * value1 * 2)}, ${startColor.b})`;
+        } else if (value1 === 0.5) { // white
+            return `rgb(${middleColor.r}, ${middleColor.g}, ${middleColor.b})`;
+        } else { // white to red
+            return `rgb(${endColor.r}, ${Math.floor(middleColor.g - (middleColor.g * (value1 - 0.5) * 2))}, ${Math.floor(middleColor.b - (middleColor.b * (value1 - 0.5) * 2))})`;
+        }
+    } else {
+        return interpolatePercentages(value1, value2);
     }
 }
 

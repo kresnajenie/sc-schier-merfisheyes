@@ -1,3 +1,5 @@
+import { ButtonState, updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
+
 export const toggleCellFilter = () => {
 
     const cellCheckbox = document.getElementById("cellCheckbox");
@@ -82,4 +84,34 @@ export const toggleButton = () => {
             targetBox.style.display = 'none';
         });
     });
+
+    const togglePointSize = document.getElementById("togglePointSize");
+    const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
+
+    togglePointSize.addEventListener('click', () => {
+        pointSizeSliderBox.style.display = pointSizeSliderBox.style.display === 'none' ? 'block' : 'none';
+    })
+
+    const pointSizeSlider = document.getElementById("pointSizeSlider");
+    const pointSizeSliderValue = document.getElementById("pointSizeSliderValue");
+    
+    pointSizeSlider.oninput = function() {
+        pointSizeSliderValue.innerHTML = this.value;
+        updateDotSize(this.value);
+    }
+
+    const toggleGenePercentile = document.getElementById("toggleGenePercentile");
+    const geneSliderBox = document.getElementById("geneSliderBox");
+
+    toggleGenePercentile.addEventListener('click', () => {
+        geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
+    })
+
+    const geneSlider = document.getElementById("geneSlider");
+    const geneSliderValue = document.getElementById("geneSliderValue");
+    
+    geneSlider.oninput = function() {
+        geneSliderValue.innerHTML = this.value;
+        updateGenePercentile(this.value);
+    }
 }
