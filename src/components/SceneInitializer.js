@@ -29,7 +29,7 @@ export class SceneInitializer {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.camera.position.z = 200;
+        this.camera.position.z = ButtonState.value.cameraPositionZ;
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         // controls.target.copy(sharedTarget); // Initially set target for cameraOne
@@ -130,6 +130,20 @@ export class SceneInitializer {
 
             updateLoadingState(false);
         });
+
+        ButtonState.pipe(
+            map(state => state.cameraPositionZ),
+            distinctUntilChanged()
+        ).subscribe(async items => {
+            console.log("Zoom In", items);
+            console.log(ButtonState.value.cameraPositionZ);
+
+            if(ButtonState.value.cameraPositionZ) {
+                await this.updateInstancedMesh(ButtonState.value.cameraPositionZ);
+            } else {
+                await this.updateInstancedMesh([]);
+            }
+        })
     }
 
     async updateInstancedMesh(filterType = []) {
@@ -180,6 +194,8 @@ export class SceneInitializer {
 
         let dotSize = ButtonState.value.dotSize;
         let smallDotSize = Math.floor(dotSize/5);
+
+        this.camera.position.z = ButtonState.value.cameraPositionZ;
 
         if (genes.length > 0) {
             try {

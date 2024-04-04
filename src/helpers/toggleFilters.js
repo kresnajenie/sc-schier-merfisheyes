@@ -1,4 +1,4 @@
-import { ButtonState, updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
+import { ButtonState, updateDotSize, updateGenePercentile, updateCameraPositionZ } from '../states/ButtonState.js';
 
 export const toggleCellFilter = () => {
 
@@ -84,6 +84,20 @@ export const toggleButton = () => {
             targetBox.style.display = 'none';
         });
     });
+
+    const toggleZoomIn = document.getElementById("toggleZoomIn");
+
+    toggleZoomIn.addEventListener('click', () => {
+        const newZoom = ButtonState.value.cameraPositionZ - 25;
+        updateCameraPositionZ(newZoom);
+    })
+
+    const toggleZoomOut = document.getElementById("toggleZoomOut");
+
+    toggleZoomOut.addEventListener('click', () => {
+        const newZoom = ButtonState.value.cameraPositionZ + 25;
+        updateCameraPositionZ(newZoom);
+    })
 
     const togglePointSize = document.getElementById("togglePointSize");
     const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
