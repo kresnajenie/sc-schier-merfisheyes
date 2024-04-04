@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { UIState, updateLoadingState } from '../states/UIState.js';
+import { ButtonState, updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { SelectedState, updateSelectedCelltype, updateSelectedGene } from '../states/SelectedState.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
@@ -109,6 +110,26 @@ export class SceneInitializer {
 
             updateLoadingState(false);
         });
+
+        // listen for changing dotsize
+
+        ButtonState.pipe(
+            map(state => state.dotSize),
+            distinctUntilChanged()
+        ).subscribe(async items => {
+            console.log("Dot Size Changed:", items);
+            console.log(ButtonState.value.dotSize);
+
+            updateLoadingState(true);
+
+            if (ButtonState.value.dotSize) {
+                await this.updateInstancedMesh(ButtonState.value.dotSize);
+            } else {
+                await this.updateInstancedMesh([]);
+            }
+
+            updateLoadingState(false);
+        });
     }
 
     async updateInstancedMesh(filterType = []) {
@@ -156,6 +177,9 @@ export class SceneInitializer {
 
         let celltypes = SelectedState.value.selectedCelltypes;
         let genes = SelectedState.value.selectedGenes;
+
+        let dotSize = ButtonState.value.dotSize;
+        let smallDotSize = Math.floor(dotSize/5);
 
         if (genes.length > 0) {
             try {
@@ -209,12 +233,12 @@ export class SceneInitializer {
                 if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
                     // color = new THREE.Color(jsonData[i]["clusters_colors"]);
                     color = new THREE.Color(pallete[jsonData[i]["clusters"]]);
-                    proj.scale.set(5, 5, 5);
-                    umap.scale.set(5 * umapmod, 5 * umapmod, 5 * umapmod);
+                    proj.scale.set(dotSize, dotSize, dotSize);
+                    umap.scale.set(dotSize * umapmod, dotSize * umapmod, dotSize * umapmod);
                 } else {
                     color = new THREE.Color('#5e5e5e');
-                    proj.scale.set(1, 1, 1);
-                    umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
+                    proj.scale.set(smallDotSize, smallDotSize, smallDotSize);
+                    umap.scale.set(smallDotSize * umapmod, smallDotSize * umapmod, smallDotSize * umapmod);
                 }
             }
 

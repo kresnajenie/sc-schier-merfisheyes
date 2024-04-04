@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "chroma": "^0.0.1",
     "chroma-js": "^2.4.2",
     "lodash": "^4.17.21",
     "rxjs": "^7.8.1",

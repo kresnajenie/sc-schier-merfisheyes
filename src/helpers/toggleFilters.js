@@ -1,3 +1,5 @@
+import { ButtonState, updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
+
 export const toggleCellFilter = () => {
 
     const cellCheckbox = document.getElementById("cellCheckbox");
@@ -93,10 +95,23 @@ export const toggleButton = () => {
     const pointSizeSlider = document.getElementById("pointSizeSlider");
     const pointSizeSliderValue = document.getElementById("pointSizeSliderValue");
     
-    // pointSizeSlider.addEventListener('mousedown', () => {
-    //     sliderValue.innerText = this.value;
-    // });
     pointSizeSlider.oninput = function() {
         pointSizeSliderValue.innerHTML = this.value;
+        updateDotSize(this.value);
+    }
+
+    const toggleGenePercentile = document.getElementById("toggleGenePercentile");
+    const geneSliderBox = document.getElementById("geneSliderBox");
+
+    toggleGenePercentile.addEventListener('click', () => {
+        geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
+    })
+
+    const geneSlider = document.getElementById("geneSlider");
+    const geneSliderValue = document.getElementById("geneSliderValue");
+    
+    geneSlider.oninput = function() {
+        geneSliderValue.innerHTML = this.value;
+        updateGenePercentile(this.value);
     }
 }

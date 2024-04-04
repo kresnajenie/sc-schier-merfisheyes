@@ -173,6 +173,13 @@
   background-color: #f9f9f9;
   align-items: center;
   text-align: center;
+  gap: 5px;
+
+  background-color: rgba(0, 0, 0, 0.8);
+
+  border: rgba(58, 58, 58, 0.5) solid;
+  padding: 0px 10px 10px 10px;
+  border-radius: 5px;
 }
 
 .slider {
@@ -190,11 +197,12 @@
 }
 
 .slider-min-max {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .slider-container-inner {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  color: white;
 }
