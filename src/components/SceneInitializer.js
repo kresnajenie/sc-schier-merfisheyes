@@ -5,11 +5,9 @@ import { ApiState } from '../states/ApiState.js';
 import { SceneState } from '../states/SceneState.js';
 import { UIState, updateLoadingState } from '../states/UIState.js';
 import { SelectedState, updateSelectedCelltype, updateSelectedGene } from '../states/SelectedState.js';
-
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
-import { UIState, updateLoadingState } from '../states/UIState.js';
 import { ButtonState, updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
