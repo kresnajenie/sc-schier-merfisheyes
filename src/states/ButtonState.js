@@ -2,7 +2,8 @@ import { BehaviorSubject } from 'rxjs';
 
 const buttonData = {
     dotSize: 5,
-    genePercentile: 100,
+    genePercentile: 0.99,
+    cameraPositionZ: 200,
 }
 
 export const ButtonState = new BehaviorSubject(buttonData);
@@ -31,14 +32,27 @@ export function updateDotSize(newDotSize) {
  */
 export function updateGenePercentile(newGenePercentile) {
     // Get the current state from the BehaviorSubject
-    const currentState = Buttonstate.getValue();
+    const currentState = ButtonState.getValue();
 
+    const percent = newGenePercentile * 0.01;
     // Update the items in the current state
     const updatedState = {
         ...currentState,
-        genePercentile: newGenePercentile
+        genePercentile: percent
     };
 
     // Emit the updated state
+    ButtonState.next(updatedState);
+}
+
+export function updateCameraPositionZ(newCameraPositionZ) {
+
+    const currentState = ButtonState.getValue();
+
+    const updatedState = {
+        ...currentState,
+        cameraPositionZ: newCameraPositionZ
+    };
+
     ButtonState.next(updatedState);
 }

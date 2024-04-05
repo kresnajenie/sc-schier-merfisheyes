@@ -11,7 +11,7 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 import { ButtonState, updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
-import { calculate99thPercentile, coolwarm, getGene, normalizeArray } from '../helpers/GeneFunctions.js';
+import { calculateGenePercentile, coolwarm, getGene, normalizeArray } from '../helpers/GeneFunctions.js';
 import { showGeneFilters } from '../helpers/Filtering/Gene.js';
 
 
@@ -32,7 +32,7 @@ export class SceneInitializer {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.camera.position.z = 200;
+        this.camera.position.z = ButtonState.value.cameraPositionZ;
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -146,6 +146,38 @@ export class SceneInitializer {
 
             updateLoadingState(false);
         });
+
+        ButtonState.pipe(
+            map(state => state.cameraPositionZ),
+            distinctUntilChanged()
+        ).subscribe(async items => {
+            console.log("Zoom", items);
+            console.log(ButtonState.value.cameraPositionZ);
+
+            if(ButtonState.value.cameraPositionZ) {
+                await this.updateInstancedMesh(ButtonState.value.cameraPositionZ);
+            } else {
+                await this.updateInstancedMesh([]);
+            }
+        })
+
+        ButtonState.pipe(
+            map(state => state.genePercentile),
+            distinctUntilChanged()
+        ).subscribe(async items => {
+            console.log("Gene Percentile", items);
+            console.log(ButtonState.value.genePercentile);
+
+            updateLoadingState(true);
+
+            if(ButtonState.value.genePercentile) {
+                await this.updateInstancedMesh(ButtonState.value.genePercentile);
+            } else {
+                await this.updateInstancedMesh([]);
+            }
+
+            updateLoadingState(false);
+        })
     }
 
     async updateInstancedMesh(filterType = []) {
@@ -197,16 +229,19 @@ export class SceneInitializer {
         let dotSize = ButtonState.value.dotSize;
         let smallDotSize = Math.floor(dotSize/5);
 
+        this.camera.position.z = ButtonState.value.cameraPositionZ;
+        let genePercentile = ButtonState.value.genePercentile;
+
         if (genes.length > 0) {
             try {
                 let count1 = await getGene(genes[0]);
                 if (genes.length == 2) {
                     let count2 = await getGene(genes[1]);
-                    let nmax2 = calculate99thPercentile(count2);
+                    let nmax2 = calculateGenePercentile(count2, genePercentile);
                     ctsClipped2 = normalizeArray(count2, nmax2);
                 }
                 // You can use cts here
-                let nmax1 = calculate99thPercentile(count1);
+                let nmax1 = calculateGenePercentile(count1, genePercentile);
                 // console.log(cts);
                 ctsClipped1 = normalizeArray(count1, nmax1);
             } catch (error) {
