@@ -72,12 +72,12 @@ export function coolwarm(value1, value2) {
  * @param {Array<number>} arr - The array of numerical values.
  * @returns {number} - The value at the 99th percentile.
  */
-export function calculate99thPercentile(arr) {
+export function calculateGenePercentile(arr, percentile) {
     // Create a copy of the array and sort the copy
     const sortedArr = arr.slice().sort((a, b) => a - b);
 
-    // Calculate the index for the 99th percentile
-    const index = Math.floor(sortedArr.length * 0.99) - 1;
+    // Calculate the index for the xth percentile
+    const index = Math.floor(sortedArr.length * percentile) - 1;
 
     // Return the value at the 99th percentile
     return sortedArr[index];

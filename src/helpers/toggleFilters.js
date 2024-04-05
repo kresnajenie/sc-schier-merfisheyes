@@ -70,6 +70,24 @@ export const toggleGeneFilter = () => {
 export const toggleButton = () => {
 
     const buttons = document.querySelectorAll('.iconBtn');
+    const toggleZoomIn = document.getElementById("toggleZoomIn");
+    const toggleZoomOut = document.getElementById("toggleZoomOut");
+    const togglePointSize = document.getElementById("togglePointSize");
+    const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
+    const pointSizeSlider = document.getElementById("pointSizeSlider");
+    const pointSizeSliderValue = document.getElementById("pointSizeSliderValue");
+    const toggleGenePercentile = document.getElementById("toggleGenePercentile");
+    const geneSliderBox = document.getElementById("geneSliderBox");
+    const geneSlider = document.getElementById("geneSlider");
+    const geneSliderValue = document.getElementById("geneSliderValue");
+
+    const cellCheckbox = document.getElementById("cellCheckbox");
+    const geneRadioContainer = document.getElementById('geneRadioContainer');
+
+    const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
+    const toggleGeneRadio = document.getElementById('toggleGeneRadio');
+
+    // hover functions for each button 
 
     buttons.forEach(button => {
         button.addEventListener('mouseenter', function() {
@@ -85,44 +103,110 @@ export const toggleButton = () => {
         });
     });
 
-    const toggleZoomIn = document.getElementById("toggleZoomIn");
+    // zoom in function
 
     toggleZoomIn.addEventListener('click', () => {
+
+        // check if anything else is open -> close
+
+        if (cellCheckbox.style.display === 'block') {
+            cellCheckbox.style.display = 'none';
+            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.color = 'white';
+        }
+        if (geneRadioContainer.style.display === 'block') {
+            geneRadioContainer.style.display = 'none';
+            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.color = 'white';
+        }
+        if (pointSizeSliderBox.style.display === 'block') {
+            pointSizeSliderBox.style.display = 'none';
+        }
+        if (geneSliderBox.style.display === 'block') {
+            geneSliderBox.style.display = 'none';
+        }
+
         const newZoom = ButtonState.value.cameraPositionZ - 25;
         updateCameraPositionZ(newZoom);
     })
 
-    const toggleZoomOut = document.getElementById("toggleZoomOut");
-
+    // zoom out function
+    
     toggleZoomOut.addEventListener('click', () => {
+
+        // check if anything else is open -> close
+
+        if (cellCheckbox.style.display === 'block') {
+            cellCheckbox.style.display = 'none';
+            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.color = 'white';
+        }
+        if (geneRadioContainer.style.display === 'block') {
+            geneRadioContainer.style.display = 'none';
+            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.color = 'white';
+        }
+        if (pointSizeSliderBox.style.display === 'block') {
+            pointSizeSliderBox.style.display = 'none';
+        }
+        if (geneSliderBox.style.display === 'block') {
+            geneSliderBox.style.display = 'none';
+        }
+
         const newZoom = ButtonState.value.cameraPositionZ + 25;
         updateCameraPositionZ(newZoom);
     })
 
-    const togglePointSize = document.getElementById("togglePointSize");
-    const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
-
+    // point size slider function
+    
     togglePointSize.addEventListener('click', () => {
+
+        // check if anything else is open -> close
+
+        if (cellCheckbox.style.display === 'block') {
+            cellCheckbox.style.display = 'none';
+            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.color = 'white';
+        }
+        if (geneRadioContainer.style.display === 'block') {
+            geneRadioContainer.style.display = 'none';
+            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.color = 'white';
+        }
+        if (geneSliderBox.style.display === 'block') {
+            geneSliderBox.style.display = 'none';
+        }
+
         pointSizeSliderBox.style.display = pointSizeSliderBox.style.display === 'none' ? 'block' : 'none';
     })
-
-    const pointSizeSlider = document.getElementById("pointSizeSlider");
-    const pointSizeSliderValue = document.getElementById("pointSizeSliderValue");
     
     pointSizeSlider.oninput = function() {
         pointSizeSliderValue.innerHTML = this.value;
         updateDotSize(this.value);
     }
 
-    const toggleGenePercentile = document.getElementById("toggleGenePercentile");
-    const geneSliderBox = document.getElementById("geneSliderBox");
+    // gene percentile slider function
 
     toggleGenePercentile.addEventListener('click', () => {
+
+        // check if anything else is open -> close
+
+        if (cellCheckbox.style.display === 'block') {
+            cellCheckbox.style.display = 'none';
+            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.color = 'white';
+        }
+        if (geneRadioContainer.style.display === 'block') {
+            geneRadioContainer.style.display = 'none';
+            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.color = 'white';
+        }
+        if (pointSizeSliderBox.style.display === 'block') {
+            pointSizeSliderBox.style.display = 'none';
+        }
+
         geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
     })
-
-    const geneSlider = document.getElementById("geneSlider");
-    const geneSliderValue = document.getElementById("geneSliderValue");
     
     geneSlider.oninput = function() {
         geneSliderValue.innerHTML = this.value;
