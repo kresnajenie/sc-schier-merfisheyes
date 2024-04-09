@@ -263,10 +263,10 @@ export class SceneInitializer {
                     // if there's a second gene
                     if (ctsClipped2) {
                         colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
-                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * 5 + 1;
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize/5;
                     } else {
                         colorrgb = coolwarm(ctsClipped1[i]);
-                        scale = ctsClipped1[i] * 5 + 1;
+                        scale = ctsClipped1[i] * dotSize + dotSize/5;
                     }
 
                     // console.log(colorrgb);
