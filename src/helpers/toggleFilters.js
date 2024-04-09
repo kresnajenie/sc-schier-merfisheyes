@@ -181,8 +181,18 @@ export const toggleButton = () => {
     })
     
     pointSizeSlider.oninput = function() {
-        pointSizeSliderValue.innerHTML = this.value;
-        updateDotSize(this.value);
+        pointSizeSliderValue.value = parseFloat(this.value).toFixed(2);
+        updateDotSize(parseFloat(this.value).toFixed(2));
+    }
+
+    pointSizeSliderValue.oninput = function() {
+        if (this.value < 0) {
+            this.value = 0;
+        } else if (this.value > 50) {
+            this.value = 50;
+        }
+        pointSizeSlider.value = parseFloat(this.value).toFixed(2);
+        updateDotSize(parseFloat(this.value).toFixed(2));
     }
 
     // gene percentile slider function
@@ -209,7 +219,17 @@ export const toggleButton = () => {
     })
     
     geneSlider.oninput = function() {
-        geneSliderValue.innerHTML = this.value;
-        updateGenePercentile(this.value);
+        geneSliderValue.value = parseFloat(this.value).toFixed(2);
+        updateGenePercentile(parseFloat(this.value).toFixed(2));
+    }
+
+    geneSliderValue.oninput = function() {
+        if (this.value < 0) {
+            this.value = 0;
+        } else if (this.value > 99.99) {
+            this.value = 99.99;
+        }
+        geneSlider.value = parseFloat(this.value).toFixed(2);
+        updateGenePercentile(parseFloat(this.value).toFixed(2));
     }
 }
