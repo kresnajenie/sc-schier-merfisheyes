@@ -218,10 +218,15 @@ export const toggleButton = () => {
         geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
     })
     
-    geneSlider.oninput = function() {
+    // geneSlider.oninput = function() {
+    //     geneSliderValue.value = parseFloat(this.value).toFixed(2);
+    //     updateGenePercentile(parseFloat(this.value).toFixed(2));
+    // }
+
+    geneSlider.addEventListener('mouseup', function() {
         geneSliderValue.value = parseFloat(this.value).toFixed(2);
         updateGenePercentile(parseFloat(this.value).toFixed(2));
-    }
+    });
 
     geneSliderValue.oninput = function() {
         if (this.value < 0) {
