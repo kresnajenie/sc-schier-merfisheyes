@@ -54,7 +54,7 @@ export function coolwarm(value1, value2) {
     const endColor = { r: 255, g: 0, b: 0 }; // Red
 
     // no second gene
-    if (!value2) {
+    if (value2 == null) {
         if (value1 < 0.5) { // blue to white
             return `rgb(${Math.floor(middleColor.r * value1 * 2)}, ${Math.floor(middleColor.g * value1 * 2)}, ${startColor.b})`;
         } else if (value1 === 0.5) { // white
@@ -63,7 +63,7 @@ export function coolwarm(value1, value2) {
             return `rgb(${endColor.r}, ${Math.floor(middleColor.g - (middleColor.g * (value1 - 0.5) * 2))}, ${Math.floor(middleColor.b - (middleColor.b * (value1 - 0.5) * 2))})`;
         }
     } else {
-        return interpolatePercentages(value1, value2);
+        return interpolatePercentages(value2, value1);
     }
 }
 

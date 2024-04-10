@@ -1,6 +1,17 @@
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedCelltype } from "../../states/SelectedState";
 
+// temporary groupings
+const groups = [
+    "Adaxial",
+    "Cephalic",
+    "Endoderm",
+    "Floor Plate",
+    "Hindbrain",
+]
+
+const divs = new Set();
+
 /**
  * Detects celltype input changes and sends them to be filtered
  */
@@ -69,6 +80,7 @@ export function createCellCheckboxes(cellTypesWithColors) {
     });
 
     cellTypesWithColors.forEach(([celltype, color]) => {
+
         // Create checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -87,12 +99,42 @@ export function createCellCheckboxes(cellTypesWithColors) {
         label.textContent = celltype;
         label.style.color = color;
 
-        const checkboxGroup = document.createElement('checkboxGroup');
+        let checkboxGroup = document.createElement('checkboxGroup');
 
         // Append checkbox and label to container
         checkboxGroup.appendChild(checkbox);
         checkboxGroup.appendChild(label);
         checkboxGroup.appendChild(document.createElement('br'));
+
+        // if in a group, add to group instead
+        let group;
+        let list;
+
+        let c = groups.find(s => celltype.startsWith(s));
+        if (c) {
+
+            // if checkboxGroup is null, we make a new group
+            if (divs.has(c)) {
+                console.log("already exists");
+                group = document.getElementById(`${c}-group`);
+
+            } else {
+                group = document.createElement("input");
+                group.type = "checkbox";
+                group.className = 'box';
+                group.id = `${c}-group`;
+                divs.add(c);
+
+                list = document.createElement("ul");
+                list.id = `${c}-list`;
+
+                console.log("create!");
+            }
+
+            // group.appendChild(list);
+            // list.appendChild(checkboxGroup);
+            // checkboxGroup = group;
+        }
 
         checkboxes.appendChild(checkboxGroup);
 
@@ -161,7 +203,7 @@ export const showCellFilters = () => {
             cellFilters.appendChild(f);
         })
 
-    // no celltype filters
+        // no celltype filters
     } else {
         cellFilters.innerHTML = "No celltype filters selected";
     }
