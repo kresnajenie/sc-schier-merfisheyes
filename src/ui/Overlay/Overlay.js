@@ -5,7 +5,6 @@ import { SceneState } from '../../states/SceneState';
 
 
 
-
 export function createOverlay() {
     const overlay = document.createElement('div');
     overlay.id = 'overlay';
