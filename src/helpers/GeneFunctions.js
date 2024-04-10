@@ -8,9 +8,6 @@ export function getGene(gene) {
 
 // for two genes
 function interpolatePercentages(percent1, percent2) {
-    // Normalize percentages to range [0, 1]
-    const normalizedPercent1 = percent1 ;
-    const normalizedPercent2 = percent2 ;
 
     // Define colors
     const white = { r: 255, g: 255, b: 255 };
@@ -19,16 +16,16 @@ function interpolatePercentages(percent1, percent2) {
 
     // Interpolate between red and white based on the first percentage
     const interpolatedRed = {
-        r: Math.round(red.r + (white.r - red.r) * normalizedPercent1),
-        g: Math.round(red.g + (white.g - red.g) * normalizedPercent1),
-        b: Math.round(red.b + (white.b - red.b) * normalizedPercent1)
+        r: Math.round(red.r + (white.r - red.r) * percent2),
+        g: Math.round(red.g + (white.g - red.g) * percent2),
+        b: Math.round(red.b + (white.b - red.b) * percent2)
     };
 
     // Interpolate between cyan and white based on the second percentage
     const interpolatedCyan = {
-        r: Math.round(cyan.r + (white.r - cyan.r) * normalizedPercent2),
-        g: Math.round(cyan.g + (white.g - cyan.g) * normalizedPercent2),
-        b: Math.round(cyan.b + (white.b - cyan.b) * normalizedPercent2)
+        r: Math.round(cyan.r + (white.r - cyan.r) * percent1),
+        g: Math.round(cyan.g + (white.g - cyan.g) * percent1),
+        b: Math.round(cyan.b + (white.b - cyan.b) * percent1)
     };
 
     // Calculate the average of the interpolated colors
@@ -63,7 +60,7 @@ export function coolwarm(value1, value2) {
             return `rgb(${endColor.r}, ${Math.floor(middleColor.g - (middleColor.g * (value1 - 0.5) * 2))}, ${Math.floor(middleColor.b - (middleColor.b * (value1 - 0.5) * 2))})`;
         }
     } else {
-        return interpolatePercentages(value2, value1);
+        return interpolatePercentages(value1, value2);
     }
 }
 
