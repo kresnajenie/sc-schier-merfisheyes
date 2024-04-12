@@ -1,6 +1,7 @@
 
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedGene } from "../../states/SelectedState";
+import { changeURL } from "../URL";
 
 
 let checked = 0;
@@ -111,8 +112,6 @@ function updateRadioItem(gene, isChecked) {
         copy = copy.filter(item => item !== gene);
         updateSelectedGene(copy);
     }
-
-    console.log(SelectedState.value.selectedGenes);
 }
 
 /**

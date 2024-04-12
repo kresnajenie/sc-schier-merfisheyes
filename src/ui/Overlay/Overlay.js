@@ -124,7 +124,6 @@ export function createOverlay() {
     renderer.setSize(initialWidth, initialHeight);
 
     // camera.aspect = sceneContainer.offsetWidth / sceneContainer.offsetHeight;
-    console.log("halo")
     camera.aspect = initialWidth / initialHeight;
     camera.updateProjectionMatrix();
     renderer.render(scene, camera);

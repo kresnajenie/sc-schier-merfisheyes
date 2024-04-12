@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
-const hash = window.location.hash.replace("#", "");
+const url = new URL(window.location);
+const params = new URLSearchParams(url.search);
 
 const apiData = {
     columns: [
@@ -12,7 +13,7 @@ const apiData = {
         'clusters',
     ],
 
-    prefix: hash ? hash : "50pe",
+    prefix: params.has("prefix") ? params.get("prefix") : "6s",
     pallete: {},
     listPalette: [], // list version of palette
     palleteColumn: "clusters_pal",

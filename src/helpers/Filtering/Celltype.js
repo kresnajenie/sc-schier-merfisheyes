@@ -1,5 +1,6 @@
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedCelltype } from "../../states/SelectedState";
+import { changeURL } from "../URL";
 
 /**
  * Detects celltype input changes and sends them to be filtered
@@ -197,8 +198,6 @@ export function createCellCheckboxes(cellTypesWithColors) {
 
                 divs[groupInput.value].forEach(input => { // if after going through each one and they're all checked, set parent to true
                     if (!input.checked) { all = false };
-
-                    console.log(groupInput, groupInput.checked);
                 })
 
                 groupInput.checked = all;
@@ -230,7 +229,6 @@ export async function updateCheckedItems(celltype, isChecked) {
         copy = copy.filter(item => item !== celltype)
         updateSelectedCelltype(copy);
     }
-    // console.log(SelectedState.value.selectedCelltypes);
 }
 
 /**

@@ -35,7 +35,8 @@ function createDropdownItem(href, text) {
     const listItem = document.createElement('li');
     const link = document.createElement('a');
     link.className = 'dropdown-item';
-    link.href = href;
+    link.style.cursor = 'pointer';
+    // link.href = href;
     link.innerHTML = text;
 
     link.onclick = () => {selectPrefix(text)};

@@ -13,6 +13,7 @@ import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
 import { calculateGenePercentile, coolwarm, getGene, normalizeArray } from '../helpers/GeneFunctions.js';
 import { showGeneFilters } from '../helpers/Filtering/Gene.js';
+import { changeURL } from '../helpers/URL.js';
 
 
 export class SceneInitializer {
@@ -63,8 +64,8 @@ export class SceneInitializer {
             // If you want to deep compare array objects, you might replace the next line with a custom comparison function
             distinctUntilChanged((prev, curr) => isEqual(prev, curr))
         ).subscribe(items => {
-            console.log('Items have updated:', items);
-            console.log(MatrixState.value.items);
+            console.log('Items have updated:');
+            // console.log(MatrixState.value.items);
             // Here you can handle the update, e.g., update UI components to reflect the new items array
         });
 
@@ -96,6 +97,14 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
+            const url = new URL(window.location);
+            const params = new URLSearchParams(url.search);
+
+            // update the url params
+            if (params.has("celltype")) {
+                params.delete("celltype");
+            }
+
             if (SelectedState.value.selectedCelltypes) {
                 await this.updateInstancedMesh(SelectedState.value.selectedCelltypes);
             } else {
@@ -103,6 +112,13 @@ export class SceneInitializer {
             }
 
             showCellFilters();
+
+            if (SelectedState.value.selectedCelltypes.length > 0) {
+                const newCelltype = encodeURIComponent(JSON.stringify(SelectedState.value.selectedCelltypes));
+                params.append("celltype", newCelltype)
+            }
+
+            changeURL(params);
 
             updateLoadingState(false);
         });
@@ -116,6 +132,14 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
+            const url = new URL(window.location);
+            const params = new URLSearchParams(url.search);
+
+            // update the url params
+            if (params.has("gene")) {
+                params.delete("gene");
+            }
+
             if (SelectedState.value.selectedGenes) {
                 await this.updateInstancedMesh(SelectedState.value.selectedGenes);
             } else {
@@ -123,6 +147,14 @@ export class SceneInitializer {
             }
 
             showGeneFilters();
+
+            if (SelectedState.value.selectedGenes.length > 0) {
+                // hype boy
+                const newGenes = encodeURIComponent(JSON.stringify(SelectedState.value.selectedGenes));
+                params.append("gene", newGenes)
+            }
+
+            changeURL(params);
 
             updateLoadingState(false);
         });
@@ -154,7 +186,7 @@ export class SceneInitializer {
             console.log("Zoom", items);
             console.log(ButtonState.value.cameraPositionZ);
 
-            if(ButtonState.value.cameraPositionZ) {
+            if (ButtonState.value.cameraPositionZ) {
                 await this.updateInstancedMesh(ButtonState.value.cameraPositionZ);
             } else {
                 await this.updateInstancedMesh([]);
@@ -170,7 +202,7 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            if(ButtonState.value.genePercentile) {
+            if (ButtonState.value.genePercentile) {
                 await this.updateInstancedMesh(ButtonState.value.genePercentile);
             } else {
                 await this.updateInstancedMesh([]);
@@ -200,8 +232,8 @@ export class SceneInitializer {
         let pallete = ApiState.value.pallete;
         let jsonData = MatrixState.value.items;
 
-        console.log(pallete);
-        console.log(jsonData);
+        // console.log(pallete);
+        // console.log(jsonData);
 
         const sphereGeometry = new THREE.CircleGeometry(0.1, 32, 32);
         const material = new THREE.MeshBasicMaterial();
@@ -227,7 +259,7 @@ export class SceneInitializer {
         let genes = SelectedState.value.selectedGenes;
 
         let dotSize = ButtonState.value.dotSize;
-        let smallDotSize = Math.floor(dotSize/5);
+        let smallDotSize = Math.floor(dotSize / 5);
 
         this.camera.position.z = ButtonState.value.cameraPositionZ;
         let genePercentile = ButtonState.value.genePercentile;
@@ -263,10 +295,10 @@ export class SceneInitializer {
                     // if there's a second gene
                     if (ctsClipped2) {
                         colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
-                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize/5;
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 5;
                     } else {
                         colorrgb = coolwarm(ctsClipped1[i]);
-                        scale = ctsClipped1[i] * dotSize + dotSize/5;
+                        scale = ctsClipped1[i] * dotSize + dotSize / 5;
                     }
 
                     // console.log(colorrgb);
