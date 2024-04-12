@@ -15,6 +15,8 @@ import { calculateGenePercentile, coolwarm, getGene, normalizeArray } from '../h
 import { showGeneFilters } from '../helpers/Filtering/Gene.js';
 import { changeURL } from '../helpers/URL.js';
 
+const url = new URL(window.location);
+const params = new URLSearchParams(url.search);
 
 export class SceneInitializer {
     constructor(container) {
@@ -95,21 +97,20 @@ export class SceneInitializer {
             console.log("Selected celltypes changed:", items);
             console.log(SelectedState.value.selectedCelltypes);
 
-            updateLoadingState(true);
-
-            const url = new URL(window.location);
-            const params = new URLSearchParams(url.search);
-
             // update the url params
             if (params.has("celltype")) {
                 params.delete("celltype");
             }
+
+            updateLoadingState(true);
 
             if (SelectedState.value.selectedCelltypes) {
                 await this.updateInstancedMesh(SelectedState.value.selectedCelltypes);
             } else {
                 await this.updateInstancedMesh([]);
             }
+
+            updateLoadingState(false);
 
             showCellFilters();
 
@@ -119,8 +120,6 @@ export class SceneInitializer {
             }
 
             changeURL(params);
-
-            updateLoadingState(false);
         });
 
         SelectedState.pipe(
@@ -130,21 +129,20 @@ export class SceneInitializer {
             console.log("Selected genes changed:", items);
             console.log(SelectedState.value.selectedGenes);
 
-            updateLoadingState(true);
-
-            const url = new URL(window.location);
-            const params = new URLSearchParams(url.search);
-
             // update the url params
             if (params.has("gene")) {
                 params.delete("gene");
             }
+
+            updateLoadingState(true);
 
             if (SelectedState.value.selectedGenes) {
                 await this.updateInstancedMesh(SelectedState.value.selectedGenes);
             } else {
                 await this.updateInstancedMesh([]);
             }
+
+            updateLoadingState(false);
 
             showGeneFilters();
 
@@ -155,8 +153,6 @@ export class SceneInitializer {
             }
 
             changeURL(params);
-
-            updateLoadingState(false);
         });
 
         // listen for changing dotsize

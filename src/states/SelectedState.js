@@ -20,7 +20,7 @@ export function updateSelectedCelltype(newCelltypes) {
     // Update the items in the current state
     const updatedState = {
         ...currentState,
-        selectedCelltypes: newCelltypes
+        selectedCelltypes: [...new Set(newCelltypes)]
     };
 
     // Emit the updated state

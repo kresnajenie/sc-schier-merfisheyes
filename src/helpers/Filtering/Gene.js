@@ -1,7 +1,6 @@
 
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedGene } from "../../states/SelectedState";
-import { changeURL } from "../URL";
 
 
 let checked = 0;
@@ -72,6 +71,10 @@ export function createGeneRadio(geneList) {
         radio.id = gene;
         radio.value = gene;
         radio.name = "radio";
+
+        if (SelectedState.value.selectedGenes.includes(gene)) {
+            radio.checked = true;
+        }
 
         // Create label
         const label = document.createElement('label');

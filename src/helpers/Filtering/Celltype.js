@@ -1,6 +1,5 @@
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedCelltype } from "../../states/SelectedState";
-import { changeURL } from "../URL";
 
 /**
  * Detects celltype input changes and sends them to be filtered
@@ -182,15 +181,31 @@ export function createCellCheckboxes(cellTypesWithColors) {
         // detect group checkbox change
         groupInput.addEventListener('change', (e) => {
 
+            let copy = SelectedState.value.selectedCelltypes.map(i => i);
+
             // change all  to checked
             divs[e.target.value].forEach(input => {
                 input.checked = e.target.checked;
-                updateCheckedItems(input.value, e.target.checked);
+                // updateCheckedItems(input.value, e.target.checked);
+
+                if (e.target.checked) {
+                    copy.push(input.value)
+                } else {
+                    copy.splice(copy.indexOf(input.value))
+                }
             })
+
+            updateSelectedCelltype(copy);
         });
 
         // detect children change and updates parent accordingly
         divs[groupInput.value].forEach(input => { // goes through each input that has a parent
+
+            // it's a repeat but this is for checking from url
+            let all = true;
+
+            if (!input.checked) { all = false };
+            groupInput.checked = all;
 
             input.addEventListener('change', () => {
 

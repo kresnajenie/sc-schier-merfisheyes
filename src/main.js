@@ -4,11 +4,12 @@ import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gen
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
 import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
+import { SelectedState, updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createNavbar } from './ui/Navbar/Navbar.js';
-import {createOverlay} from './ui/Overlay/Overlay.js'
+import { createOverlay } from './ui/Overlay/Overlay.js'
 
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
@@ -38,6 +39,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadGenes();
         console.log(ApiState.value.genes);
 
+        // // Fetch additional data items
+        // const data = await firstValueFrom(fetchDataFromAPI(pal_col, prefix));
+        // updateDataItems(data);
+
+        const sceneContainer = document.body;
+        new SceneInitializer(sceneContainer);
+
+        // dictionary of all search paramaters in url
+        const url = new URL(window.location);
+        const params = new URLSearchParams(url.search);
+
+        if (params.has("celltype")) {
+            const cells = JSON.parse(decodeURIComponent(params.get("celltype")))
+
+            // remove invalid celltypes
+            const filteredCells = cells.filter((cell) => Object.keys(ApiState.value.pallete).includes(cell))
+            console.log("new cells", filteredCells);
+
+            updateSelectedCelltype(filteredCells);
+        }
+
+        if (params.has("gene")) {
+
+            console.log("you shouldn't be here.");
+
+            const genes = JSON.parse(decodeURIComponent(params.get("gene")))
+
+            // remove invalid genes
+            const filteredGenes = genes.filter((gene) => ApiState.value.genes.includes(gene))
+            console.log("new genes", filteredGenes);
+
+            updateSelectedGene(filteredGenes);
+        }
+
         createCellCheckboxes(ApiState.value.listPalette);
         clearCells();
         cellSearch()
@@ -46,12 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         clearGenes();
         geneSearch();
 
-        // // Fetch additional data items
-        // const data = await firstValueFrom(fetchDataFromAPI(pal_col, prefix));
-        // updateDataItems(data);
-
-        const sceneContainer = document.body;
-        new SceneInitializer(sceneContainer);
     } catch (err) {
         console.error('Failed to load data:', err);
     } finally {
