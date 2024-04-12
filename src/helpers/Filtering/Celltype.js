@@ -1,17 +1,6 @@
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedCelltype } from "../../states/SelectedState";
 
-// temporary groupings
-const groups = [
-    "Adaxial",
-    "Cephalic",
-    "Endoderm",
-    "Floor Plate",
-    "Hindbrain",
-]
-
-const divs = new Set();
-
 /**
  * Detects celltype input changes and sends them to be filtered
  */
@@ -68,6 +57,10 @@ export function filterCellSearchQuery(searchQuery) {
  * filterCellSearchQuery(["cell1", "cell2", "cell3"]);
  */
 export function createCellCheckboxes(cellTypesWithColors) {
+
+    // holds the group : input element inside group
+    let divs = {};
+
     const checkboxes = document.getElementById('cellCheckboxes');
 
     checkboxes.innerHTML = ''; // clear checkbox container
@@ -96,53 +89,123 @@ export function createCellCheckboxes(cellTypesWithColors) {
         // Create label
         const label = document.createElement('label');
         label.htmlFor = celltype;
-        label.textContent = celltype;
         label.style.color = color;
 
-        let checkboxGroup = document.createElement('checkboxGroup');
-
-        // Append checkbox and label to container
-        checkboxGroup.appendChild(checkbox);
-        checkboxGroup.appendChild(label);
-        checkboxGroup.appendChild(document.createElement('br'));
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(celltype));
 
         // if in a group, add to group instead
-        let group;
-        let list;
+        let groupDiv;
+        let groupInput; // the checkbox for the GROUP
+        let groupLabel;
+        let groupList;
 
-        let c = groups.find(s => celltype.startsWith(s));
+        let c = ApiState.value.groups.find(s => celltype.toLowerCase().startsWith(s));
+
+        // if c is true meaning found
         if (c) {
 
+            // id of group input element
+            const id = `${c}-group`;
+
             // if checkboxGroup is null, we make a new group
-            if (divs.has(c)) {
-                console.log("already exists");
-                group = document.getElementById(`${c}-group`);
+            if (Object.keys(divs).includes(c)) {
+                groupDiv = document.getElementById(`${c}-div`);
+                groupInput = document.getElementById(id);
+                groupLabel = document.getElementById(`${c}-label`);
+                groupList = document.getElementById(`${c}-list`);
+            } else { // new group
+                divs[c] = []
 
-            } else {
-                group = document.createElement("input");
-                group.type = "checkbox";
-                group.className = 'box';
-                group.id = `${c}-group`;
-                divs.add(c);
+                groupDiv = document.createElement("div");
+                groupDiv.id = `${c}-div`;
 
-                list = document.createElement("ul");
-                list.id = `${c}-list`;
+                // parent element
+                groupLabel = document.createElement("label");
+                groupLabel.htmlFor = c;
+                groupLabel.setAttribute("for", id);
+                groupLabel.style.color = "white";
+                groupLabel.id = `${c}-label`;
 
-                console.log("create!");
+                // inside group label
+                groupInput = document.createElement("input");
+                groupInput.type = "checkbox";
+                groupInput.classList.add('box'); groupInput.classList.add('group-input');
+                groupInput.value = c;
+                groupInput.id = id;
+
+                groupLabel.appendChild(groupInput);
+                groupLabel.appendChild(document.createTextNode(c.toUpperCase())); // group name
+
+                // holds the inner checkboxes
+                groupList = document.createElement("ul");
+                groupList.id = `${c}-list`;
+                groupList.style.marginBottom = 0;
+
+                groupDiv.appendChild(groupLabel);
+                groupDiv.appendChild(groupList);
+
+                checkboxes.appendChild(groupDiv) // add to checkbox container
             }
 
-            // group.appendChild(list);
-            // list.appendChild(checkboxGroup);
-            // checkboxGroup = group;
+            // the individual checkbox inside the group
+            const listItem = document.createElement("li");
+            listItem.id = `${c}-item`;
+
+            groupList.appendChild(label)
+            groupList.append(document.createElement("br")); // so on new line
+
+            divs[c].push(checkbox); // adds checkbox to dictionary for updating later
+
+            checkboxes.appendChild(groupDiv)
+
+        } else { // add it by itself without groups
+
+            checkboxes.appendChild(label);
+            checkboxes.appendChild(document.createElement('br'));
         }
 
-        checkboxes.appendChild(checkboxGroup);
-
-        // Attach event listener
+        // Attach event listener for individual checkboxes
         checkbox.addEventListener('change', (e) => {
+            console.log(e);
             updateCheckedItems(celltype, e.target.checked);
         });
     });
+
+    // gets all group checkboxes (applies at end to prevent duplicate event listeners)
+    const groupInputs = document.getElementsByClassName("group-input");
+
+    // convert groupInputs to Array
+    Array.prototype.slice.call(groupInputs).forEach(groupInput => {
+
+        // detect group checkbox change
+        groupInput.addEventListener('change', (e) => {
+
+            // change all  to checked
+            divs[e.target.value].forEach(input => {
+                input.checked = e.target.checked;
+                updateCheckedItems(input.value, e.target.checked);
+            })
+        });
+
+        // detect children change and updates parent accordingly
+        divs[groupInput.value].forEach(input => { // goes through each input that has a parent
+
+            input.addEventListener('change', () => {
+
+                let all = true;
+
+                divs[groupInput.value].forEach(input => { // if after going through each one and they're all checked, set parent to true
+                    if (!input.checked) { all = false };
+
+                    console.log(groupInput, groupInput.checked);
+                })
+
+                groupInput.checked = all;
+
+            })
+        });
+    })
 }
 
 /**
@@ -167,7 +230,7 @@ export async function updateCheckedItems(celltype, isChecked) {
         copy = copy.filter(item => item !== celltype)
         updateSelectedCelltype(copy);
     }
-    console.log(SelectedState.value.selectedCelltypes);
+    // console.log(SelectedState.value.selectedCelltypes);
 }
 
 /**

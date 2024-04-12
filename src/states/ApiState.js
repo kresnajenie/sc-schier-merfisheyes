@@ -17,7 +17,18 @@ const apiData = {
     listPalette: [], // list version of palette
     palleteColumn: "clusters_pal",
     genes: [],
-    items: []
+    items: [],
+
+    // capitalization doesn't matter
+    groups: [
+        "adaxial cells",
+        "cephalic",
+        "endoderm",
+        "floor Plate",
+        "hindbrain",
+        "ectoderm",
+        "spinal cord"
+    ]
 };
 
 
@@ -81,6 +92,26 @@ export function updatePrefix(prefix) {
     const updatedState = {
         ...currentState,
         prefix: prefix
+    };
+
+    // Emit the updated state
+    ApiState.next(updatedState);
+}
+
+/**
+ * Updates the cell groups within the application's constant data state.
+ * @param {Array} groups - The new groups to set in the state.
+ * Example Usage:
+ * updatePrefix(["ectoderm", "endoderm"]);
+ */
+export function updateGroup(groups) {
+
+    const currentState = ApiState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        groups: groups
     };
 
     // Emit the updated state

@@ -1,21 +1,32 @@
 <head>
     <script type="module" src="/@vite/client"></script>
-  
-      <meta charset="UTF-8">
-      <title>FISHEYES</title>
-      <style>
-          body { margin: 0; overflow: hidden; font: 16px Arial;}
-          canvas { display: block; }
-      </style>
-      <link rel="stylesheet" href="src/ui/Navbar.css">
-      <link rel="stylesheet" href="src/ui/Overlay.css">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-      
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-      <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet">
-  <style type="text/css" data-vite-dev-id="./Filter.css"></style>
+
+    <meta charset="UTF-8">
+    <title>FISHEYES</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font: 16px Arial;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+    <link rel="stylesheet" href="src/ui/Navbar.css">
+    <link rel="stylesheet" href="src/ui/Overlay.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap"
+        rel="stylesheet">
+    <style type="text/css" data-vite-dev-id="./Filter.css"></style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid nav-container">
@@ -24,7 +35,8 @@
                 <p>by <i>Bintu Lab</i>, data by <i>Schier Lab</i></p>
             </div>
             <div class="dropdown dropdown-center" id="filter-container">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Show Gene / Celltype Filters</button>
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">Show Gene / Celltype Filters</button>
                 <ul class="dropdown-menu list">
                     <div><b>Celltype Filters: </b>
                         <div class="listFilters" id="cellFilters">No celltype filters selected</div>
@@ -39,7 +51,8 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">50pe</button>
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">50pe</button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="#50pe">50pe</a></li>
                                 <li><a class="dropdown-item" href="#75pe">75pe</a></li>
@@ -58,8 +71,12 @@
         </div>
     </nav>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
     <script type="module" src="/src/main.js?t=1712709776259"></script>
     <div id="overlay" class="overlay">
         <div class="top-controls">
@@ -67,7 +84,8 @@
             <div id="resizeHandle" class="resize-handle"></div>
         </div>
         <div id="overlayScene" style="width: 100%; height: 100%;">
-            <canvas data-engine="three.js r162" width="187" height="365" style="display: block; width: 187.5px; height: 365.5px; touch-action: none;"></canvas>
+            <canvas data-engine="three.js r162" width="187" height="365"
+                style="display: block; width: 187.5px; height: 365.5px; touch-action: none;"></canvas>
         </div>
     </div>
     <div id="loadingIndicator" style="display: none;">
@@ -106,7 +124,8 @@
                 <div></div>
                 <div></div>
                 <span></span>
-            </li><li>
+            </li>
+            <li>
                 <div></div>
                 <div></div>
                 <span></span>
@@ -137,8 +156,10 @@
                     <br>
                 </checkboxgroup>
                 <checkboxgroup>
-                    <input type="checkbox" class="box" id="anterior ventrolateral margin" value="anterior ventrolateral margin">
-                    <label for="anterior ventrolateral margin" style="color: rgb(67, 99, 216);">anterior ventrolateral margin</label>
+                    <input type="checkbox" class="box" id="anterior ventrolateral margin"
+                        value="anterior ventrolateral margin">
+                    <label for="anterior ventrolateral margin" style="color: rgb(67, 99, 216);">anterior ventrolateral
+                        margin</label>
                     <br>
                 </checkboxgroup>
                 <checkboxgroup>
@@ -167,8 +188,10 @@
                     <br>
                 </checkboxgroup>
                 <checkboxgroup>
-                    <input type="checkbox" class="box" id="posterior ventraolateral margin" value="posterior ventraolateral margin">
-                    <label for="posterior ventraolateral margin" style="color: rgb(255, 225, 25);">posterior ventraolateral margin</label>
+                    <input type="checkbox" class="box" id="posterior ventraolateral margin"
+                        value="posterior ventraolateral margin">
+                    <label for="posterior ventraolateral margin" style="color: rgb(255, 225, 25);">posterior
+                        ventraolateral margin</label>
                     <br>
                 </checkboxgroup>
                 <checkboxgroup>
@@ -182,12 +205,14 @@
                     <br>
                 </checkboxgroup>
             </div>
-            <div class="notfound alert alert-danger alert-dismissible fade show" id="cellNotFound">No cell types of that name found.</div>
+            <div class="notfound alert alert-danger alert-dismissible fade show" id="cellNotFound">No cell types of that
+                name found.</div>
         </div>
         <button type="button" class="toggles btn" id="toggleGeneRadio">Gene</button>
         <div class="checkbox-container" id="geneRadioContainer" style="display: none;">
             <div class="input-elements">
-                <input type="text" class="textInput" id="geneTextbox" placeholder="Search gene (only 2 can be selected)">
+                <input type="text" class="textInput" id="geneTextbox"
+                    placeholder="Search gene (only 2 can be selected)">
                 <button type="button" class="clearButton btn btn-danger" id="geneClearButton">Clear</button>
             </div>
             <div class="checkboxes" id="geneRadio">
@@ -297,25 +322,34 @@
                     <br>
                 </generadiogroup>
             </div>
-            <div class="notfound alert alert-danger alert-dismissible fade show" id="geneNotFound">No genes of that name found.</div>
+            <div class="notfound alert alert-danger alert-dismissible fade show" id="geneNotFound">No genes of that name
+                found.</div>
         </div>
         <div class="icon">
             <button type="button" data-target="zoomInBox" class="iconBtn btn" id="toggleZoomIn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.3431 15.2426C17.6863 12.8995 17.6863 9.1005 15.3431 6.75736C13 4.41421 9.20101 4.41421 6.85786 6.75736C4.51472 9.1005 4.51472 12.8995 6.85786 15.2426C9.20101 17.5858 13 17.5858 15.3431 15.2426ZM16.7574 5.34315C19.6425 8.22833 19.8633 12.769 17.4195 15.9075C17.4348 15.921 17.4498 15.9351 17.4645 15.9497L21.7071 20.1924C22.0976 20.5829 22.0976 21.2161 21.7071 21.6066C21.3166 21.9971 20.6834 21.9971 20.2929 21.6066L16.0503 17.364C16.0356 17.3493 16.0215 17.3343 16.008 17.319C12.8695 19.7628 8.32883 19.542 5.44365 16.6569C2.31946 13.5327 2.31946 8.46734 5.44365 5.34315C8.56785 2.21895 13.6332 2.21895 16.7574 5.34315ZM10.1005 7H12.1005V10H15.1005V12H12.1005V15H10.1005V12H7.10052V10H10.1005V7Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M15.3431 15.2426C17.6863 12.8995 17.6863 9.1005 15.3431 6.75736C13 4.41421 9.20101 4.41421 6.85786 6.75736C4.51472 9.1005 4.51472 12.8995 6.85786 15.2426C9.20101 17.5858 13 17.5858 15.3431 15.2426ZM16.7574 5.34315C19.6425 8.22833 19.8633 12.769 17.4195 15.9075C17.4348 15.921 17.4498 15.9351 17.4645 15.9497L21.7071 20.1924C22.0976 20.5829 22.0976 21.2161 21.7071 21.6066C21.3166 21.9971 20.6834 21.9971 20.2929 21.6066L16.0503 17.364C16.0356 17.3493 16.0215 17.3343 16.008 17.319C12.8695 19.7628 8.32883 19.542 5.44365 16.6569C2.31946 13.5327 2.31946 8.46734 5.44365 5.34315C8.56785 2.21895 13.6332 2.21895 16.7574 5.34315ZM10.1005 7H12.1005V10H15.1005V12H12.1005V15H10.1005V12H7.10052V10H10.1005V7Z"
+                        fill="currentColor"></path>
                 </svg>
             </button>
             <div class="descBox" id="zoomInBox" style="display: none;">Click to zoom in.</div>
             <button type="button" data-target="zoomOutBox" class="iconBtn btn" id="toggleZoomOut">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.3431 15.2426C17.6863 12.8995 17.6863 9.1005 15.3431 6.75736C13 4.41421 9.20101 4.41421 6.85786 6.75736C4.51472 9.1005 4.51472 12.8995 6.85786 15.2426C9.20101 17.5858 13 17.5858 15.3431 15.2426ZM16.7574 5.34315C19.6425 8.22833 19.8633 12.769 17.4195 15.9075C17.4348 15.921 17.4498 15.9351 17.4645 15.9497L21.7071 20.1924C22.0976 20.5829 22.0976 21.2161 21.7071 21.6066C21.3166 21.9971 20.6834 21.9971 20.2929 21.6066L16.0503 17.364C16.0356 17.3493 16.0215 17.3343 16.008 17.319C12.8695 19.7628 8.32883 19.542 5.44365 16.6569C2.31946 13.5327 2.31946 8.46734 5.44365 5.34315C8.56785 2.21895 13.6332 2.21895 16.7574 5.34315ZM7.10052 10V12H15.1005V10L7.10052 10Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M15.3431 15.2426C17.6863 12.8995 17.6863 9.1005 15.3431 6.75736C13 4.41421 9.20101 4.41421 6.85786 6.75736C4.51472 9.1005 4.51472 12.8995 6.85786 15.2426C9.20101 17.5858 13 17.5858 15.3431 15.2426ZM16.7574 5.34315C19.6425 8.22833 19.8633 12.769 17.4195 15.9075C17.4348 15.921 17.4498 15.9351 17.4645 15.9497L21.7071 20.1924C22.0976 20.5829 22.0976 21.2161 21.7071 21.6066C21.3166 21.9971 20.6834 21.9971 20.2929 21.6066L16.0503 17.364C16.0356 17.3493 16.0215 17.3343 16.008 17.319C12.8695 19.7628 8.32883 19.542 5.44365 16.6569C2.31946 13.5327 2.31946 8.46734 5.44365 5.34315C8.56785 2.21895 13.6332 2.21895 16.7574 5.34315ZM7.10052 10V12H15.1005V10L7.10052 10Z"
+                        fill="currentColor"></path>
                 </svg>
             </button>
             <div class="descBox" id="zoomOutBox" style="display: none;">Click to zoom out.</div>
             <button type="button" data-target="pointSizeBox" class="iconBtn btn" id="togglePointSize">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12ZM12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z" fill="currentColor"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12ZM12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z"
+                        fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z"
+                        fill="currentColor"></path>
                 </svg>
             </button>
             <div class="descBox" id="pointSizeBox" style="display: none;">Click to change dot size.</div>
@@ -329,11 +363,16 @@
             </div>
             <button type="button" data-target="genePercentileBox" class="iconBtn btn" id="toggleGenePercentile">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7 3C8.86384 3 10.4299 4.27477 10.874 6H19V8H10.874C10.4299 9.72523 8.86384 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3ZM7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z" fill="currentColor"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17 20C15.1362 20 13.5701 18.7252 13.126 17H5V15H13.126C13.5701 13.2748 15.1362 12 17 12C19.2091 12 21 13.7909 21 16C21 18.2091 19.2091 20 17 20ZM17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M7 3C8.86384 3 10.4299 4.27477 10.874 6H19V8H10.874C10.4299 9.72523 8.86384 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3ZM7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z"
+                        fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M17 20C15.1362 20 13.5701 18.7252 13.126 17H5V15H13.126C13.5701 13.2748 15.1362 12 17 12C19.2091 12 21 13.7909 21 16C21 18.2091 19.2091 20 17 20ZM17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z"
+                        fill="currentColor"></path>
                 </svg>
             </button>
-            <div class="descBox" id="genePercentileBox" style="display: none;">Click to change the gene percentile.</div>
+            <div class="descBox" id="genePercentileBox" style="display: none;">Click to change the gene percentile.
+            </div>
             <div id="geneSliderBox" class="slider-container" style="display: none;">
                 <input type="range" min="1" max="99.99" value="99" step="0.01" class="slider" id="geneSlider">
                 <div id="geneSliderNumContainer" class="slider-container-inner">
@@ -344,12 +383,18 @@
             </div>
             <button type="button" data-target="downloadBox" class="iconBtn btn" id="toggleDownload">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11 5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V12.1578L16.2428 8.91501L17.657 10.3292L12.0001 15.9861L6.34326 10.3292L7.75748 8.91501L11 12.1575V5Z" fill="currentColor"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M11 5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V12.1578L16.2428 8.91501L17.657 10.3292L12.0001 15.9861L6.34326 10.3292L7.75748 8.91501L11 12.1575V5Z"
+                        fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z"
+                        fill="currentColor"></path>
                 </svg>
             </button>
-            <div class="descBox" id="downloadBox" style="display: none;">Click to download an image of the projection and umap.</div>
+            <div class="descBox" id="downloadBox" style="display: none;">Click to download an image of the projection
+                and umap.</div>
         </div>
     </div>
-    <canvas data-engine="three.js r162" width="750" height="731" style="display: block; width: 750px; height: 731px; touch-action: none;"></canvas>
+    <canvas data-engine="three.js r162" width="750" height="731"
+        style="display: block; width: 750px; height: 731px; touch-action: none;"></canvas>
 </body>
