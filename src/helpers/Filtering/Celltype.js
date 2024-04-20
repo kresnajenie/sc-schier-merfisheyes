@@ -182,6 +182,7 @@ export function createCellCheckboxes(cellTypesWithColors) {
         groupInput.addEventListener('change', (e) => {
 
             let copy = SelectedState.value.selectedCelltypes.map(i => i);
+            console.log("CHECKING", copy);
 
             // change all  to checked
             divs[e.target.value].forEach(input => {
@@ -191,7 +192,7 @@ export function createCellCheckboxes(cellTypesWithColors) {
                 if (e.target.checked) {
                     copy.push(input.value)
                 } else {
-                    copy.splice(copy.indexOf(input.value))
+                    copy.splice(copy.indexOf(input.value), 1)
                 }
             })
 
