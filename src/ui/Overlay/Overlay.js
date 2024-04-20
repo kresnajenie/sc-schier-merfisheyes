@@ -18,7 +18,7 @@ export function createOverlay() {
     const dragButton = document.createElement('button');
     dragButton.id = 'dragButton';
     dragButton.textContent = 'Drag';
-    dragButton.className = 'btn btn-primary'; 
+    dragButton.className = 'btn btn-primary';
 
     // Resize Handle
     const resizeHandle = document.createElement('div');
@@ -45,8 +45,8 @@ export function createOverlay() {
 
     document.addEventListener('mousemove', (e) => {
         if (isDragging) {
-            overlay.style.left = `${e.clientX - offsetX}px`;
-            overlay.style.top = `${e.clientY - offsetY}px`;
+            overlay.style.left = `${(e.clientX - offsetX) / window.innerWidth * 100}%`;
+            overlay.style.top = `${(e.clientY - offsetY) / window.innerHeight * 100}%`;
         }
     });
 
@@ -73,28 +73,28 @@ export function createOverlay() {
     // }
     // Update camera and renderer
 
-    
+
     function resizeMouseMove(e) {
         const newWidth = overlay.offsetWidth + (overlay.offsetLeft - e.clientX);
         const newHeight = overlay.offsetHeight + (overlay.offsetTop - e.clientY);
-    
+
         // Apply minimum constraints to prevent the overlay from disappearing or getting too small
         const minWidth = 100; // Minimum width
         const minHeight = 100; // Minimum height
-    
+
         overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
         overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
-    
+
         // Adjust the overlay's top and left positions to move along with the resize handle
         overlay.style.left = `${e.clientX}px`;
         overlay.style.top = `${e.clientY}px`;
-    
+
         // Update camera and renderer
         camera.aspect = newWidth / newHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(newWidth, newHeight);
-    }    
-    
+    }
+
     function resizeMouseUp() {
         window.removeEventListener('mousemove', resizeMouseMove);
         window.removeEventListener('mouseup', resizeMouseUp);
@@ -147,7 +147,7 @@ export function createOverlay() {
         RIGHT: THREE.MOUSE.ROTATE
     };
 
-   // Make the camera look at the object
+    // Make the camera look at the object
     camera.lookAt(10000, 0, 10);
 
     // Set the controls target to the position you want the camera to focus on
@@ -169,22 +169,22 @@ export function createOverlay() {
     //             }
     //         }
     //     });
-    
+
     //     // Dispose of renderer and its DOM element
     //     if (renderer) {
     //         renderer.domElement.remove();
     //         renderer.dispose();
     //     }
-    
+
     //     // Dispose of controls if they exist
     //     if (controls) controls.dispose();
-    
+
     //     // Remove the event listeners related to the overlay interactions
     //     // Assuming these functions are defined in the scope where the overlay is manipulated
     //     document.removeEventListener('mousemove', resizeMouseMove);
     //     document.removeEventListener('mouseup', resizeMouseUp);
     // }
-    
+
 
     // // Create a close button to dispose of the scene and remove the overlay
     // const closeButton = document.createElement('button');
@@ -193,10 +193,10 @@ export function createOverlay() {
     //     disposeScene(scene, renderer, controls);
     //     overlay.remove();
     // });
-    
+
     // // Append the close button to the overlay
     // overlay.appendChild(closeButton);
-    
+
 
     function animate() {
         requestAnimationFrame(animate);
@@ -210,5 +210,19 @@ export function createOverlay() {
 }
 
 document.body.appendChild(createOverlay());
+
+// window.addEventListener('resize', () => {
+//     const overlay = document.getElementById('overlay');
+//     const rect = overlay.getBoundingClientRect();
+
+//     // out of bounds horizontally
+//     if (rect.x + rect.width > window.innerWidth) {
+//         overlay.style.left = `${window.innerWidth - rect.width}px`;
+//     }
+
+//     if (rect.y + rect.height > window.innerHeight) {
+//         overlay.style.top = `${window.innerHeight - rect.height}px`;
+//     }
+// });
 
 // renderer.render(scene, camera)
