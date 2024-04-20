@@ -1,4 +1,13 @@
 /* /src/ui/Navbar.css */
+.nav-container > * {
+  flex: 1 1 0px;
+}
+
+#collapse-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .navbar-nav {
   margin-left: auto;
   z-index: 100;

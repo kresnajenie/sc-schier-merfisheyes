@@ -5,17 +5,40 @@ import { createFilterIndicator } from './FilterIndicator';
 
 export function createNavbar() {
     const navContainer = document.createElement('nav');
-    navContainer.className = 'navbar navbar-expand-lg navbar-dark bg-dark';
+    navContainer.className = 'sidenav navbar navbar-expand-lg navbar-dark bg-dark';
+    navContainer.setAttribute('data-mdb-sidenav-init', '');
+    navContainer.setAttribute('data-mdb-right', 'true');
+
+    // Create a button for the collapsed navbar
+    const button = document.createElement('button');
+    button.className = 'navbar-toggler ms-auto';
+    button.type = 'button';
+    button.setAttribute('data-mdb-collapse-init', '');
+    button.setAttribute('data-mdb-target', '#navbarCollapse');
+    button.setAttribute('aria-controls', 'navbarCollapse');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Toggle navigation');
+    button.addEventListener('click', () => {
+        console.log("here");
+    })
+
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'navbar-toggler-icon';
+    button.appendChild(iconSpan);
 
     const containerFluid = document.createElement('div');
     containerFluid.className = 'container-fluid nav-container';
-
 
     containerFluid.appendChild(createTitle());
 
     containerFluid.appendChild(createFilterIndicator());
 
-    containerFluid.appendChild(createCollapseDiv());
+    const div = document.createElement('div');
+    div.id = "collapse-container"
+    // div.appendChild(button);
+    div.appendChild(createCollapseDiv());
+
+    containerFluid.appendChild(div);
 
     navContainer.appendChild(containerFluid);
 
@@ -42,11 +65,11 @@ function createTitle() {
 
 function createCollapseDiv() {
     const collapseDiv = document.createElement('div');
-    collapseDiv.className = 'collapse navbar-collapse';
-    collapseDiv.id = 'navbarNav';
+    // collapseDiv.className = 'collapse navbar-collapse';
+    collapseDiv.id = 'navbarCollapse';
 
     const ulList = document.createElement('ul');
-    ulList.className = 'navbar-nav ml-auto';
+    ulList.className = 'navbar-nav mr-auto';
 
     ulList.appendChild(createDropdown());
     ulList.appendChild(createUploadItem());

@@ -14,10 +14,11 @@ export function createDropdown() {
     dropdownButton.id = 'dropdownMenuButton';
     dropdownButton.dataset.bsToggle = 'dropdown';
     dropdownButton.setAttribute('aria-expanded', 'false');
+    dropdownButton.setAttribute("data-display", "static")
     dropdownButton.innerHTML = ApiState.value.prefix;
 
     const dropdownMenu = document.createElement('ul');
-    dropdownMenu.className = 'dropdown-menu';
+    dropdownMenu.className = 'dropdown-menu dropdown-menu-left';
     dropdownMenu.setAttribute('aria-labelledby', 'dropdownMenuButton');
 
     dropdownMenu.appendChild(createDropdownItem('#50pe', '50pe'));
