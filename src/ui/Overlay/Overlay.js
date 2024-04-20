@@ -82,8 +82,8 @@ export function createOverlay() {
         const minWidth = 100; // Minimum width
         const minHeight = 100; // Minimum height
 
-        overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
-        overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
+        overlay.style.width = `${Math.max(newWidth, minWidth) / window.innerWidth * 100}%`;
+        overlay.style.height = `${Math.max(newHeight, minHeight) / window.innerHeight * 100}%`;
 
         // Adjust the overlay's top and left positions to move along with the resize handle
         overlay.style.left = `${e.clientX}px`;
@@ -211,18 +211,18 @@ export function createOverlay() {
 
 document.body.appendChild(createOverlay());
 
-// window.addEventListener('resize', () => {
-//     const overlay = document.getElementById('overlay');
-//     const rect = overlay.getBoundingClientRect();
+window.addEventListener('resize', () => {
+    const overlay = document.getElementById('overlay');
+    const rect = overlay.getBoundingClientRect();
 
-//     // out of bounds horizontally
-//     if (rect.x + rect.width > window.innerWidth) {
-//         overlay.style.left = `${window.innerWidth - rect.width}px`;
-//     }
-
-//     if (rect.y + rect.height > window.innerHeight) {
-//         overlay.style.top = `${window.innerHeight - rect.height}px`;
-//     }
-// });
+    // out of bounds horizontally
+    if (
+        (rect.x + rect.width > window.innerWidth && rect.y + rect.height > window.innerHeight)
+        || rect.x < 0 || rect.y < 0
+    ) {
+        overlay.style.left = `${(window.innerWidth - rect.width) / window.innerWidth * 100}%`;
+        overlay.style.top = `${(window.innerHeight - rect.height) / window.innerHeight * 100}%`;
+    }
+});
 
 // renderer.render(scene, camera)
