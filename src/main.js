@@ -75,8 +75,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (params.has("gene")) {
 
-            console.log("you shouldn't be here.");
-
             const genes = JSON.parse(decodeURIComponent(params.get("gene")))
 
             // remove invalid genes
