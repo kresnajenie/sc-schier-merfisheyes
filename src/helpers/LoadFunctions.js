@@ -10,7 +10,9 @@ export async function loadPallete() {
     const pal_col = ApiState.value.palleteColumn;
     try {
         const data = await fetchDataFromAPI(pal_col, prefix); 
-        updateDataPalette(data);
+        console.log("palletetlkejtlkjekltj")
+        console.log(data)
+        updateDataPalette(JSON.parse(data));
     } catch (error) {
         console.error('Failed to load items:', error);
     }
@@ -19,7 +21,7 @@ export async function loadPallete() {
 export async function loadGenes() {
     try {
         const data = await fetchDataFromAPI("genes", prefix); 
-        updateGenes(data);
+        updateGenes(JSON.parse(data));
     } catch (error) {
         console.error('Failed to load items:', error);
     }
