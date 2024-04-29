@@ -13,7 +13,7 @@ const apiData = {
         'clusters',
     ],
 
-    prefix: params.has("prefix") ? params.get("prefix") : "genes",
+    prefix: params.has("prefix") ? params.get("prefix") : "6s",
     pallete: {},
     listPalette: [], // list version of palette
     palleteColumn: "clusters_pal",
