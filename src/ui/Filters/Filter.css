@@ -68,6 +68,7 @@
   padding: 0px 10px 10px 10px;
   border-radius: 5px;
   max-height: 40vh; /* Set maximum height relative to viewport */
+  width: 350px;
   scrollbar-color: dark;
 
   overflow: auto;

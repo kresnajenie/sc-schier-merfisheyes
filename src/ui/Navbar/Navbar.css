@@ -1,4 +1,8 @@
 /* /src/ui/Navbar.css */
+.nav-container {
+  width: 100%;
+}
+
 .nav-container > * {
   flex: 1 1 0px;
 }

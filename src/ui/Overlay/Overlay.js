@@ -37,28 +37,49 @@ export function createOverlay() {
     let offsetX = 0;
     let offsetY = 0;
 
-    dragButton.addEventListener('mousedown', (e) => {
+    dragButton.addEventListener("mousedown", (e) => {
         isDragging = true;
         offsetX = e.offsetX;
         offsetY = e.offsetY;
-    });
+    })
 
-    document.addEventListener('mousemove', (e) => {
+    const keepInBounds = () => {
+        if (overlay.offsetLeft < 0) {
+            overlay.style.left = "0%";
+        }
+
+        if (overlay.offsetLeft + overlay.offsetWidth > window.innerWidth) {
+            overlay.style.left = `${(window.innerWidth - overlay.offsetWidth) / window.innerWidth * 100}%`
+        }
+
+        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+
+        if (overlay.offsetTop < topBound) {
+            overlay.style.top = `${topBound / window.innerHeight * 100}%`;
+        }
+
+        if (overlay.offsetTop + overlay.offsetHeight > window.innerHeight) {
+            overlay.style.top = `${(window.innerHeight - overlay.offsetHeight) / window.innerHeight * 100}%`
+        }
+    }
+
+    document.addEventListener("mousemove", (e) => {
+
         if (isDragging) {
             overlay.style.left = `${(e.clientX - offsetX) / window.innerWidth * 100}%`;
             overlay.style.top = `${(e.clientY - offsetY) / window.innerHeight * 100}%`;
-        }
-    });
 
-    document.addEventListener('mouseup', () => {
+            keepInBounds();
+        }
+    })
+    
+    document.addEventListener("mouseup", () => {
         isDragging = false;
-    });
+    })
 
     // Add more content or functionality to the overlay as needed...
 
-
-
-    // Handle resizing
+    // Handle MOUSE resizing
     resizeHandle.addEventListener('mousedown', resizeMouseDown);
 
     function resizeMouseDown(e) {
@@ -67,27 +88,41 @@ export function createOverlay() {
         e.preventDefault();
     }
 
-    // function resizeMouseMove(e) {
-    //     overlay.style.width = `${e.clientX - overlay.offsetLeft}px`;
-    //     overlay.style.height = `${e.clientY - overlay.offsetTop}px`;
-    // }
-    // Update camera and renderer
-
-
     function resizeMouseMove(e) {
-        const newWidth = overlay.offsetWidth + (overlay.offsetLeft - e.clientX);
-        const newHeight = overlay.offsetHeight + (overlay.offsetTop - e.clientY);
+        
+        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+
+        // Bound the size to the window
+        let x = e.clientX < 0 ? 0 : e.clientX
+        let y = e.clientY < topBound ? topBound : e.clientY
 
         // Apply minimum constraints to prevent the overlay from disappearing or getting too small
         const minWidth = 100; // Minimum width
         const minHeight = 100; // Minimum height
 
+        // if min size already and shrinking
+        if (overlay.offsetWidth == minWidth && x > overlay.offsetLeft) {
+            x = overlay.offsetLeft
+        } 
+        
+        if (overlay.offsetHeight == minHeight && y > overlay.offsetTop) {
+            y = overlay.offsetTop
+        }
+
+        const newWidth = overlay.offsetWidth + (overlay.offsetLeft - x);
+        const newHeight = overlay.offsetHeight + (overlay.offsetTop - y);
+
         overlay.style.width = `${Math.max(newWidth, minWidth) / window.innerWidth * 100}%`;
         overlay.style.height = `${Math.max(newHeight, minHeight) / window.innerHeight * 100}%`;
 
         // Adjust the overlay's top and left positions to move along with the resize handle
-        overlay.style.left = `${e.clientX}px`;
-        overlay.style.top = `${e.clientY}px`;
+        if (newWidth > minWidth) {
+            overlay.style.left = `${x}px`;
+        }
+
+        if (newHeight > minHeight) {
+            overlay.style.top = `${y}px`;
+        }
 
         // Update camera and renderer
         camera.aspect = newWidth / newHeight;
@@ -98,6 +133,88 @@ export function createOverlay() {
     function resizeMouseUp() {
         window.removeEventListener('mousemove', resizeMouseMove);
         window.removeEventListener('mouseup', resizeMouseUp);
+    }
+
+
+    // Tablet DRAG Overlay
+    dragButton.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        offsetX = e.changedTouches[0].clientX;
+        offsetY = e.changedTouches[0].clientY;
+    })
+
+    document.addEventListener("touchmove", (e) => {
+        if (isDragging) {
+
+            let x = e.changedTouches[0].clientX;
+            if (x + overlay.offsetWidth > window.innerWidth) {
+                x = window.innerWidth - overlay.offsetWidth;
+            }
+
+            overlay.style.left = `${x / window.innerWidth * 100}%`;
+            overlay.style.top = `${(e.changedTouches[0].clientY) / window.innerHeight * 100}%`;
+
+            keepInBounds()
+        }
+    });
+
+    document.addEventListener("touchend", () => {
+        isDragging = false;
+    })
+
+    resizeHandle.addEventListener('touchstart', resizeTouchStart);
+
+    function resizeTouchStart(e) {
+        window.addEventListener('touchmove', resizeTouchMove);
+        window.addEventListener('touchend', resizeTouchEnd);
+        e.preventDefault();
+    }
+
+    function resizeTouchMove(e) {
+
+        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+
+        // Bound the size to the window
+        let x = e.changedTouches[0].clientX < 0 ? 0 : e.changedTouches[0].clientX
+        let y = e.changedTouches[0].clientY < topBound ? topBound : e.changedTouches[0].clientY
+
+        // Apply minimum constraints to prevent the overlay from disappearing or getting too small
+        const minWidth = 100; // Minimum width
+        const minHeight = 100; // Minimum height
+
+        // if min size already and shrinking
+        if (overlay.offsetWidth == minWidth && x > overlay.offsetLeft) {
+            x = overlay.offsetLeft
+        } 
+        
+        if (overlay.offsetHeight == minHeight && y > overlay.offsetTop) {
+            y = overlay.offsetTop
+        }
+
+        const newWidth = overlay.offsetWidth + (overlay.offsetLeft - x);
+        const newHeight = overlay.offsetHeight + (overlay.offsetTop - y);
+
+        overlay.style.width = `${Math.max(newWidth, minWidth) / window.innerWidth * 100}%`;
+        overlay.style.height = `${Math.max(newHeight, minHeight) / window.innerHeight * 100}%`;
+
+        // Adjust the overlay's top and left positions to move along with the resize handle
+        if (newWidth > minWidth) {
+            overlay.style.left = `${x}px`;
+        }
+
+        if (newHeight > minHeight) {
+            overlay.style.top = `${y}px`;
+        }
+
+        // Update camera and renderer
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight);
+    }
+    
+    function resizeTouchEnd() {
+        window.removeEventListener('touchmove', resizeTouchMove);
+        window.removeEventListener('touchend', resizeTouchEnd);
     }
 
     const sceneContainer = document.createElement('div');

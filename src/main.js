@@ -12,17 +12,6 @@ import { createNavbar } from './ui/Navbar/Navbar.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
 import { createGenomeBrowser } from './ui/GenomeBrowser/GenomeBrowser.js';
 
-// function onWindowResize() {
-
-//     const body = document.body;
-
-//     camera.aspect = body.clientWidth / body.clientHeight;
-
-//     camera.updateProjectionMatrix();
-
-//     renderer.setSize(body.clientWidth, body.clientHeight);
-// }
-
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
     createOverlay();
@@ -39,8 +28,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleCellFilter();
     toggleGeneFilter();
     toggleButton();
-
-    // window.addEventListener('resize', onWindowResize, false);
 
     updateLoadingState(true); // Assume loading starts
 
