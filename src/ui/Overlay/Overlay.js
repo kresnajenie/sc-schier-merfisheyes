@@ -13,6 +13,12 @@ export function createOverlay() {
     // Create a container for top controls
     const topControls = document.createElement('div');
     topControls.className = 'top-controls';
+    topControls.style.zIndex = 1;
+    topControls.style.position = 'absolute';
+    
+    // const isMobile = window.innerWidth <= 425
+    
+    // if (isMobile) { topControls.style.display = 'none' }
 
     // Drag Button
     const dragButton = document.createElement('button');
@@ -44,22 +50,50 @@ export function createOverlay() {
     })
 
     const keepInBounds = () => {
+        // touching left
         if (overlay.offsetLeft < 0) {
             overlay.style.left = "0%";
         }
 
+        // touching right
         if (overlay.offsetLeft + overlay.offsetWidth > window.innerWidth) {
             overlay.style.left = `${(window.innerWidth - overlay.offsetWidth) / window.innerWidth * 100}%`
         }
 
+        // navbar height
         const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
 
+        // touching navbar
         if (overlay.offsetTop < topBound) {
             overlay.style.top = `${topBound / window.innerHeight * 100}%`;
         }
 
+        // touching bottom
         if (overlay.offsetTop + overlay.offsetHeight > window.innerHeight) {
             overlay.style.top = `${(window.innerHeight - overlay.offsetHeight) / window.innerHeight * 100}%`
+        }
+
+        // touching both top and bottom means we have to shrink it
+        if (overlay.offsetTop <= topBound && overlay.offsetTop + overlay.offsetHeight >= window.innerHeight) {
+
+            overlay.style.top = `${topBound / window.innerHeight * 100}%`;
+            overlay.style.height = `${window.innerHeight - topBound}px`
+
+            // Update camera and renderer
+            camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
+        }
+
+        // touching both left and right means we have to shrink it
+        if (overlay.offsetLeft <= 0 && overlay.offsetLeft + overlay.offsetWidth >= window.innerWidth) {
+            overlay.style.left = `${0}%`;
+            overlay.style.width = `${window.innerWidth}px`
+
+            // Update camera and renderer
+            camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
         }
     }
 
@@ -112,8 +146,8 @@ export function createOverlay() {
         const newWidth = overlay.offsetWidth + (overlay.offsetLeft - x);
         const newHeight = overlay.offsetHeight + (overlay.offsetTop - y);
 
-        overlay.style.width = `${Math.max(newWidth, minWidth) / window.innerWidth * 100}%`;
-        overlay.style.height = `${Math.max(newHeight, minHeight) / window.innerHeight * 100}%`;
+        overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
+        overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
 
         // Adjust the overlay's top and left positions to move along with the resize handle
         if (newWidth > minWidth) {
@@ -135,7 +169,7 @@ export function createOverlay() {
         window.removeEventListener('mouseup', resizeMouseUp);
     }
 
-
+    // if (!isMobile) {
     // Tablet DRAG Overlay
     dragButton.addEventListener("touchstart", (e) => {
         isDragging = true;
@@ -194,8 +228,8 @@ export function createOverlay() {
         const newWidth = overlay.offsetWidth + (overlay.offsetLeft - x);
         const newHeight = overlay.offsetHeight + (overlay.offsetTop - y);
 
-        overlay.style.width = `${Math.max(newWidth, minWidth) / window.innerWidth * 100}%`;
-        overlay.style.height = `${Math.max(newHeight, minHeight) / window.innerHeight * 100}%`;
+        overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
+        overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
 
         // Adjust the overlay's top and left positions to move along with the resize handle
         if (newWidth > minWidth) {
@@ -216,6 +250,13 @@ export function createOverlay() {
         window.removeEventListener('touchmove', resizeTouchMove);
         window.removeEventListener('touchend', resizeTouchEnd);
     }
+    // } else {
+    //     // mobile view size
+    //     overlay.style.left = "0%"
+    //     overlay.style.top = "66%"
+    //     overlay.style.width = "100%"
+    //     overlay.style.height = "33%"
+    // }
 
     const sceneContainer = document.createElement('div');
     sceneContainer.id = 'overlayScene';
@@ -228,28 +269,20 @@ export function createOverlay() {
     const scene = SceneState.value.scene;
     const camera = new THREE.PerspectiveCamera(75, sceneContainer.offsetWidth / sceneContainer.offsetHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    // console.log(sceneContainer.offsetWidth)
-    // console.log(sceneContainer.offsetHeight)
-    // renderer.setSize(sceneContainer.offsetWidth, sceneContainer.offsetHeight);
-    // renderer.setSize(sceneContainer.offsetWidth, sceneContainer.offsetHeight);
-
+    
     // Calculate dimensions based on the viewport size
     const initialWidth = window.innerWidth * 0.25; // 25% of the viewport width
     const initialHeight = window.innerHeight * 0.5; // 50% of the viewport height
 
-    // Set renderer size directly
-    renderer.setSize(initialWidth, initialHeight);
-
-    // camera.aspect = sceneContainer.offsetWidth / sceneContainer.offsetHeight;
     camera.aspect = initialWidth / initialHeight;
     camera.updateProjectionMatrix();
+    renderer.setSize(initialWidth, initialHeight);
+    
     renderer.render(scene, camera);
     sceneContainer.appendChild(renderer.domElement);
 
     camera.position.x = 10000;
     camera.position.z = 150;
-
-
 
     // Add orbit controls to the camera
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -264,6 +297,10 @@ export function createOverlay() {
         RIGHT: THREE.MOUSE.ROTATE
     };
 
+    controls.touches = {
+        ONE: THREE.TOUCH.PAN,
+    }
+
     // Make the camera look at the object
     camera.lookAt(10000, 0, 10);
 
@@ -274,47 +311,6 @@ export function createOverlay() {
     controls.update();
     renderer.render(scene, camera);
 
-
-    // function disposeScene(scene, renderer, controls) {
-    //     // Dispose of scene resources
-    //     scene.traverse(function (object) {
-    //         if (object.isMesh) {
-    //             if (object.geometry) object.geometry.dispose();
-    //             if (object.material) {
-    //                 if (object.material.map) object.material.map.dispose();
-    //                 object.material.dispose();
-    //             }
-    //         }
-    //     });
-
-    //     // Dispose of renderer and its DOM element
-    //     if (renderer) {
-    //         renderer.domElement.remove();
-    //         renderer.dispose();
-    //     }
-
-    //     // Dispose of controls if they exist
-    //     if (controls) controls.dispose();
-
-    //     // Remove the event listeners related to the overlay interactions
-    //     // Assuming these functions are defined in the scope where the overlay is manipulated
-    //     document.removeEventListener('mousemove', resizeMouseMove);
-    //     document.removeEventListener('mouseup', resizeMouseUp);
-    // }
-
-
-    // // Create a close button to dispose of the scene and remove the overlay
-    // const closeButton = document.createElement('button');
-    //     closeButton.textContent = 'Close';
-    //     closeButton.addEventListener('click', function () {
-    //     disposeScene(scene, renderer, controls);
-    //     overlay.remove();
-    // });
-
-    // // Append the close button to the overlay
-    // overlay.appendChild(closeButton);
-
-
     function animate() {
         requestAnimationFrame(animate);
         // controls.update();
@@ -323,23 +319,12 @@ export function createOverlay() {
 
     animate();
 
+    // if clips out of bounds
+    window.addEventListener('resize', () => {
+        keepInBounds()
+    })
+
     return overlay;
 }
 
 document.body.appendChild(createOverlay());
-
-window.addEventListener('resize', () => {
-    const overlay = document.getElementById('overlay');
-    const rect = overlay.getBoundingClientRect();
-
-    // out of bounds horizontally
-    if (
-        (rect.x + rect.width > window.innerWidth && rect.y + rect.height > window.innerHeight)
-        || rect.x < 0 || rect.y < 0
-    ) {
-        overlay.style.left = `${(window.innerWidth - rect.width) / window.innerWidth * 100}%`;
-        overlay.style.top = `${(window.innerHeight - rect.height) / window.innerHeight * 100}%`;
-    }
-});
-
-// renderer.render(scene, camera)
