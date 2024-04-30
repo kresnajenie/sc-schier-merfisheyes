@@ -9,7 +9,8 @@ import { updateLoadingState } from './states/UIState.js';
 import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createNavbar } from './ui/Navbar/Navbar.js';
-import { createOverlay } from './ui/Overlay/Overlay.js'
+import { createOverlay } from './ui/Overlay/Overlay.js';
+import { createGenomeBrowser } from './ui/GenomeBrowser/GenomeBrowser.js';
 
 // function onWindowResize() {
 
@@ -25,6 +26,7 @@ import { createOverlay } from './ui/Overlay/Overlay.js'
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
     createOverlay();
+    createGenomeBrowser();
     const loading = createLoadingIndicator();
     const filter = createFilter();
 
