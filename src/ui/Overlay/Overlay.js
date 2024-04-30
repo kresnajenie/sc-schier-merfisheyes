@@ -145,7 +145,13 @@ export function createOverlay() {
 
     document.addEventListener("touchmove", (e) => {
         if (isDragging) {
-            overlay.style.left = `${(e.changedTouches[0].clientX) / window.innerWidth * 100}%`;
+
+            let x = e.changedTouches[0].clientX;
+            if (x + overlay.offsetWidth > window.innerWidth) {
+                x = window.innerWidth - overlay.offsetWidth;
+            }
+
+            overlay.style.left = `${x / window.innerWidth * 100}%`;
             overlay.style.top = `${(e.changedTouches[0].clientY) / window.innerHeight * 100}%`;
 
             keepInBounds()
