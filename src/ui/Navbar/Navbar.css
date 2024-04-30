@@ -1,27 +1,19 @@
 /* /src/ui/Navbar.css */
 .nav-container {
   width: 100%;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 .nav-container > * {
   flex: 1 1 0px;
 }
 
-#collapse-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.navbar-nav {
-  margin-left: auto;
-  z-index: 100;
-
-  justify-content: space-between;
-}
-
 #title {
   display: flex;
   flex-direction: column;
+
+  justify-content: center;
 
   flex-grow: 1;
 
@@ -31,4 +23,42 @@
 #title p {
   margin: 0;
   color: rgb(189, 189, 189);
+
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.title-paragraph {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 526px) {
+  .nav-container {
+    padding-bottom: 10px;
+    justify-content: center !important; 
+  }
+
+  #title {
+    flex-basis: 100%;
+
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+@media (max-width: 321px) {
+  .nav-container {
+    flex-direction: column;
+    padding-bottom: 10px;
+    
+    justify-content: flex-start !important; 
+
+    gap: 10px;
+  }
+
+  .title-paragraph {
+    flex-direction: column;
+  }
 }

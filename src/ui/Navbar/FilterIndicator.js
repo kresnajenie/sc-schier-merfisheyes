@@ -10,7 +10,7 @@ export function createFilterIndicator() {
     button.type = 'button';
     button.dataset.bsToggle = 'dropdown';
     button.setAttribute('aria-expanded', 'false');
-    button.textContent = 'Show Gene / Celltype Filters';
+    button.textContent = 'Show Selected Filters';
 
     const dropdownMenu = document.createElement('ul');
     dropdownMenu.classList.add('dropdown-menu', 'list');

@@ -29,15 +29,6 @@
 }
 
 .toggles {
-  /* background-color: rgb(97, 97, 97);
-  color: white;
-  justify-content: center;
-  align-items: center;
-  transform: rotate(-90deg);
-  white-space: nowrap;
-  height: auto;
-  width: 10%; */
-
   background-color: rgb(97, 97, 97);
   color: white;
 
@@ -59,7 +50,6 @@
 }
 
 .checkbox-container {
-  display: flex;
   gap: 5px;
 
   background-color: rgba(0, 0, 0, 0.8);
@@ -129,6 +119,17 @@
   font-style: normal;
 }
 
+.desc-container {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  gap: 5px;
+}
+
+.iconBtn:hover .descBox {
+  display: block;
+}
+
 .icon {
   display: flex;
   flex-direction: column;
@@ -171,6 +172,7 @@
 }
 
 .slider-container {
+  width: 200px;
   background-color: #f9f9f9;
   align-items: center;
   text-align: center;
@@ -207,4 +209,10 @@
   flex-direction: row;
   justify-content: space-evenly;
   color: white;
+}
+
+@media (max-width: 426px) {
+  .filter {
+    bottom: 0;
+  }
 }

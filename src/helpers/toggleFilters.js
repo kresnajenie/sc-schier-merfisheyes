@@ -70,8 +70,8 @@ export const toggleGeneFilter = () => {
 export const toggleButton = () => {
 
     const buttons = document.querySelectorAll('.iconBtn');
-    const toggleZoomIn = document.getElementById("toggleZoomIn");
-    const toggleZoomOut = document.getElementById("toggleZoomOut");
+    // const toggleZoomIn = document.getElementById("toggleZoomIn");
+    // const toggleZoomOut = document.getElementById("toggleZoomOut");
     const togglePointSize = document.getElementById("togglePointSize");
     const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
     const pointSizeSlider = document.getElementById("pointSizeSlider");
@@ -105,57 +105,57 @@ export const toggleButton = () => {
 
     // zoom in function
 
-    toggleZoomIn.addEventListener('click', () => {
+    // toggleZoomIn.addEventListener('click', () => {
 
-        // check if anything else is open -> close
+    //     // check if anything else is open -> close
 
-        if (cellCheckbox.style.display === 'block') {
-            cellCheckbox.style.display = 'none';
-            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
-            toggleCellCheckbox.style.color = 'white';
-        }
-        if (geneRadioContainer.style.display === 'block') {
-            geneRadioContainer.style.display = 'none';
-            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
-            toggleGeneRadio.style.color = 'white';
-        }
-        if (pointSizeSliderBox.style.display === 'block') {
-            pointSizeSliderBox.style.display = 'none';
-        }
-        if (geneSliderBox.style.display === 'block') {
-            geneSliderBox.style.display = 'none';
-        }
+    //     if (cellCheckbox.style.display === 'block') {
+    //         cellCheckbox.style.display = 'none';
+    //         toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+    //         toggleCellCheckbox.style.color = 'white';
+    //     }
+    //     if (geneRadioContainer.style.display === 'block') {
+    //         geneRadioContainer.style.display = 'none';
+    //         toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+    //         toggleGeneRadio.style.color = 'white';
+    //     }
+    //     if (pointSizeSliderBox.style.display === 'block') {
+    //         pointSizeSliderBox.style.display = 'none';
+    //     }
+    //     if (geneSliderBox.style.display === 'block') {
+    //         geneSliderBox.style.display = 'none';
+    //     }
 
-        const newZoom = ButtonState.value.cameraPositionZ - 25;
-        updateCameraPositionZ(newZoom);
-    })
+    //     const newZoom = ButtonState.value.cameraPositionZ - 25;
+    //     updateCameraPositionZ(newZoom);
+    // })
 
     // zoom out function
     
-    toggleZoomOut.addEventListener('click', () => {
+    // toggleZoomOut.addEventListener('click', () => {
 
-        // check if anything else is open -> close
+    //     // check if anything else is open -> close
 
-        if (cellCheckbox.style.display === 'block') {
-            cellCheckbox.style.display = 'none';
-            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
-            toggleCellCheckbox.style.color = 'white';
-        }
-        if (geneRadioContainer.style.display === 'block') {
-            geneRadioContainer.style.display = 'none';
-            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
-            toggleGeneRadio.style.color = 'white';
-        }
-        if (pointSizeSliderBox.style.display === 'block') {
-            pointSizeSliderBox.style.display = 'none';
-        }
-        if (geneSliderBox.style.display === 'block') {
-            geneSliderBox.style.display = 'none';
-        }
+    //     if (cellCheckbox.style.display === 'block') {
+    //         cellCheckbox.style.display = 'none';
+    //         toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+    //         toggleCellCheckbox.style.color = 'white';
+    //     }
+    //     if (geneRadioContainer.style.display === 'block') {
+    //         geneRadioContainer.style.display = 'none';
+    //         toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+    //         toggleGeneRadio.style.color = 'white';
+    //     }
+    //     if (pointSizeSliderBox.style.display === 'block') {
+    //         pointSizeSliderBox.style.display = 'none';
+    //     }
+    //     if (geneSliderBox.style.display === 'block') {
+    //         geneSliderBox.style.display = 'none';
+    //     }
 
-        const newZoom = ButtonState.value.cameraPositionZ + 25;
-        updateCameraPositionZ(newZoom);
-    })
+    //     const newZoom = ButtonState.value.cameraPositionZ + 25;
+    //     updateCameraPositionZ(newZoom);
+    // })
 
     // point size slider function
     

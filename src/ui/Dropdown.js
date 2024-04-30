@@ -2,11 +2,15 @@ import { selectPrefix } from "../helpers/Prefix";
 import { ApiState, updatePrefix } from "../states/ApiState";
 
 export function createDropdown() {
-    const dropdownLi = document.createElement('li');
-    dropdownLi.className = 'nav-item';
-
+    const dropdownContainer = document.createElement('div');
+    dropdownContainer.id = "prefix-dropdown-container"
+    dropdownContainer.style.display = "flex"
+    dropdownContainer.style.justifyContent = 'flex-end';
+    
     const dropdownDiv = document.createElement('div');
-    dropdownDiv.className = 'dropdown';
+    dropdownDiv.className = 'dropdown dropdown-center';
+
+    dropdownContainer.appendChild(dropdownDiv);
 
     const dropdownButton = document.createElement('button');
     dropdownButton.className = 'btn btn-secondary dropdown-toggle';
@@ -14,12 +18,16 @@ export function createDropdown() {
     dropdownButton.id = 'dropdownMenuButton';
     dropdownButton.dataset.bsToggle = 'dropdown';
     dropdownButton.setAttribute('aria-expanded', 'false');
-    dropdownButton.setAttribute("data-display", "static")
     dropdownButton.innerHTML = ApiState.value.prefix;
 
+    dropdownButton.style.width = '80px'
+
     const dropdownMenu = document.createElement('ul');
-    dropdownMenu.className = 'dropdown-menu dropdown-menu-left';
-    dropdownMenu.setAttribute('aria-labelledby', 'dropdownMenuButton');
+    dropdownMenu.className = 'dropdown-menu';
+
+    dropdownMenu.style.minWidth = '80px';
+    dropdownMenu.style.maxWidth = '80px';
+    
 
     dropdownMenu.appendChild(createDropdownItem('#50pe', '50pe'));
     dropdownMenu.appendChild(createDropdownItem('#75pe', '75pe'));
@@ -27,18 +35,17 @@ export function createDropdown() {
 
     dropdownDiv.appendChild(dropdownButton);
     dropdownDiv.appendChild(dropdownMenu);
-    dropdownLi.appendChild(dropdownDiv);
 
-    return dropdownLi;
+    return dropdownContainer;
 }
 
 function createDropdownItem(href, text) {
-    const listItem = document.createElement('li');
+    const listItem = document.createElement('p');
     const link = document.createElement('a');
     link.className = 'dropdown-item';
     link.style.cursor = 'pointer';
-    // link.href = href;
     link.innerHTML = text;
+    link.style.textAlign = 'center';
 
     link.onclick = () => {selectPrefix(text)};
 

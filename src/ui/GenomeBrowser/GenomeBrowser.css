@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: flex-start; /* Ensure content starts from the left */
     position: absolute;
-    right: 0px; /* Position it to stick to the left */
+    right: 25%; /* Position it to stick to the left */
     bottom: 0px;
     width: 25%; /* Set width to 25% of the screen width */
     height: 50%; /* Set height to 50% of the screen height */

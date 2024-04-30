@@ -1,16 +1,14 @@
 #filter-container {
-
-  flex-grow: 1;
-
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .list {
   padding: 10px;
 
   width: 500px;
+  max-width: 100%;
   left: auto !important;
 
   background-color: rgb(60, 60, 60);
@@ -35,11 +33,23 @@
   margin-top: 7.5px !important;
   width: 100%;
 
+  max-height: 75px;
+
   flex-shrink: 0;
-  flex-wrap: row wrap;
   justify-content: flex-start;
   align-items: flex-start;
 
+  overflow: auto;
+
   font-style: italic;
   color: rgb(169, 169, 169);
+}
+
+.listFilters::-webkit-scrollbar {
+  width: 5px;
+}
+
+.listFilters::-webkit-scrollbar-thumb {
+  background-color: lightgray;
+  border-radius: 20px;
 }
