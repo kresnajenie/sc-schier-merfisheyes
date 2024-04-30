@@ -38,10 +38,60 @@ export function createGenomeBrowser() {
         offsetY = e.offsetY;
     });
 
+    const keepInBounds = () => {
+        // touching left
+        if (genomeBrowser.offsetLeft < 0) {
+            genomeBrowser.style.left = "0%";
+        }
+
+        // touching right
+        if (genomeBrowser.offsetLeft + genomeBrowser.offsetWidth > window.innerWidth) {
+            genomeBrowser.style.left = `${(window.innerWidth - genomeBrowser.offsetWidth) / window.innerWidth * 100}%`
+        }
+
+        // navbar height
+        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+
+        // touching navbar
+        if (genomeBrowser.offsetTop < topBound) {
+            genomeBrowser.style.top = `${topBound / window.innerHeight * 100}%`;
+        }
+
+        // touching bottom
+        if (genomeBrowser.offsetTop + genomeBrowser.offsetHeight > window.innerHeight) {
+            genomeBrowser.style.top = `${(window.innerHeight - genomeBrowser.offsetHeight) / window.innerHeight * 100}%`
+        }
+
+        // touching both top and bottom means we have to shrink it
+        if (genomeBrowser.offsetTop <= topBound && genomeBrowser.offsetTop + genomeBrowser.offsetHeight >= window.innerHeight) {
+
+            genomeBrowser.style.top = `${topBound / window.innerHeight * 100}%`;
+            genomeBrowser.style.height = `${window.innerHeight - topBound}px`
+
+            // Update camera and renderer
+            camera.aspect = genomeBrowser.offsetWidth / genomeBrowser.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(genomeBrowser.offsetWidth, genomeBrowser.offsetHeight);
+        }
+
+        // touching both left and right means we have to shrink it
+        if (genomeBrowser.offsetLeft <= 0 && genomeBrowser.offsetLeft + genomeBrowser.offsetWidth >= window.innerWidth) {
+            genomeBrowser.style.left = `${0}%`;
+            genomeBrowser.style.width = `${window.innerWidth}px`
+
+            // Update camera and renderer
+            camera.aspect = genomeBrowser.offsetWidth / genomeBrowser.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(genomeBrowser.offsetWidth, genomeBrowser.offsetHeight);
+        }
+    }
+
     document.addEventListener('mousemove', (e) => {
         if (isDragging) {
             genomeBrowser.style.left = `${(e.clientX - offsetX) / window.innerWidth * 100}%`;
             genomeBrowser.style.top = `${(e.clientY - offsetY) / window.innerHeight * 100}%`;
+        
+            keepInBounds();
         }
     });
 
@@ -59,19 +109,40 @@ export function createGenomeBrowser() {
     }
 
     function resizeMouseMove(e) {
-        const newWidth = genomeBrowser.offsetWidth + (genomeBrowser.offsetLeft - e.clientX);
-        const newHeight = genomeBrowser.offsetHeight + (genomeBrowser.offsetTop - e.clientY);
+
+        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+
+        // Bound the size to the window
+        let x = e.clientX < 0 ? 0 : e.clientX
+        let y = e.clientY < topBound ? topBound : e.clientY
 
         // Apply minimum constraints to prevent the genomeBrowser from disappearing or getting too small
         const minWidth = 100; // Minimum width
         const minHeight = 100; // Minimum height
 
-        genomeBrowser.style.width = `${Math.max(newWidth, minWidth) / window.innerWidth * 100}%`;
-        genomeBrowser.style.height = `${Math.max(newHeight, minHeight) / window.innerHeight * 100}%`;
+        // if min size already and shrinking
+        if (genomeBrowser.offsetWidth == minWidth && x > genomeBrowser.offsetLeft) {
+            x = genomeBrowser.offsetLeft
+        } 
+        
+        if (genomeBrowser.offsetHeight == minHeight && y > genomeBrowser.offsetTop) {
+            y = genomeBrowser.offsetTop
+        }
 
-        // Adjust the genomeBrowser's top and left positions to move along with the resize handle
-        genomeBrowser.style.left = `${e.clientX}px`;
-        genomeBrowser.style.top = `${e.clientY}px`;
+        const newWidth = genomeBrowser.offsetWidth + (genomeBrowser.offsetLeft - x);
+        const newHeight = genomeBrowser.offsetHeight + (genomeBrowser.offsetTop -y);
+
+        genomeBrowser.style.width = `${Math.max(newWidth, minWidth)}px`;
+        genomeBrowser.style.height = `${Math.max(newHeight, minHeight)}px`;
+
+        // Adjust the overlay's top and left positions to move along with the resize handle
+        if (newWidth > minWidth) {
+            genomeBrowser.style.left = `${x}px`;
+        }
+
+        if (newHeight > minHeight) {
+            genomeBrowser.style.top = `${y}px`;
+        }
 
         // Update camera and renderer
         camera.aspect = newWidth / newHeight;
@@ -94,22 +165,13 @@ export function createGenomeBrowser() {
 
     genomeBrowser.appendChild(content);
 
+    // if clips out of bounds
+    window.addEventListener('resize', () => {
+        keepInBounds()
+    })
+
     return genomeBrowser;
 
 }
 
 document.body.appendChild(createGenomeBrowser());
-
-window.addEventListener('resize', () => {
-    const genomeBrowser = document.getElementById('genomeBrowser');
-    const rect = genomeBrowser.getBoundingClientRect();
-
-    // out of bounds horizontally
-    if (
-        (rect.x + rect.width > window.innerWidth && rect.y + rect.height > window.innerHeight)
-        || rect.x < 0 || rect.y < 0
-    ) {
-        genomeBrowser.style.left = `${(window.innerWidth - rect.width) / window.innerWidth * 100}%`;
-        genomeBrowser.style.top = `${(window.innerHeight - rect.height) / window.innerHeight * 100}%`;
-    }
-});
