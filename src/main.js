@@ -10,12 +10,12 @@ import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createNavbar } from './ui/Navbar/Navbar.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
-import { createGenomeBrowser } from './ui/GenomeBrowser/GenomeBrowser.js';
+// import { createGenomeBrowser } from './ui/GenomeBrowser/GenomeBrowser.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const navbar = createNavbar();
     createOverlay();
-    createGenomeBrowser();
+    // createGenomeBrowser();
     const loading = createLoadingIndicator();
     const filter = createFilter();
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         clearCells();
         cellSearch()
 
-        createGeneRadio(ApiState.value.genes);
+        createGeneRadio(ApiState.value.genes.slice(0, 10));
         clearGenes();
         geneSearch();
 

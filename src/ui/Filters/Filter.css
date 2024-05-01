@@ -1,15 +1,15 @@
 .filter {
   display: flex;
   flex-direction: column;
-  justify-content: left;
-  align-content: left;
+  justify-content: flex-start;
+  align-content: flex-start;
 
   gap: 7px;
 
   position: absolute;
   height: auto;
   margin: 10px;
-  width: 20%;
+  width: fit-content;
 
   z-index: 100;
 }

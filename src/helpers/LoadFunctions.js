@@ -10,7 +10,6 @@ export async function loadPallete() {
     const pal_col = ApiState.value.palleteColumn;
     try {
         const data = await fetchDataFromAPI(pal_col, prefix); 
-        console.log("palletetlkejtlkjekltj")
         console.log(data)
         updateDataPalette(JSON.parse(data));
     } catch (error) {

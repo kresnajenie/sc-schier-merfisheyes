@@ -6,6 +6,7 @@ export function createDropdown() {
     dropdownContainer.id = "prefix-dropdown-container"
     dropdownContainer.style.display = "flex"
     dropdownContainer.style.justifyContent = 'flex-end';
+    dropdownContainer.style.zIndex = "1000";
     
     const dropdownDiv = document.createElement('div');
     dropdownDiv.className = 'dropdown dropdown-center';

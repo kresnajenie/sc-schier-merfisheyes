@@ -38,6 +38,7 @@ function createCheckboxContainer() {
     containerDiv.classList.add("checkbox-container");
     containerDiv.id = "cellCheckbox";
     containerDiv.style.display = "none";
+    containerDiv.style.zIndex = 1000;
 
     // Create textbox input and clear button
     const inputDiv = document.createElement("div");
