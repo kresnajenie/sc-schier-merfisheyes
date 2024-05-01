@@ -1,6 +1,4 @@
 // /src/helpers/APIClient.js
-import { from } from 'rxjs';
-
 // Function to fetch data from the API and return an Observable using async/await
 export async function fetchDataFromAPI(columnName, prefix) {
     // const response = await fetch(`http://localhost:8000/getdata?data=${prefix}&gene=${columnName}`);
@@ -15,12 +13,13 @@ export async function fetchDataFromAPI(columnName, prefix) {
 
     const exists = list.includes(searchTerm);
 
+    console.log(columnName, prefix)
     if (exists) {
-        // console.log(data["values"])
+        console.log(data["values"])
         return data["values"]
     } else {
         const floatList = data.values.map(item => parseFloat(item));
-        // console.log(floatList)
+        console.log(floatList)
         return floatList
     }
     
