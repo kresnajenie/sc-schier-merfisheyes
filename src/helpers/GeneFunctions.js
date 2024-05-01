@@ -11,21 +11,21 @@ function interpolatePercentages(percent1, percent2) {
 
     // Define colors
     const white = { r: 255, g: 255, b: 255 };
-    const red = { r: 255, g: 0, b: 0 };
-    const cyan = { r: 0, g: 255, b: 255 };
+    const green = { r: 0, g: 255, b: 0 };
+    const magenta = { r: 255, g: 0, b: 255 };
 
     // Interpolate between red and white based on the first percentage
     const interpolatedRed = {
-        r: Math.round(red.r + (white.r - red.r) * percent2),
-        g: Math.round(red.g + (white.g - red.g) * percent2),
-        b: Math.round(red.b + (white.b - red.b) * percent2)
+        r: Math.round(green.r + (white.r - green.r) * percent2),
+        g: Math.round(green.g + (white.g - green.g) * percent2),
+        b: Math.round(green.b + (white.b - green.b) * percent2)
     };
 
     // Interpolate between cyan and white based on the second percentage
     const interpolatedCyan = {
-        r: Math.round(cyan.r + (white.r - cyan.r) * percent1),
-        g: Math.round(cyan.g + (white.g - cyan.g) * percent1),
-        b: Math.round(cyan.b + (white.b - cyan.b) * percent1)
+        r: Math.round(magenta.r + (white.r - magenta.r) * percent1),
+        g: Math.round(magenta.g + (white.g - magenta.g) * percent1),
+        b: Math.round(magenta.b + (white.b - magenta.b) * percent1)
     };
 
     // Calculate the average of the interpolated colors
