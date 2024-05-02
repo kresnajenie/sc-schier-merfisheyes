@@ -1,8 +1,7 @@
 // /src/helpers/LoadFunctions.js
 import { fetchDataFromAPI } from './APIClient';
-import { updateDataPalette, updateGenes, ApiState } from '../states/ApiState';
+import { updateDataPalette, updateGenes, ApiState, updateGroups } from '../states/ApiState';
 import { updateDataItems } from '../states/MatrixState';
-import { updateLoadingState } from '../states/UIState';
 
 const prefix = ApiState.value.prefix;
 
@@ -59,4 +58,13 @@ export async function loadItems() {
     } catch (error) {
         console.error('Error combining data:', error);
     }   
+}
+
+export async function loadGroups() {
+    try {
+        const data = await fetchDataFromAPI("hierarchical_clusters", prefix); 
+        // updateGroups(JSON.parse(data));
+    } catch (error) {
+        console.error('Failed to load items:', error);
+    }
 }

@@ -1,4 +1,4 @@
-import { ButtonState, updateDotSize, updateGenePercentile, updateCameraPositionZ } from '../states/ButtonState.js';
+import { updateDotSize, updateGenePercentile } from '../states/ButtonState.js';
 
 export const toggleCellFilter = () => {
 
@@ -70,8 +70,6 @@ export const toggleGeneFilter = () => {
 export const toggleButton = () => {
 
     const buttons = document.querySelectorAll('.iconBtn');
-    // const toggleZoomIn = document.getElementById("toggleZoomIn");
-    // const toggleZoomOut = document.getElementById("toggleZoomOut");
     const togglePointSize = document.getElementById("togglePointSize");
     const pointSizeSliderBox = document.getElementById("pointSizeSliderBox");
     const pointSizeSlider = document.getElementById("pointSizeSlider");
@@ -103,60 +101,6 @@ export const toggleButton = () => {
         });
     });
 
-    // zoom in function
-
-    // toggleZoomIn.addEventListener('click', () => {
-
-    //     // check if anything else is open -> close
-
-    //     if (cellCheckbox.style.display === 'block') {
-    //         cellCheckbox.style.display = 'none';
-    //         toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
-    //         toggleCellCheckbox.style.color = 'white';
-    //     }
-    //     if (geneRadioContainer.style.display === 'block') {
-    //         geneRadioContainer.style.display = 'none';
-    //         toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
-    //         toggleGeneRadio.style.color = 'white';
-    //     }
-    //     if (pointSizeSliderBox.style.display === 'block') {
-    //         pointSizeSliderBox.style.display = 'none';
-    //     }
-    //     if (geneSliderBox.style.display === 'block') {
-    //         geneSliderBox.style.display = 'none';
-    //     }
-
-    //     const newZoom = ButtonState.value.cameraPositionZ - 25;
-    //     updateCameraPositionZ(newZoom);
-    // })
-
-    // zoom out function
-    
-    // toggleZoomOut.addEventListener('click', () => {
-
-    //     // check if anything else is open -> close
-
-    //     if (cellCheckbox.style.display === 'block') {
-    //         cellCheckbox.style.display = 'none';
-    //         toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
-    //         toggleCellCheckbox.style.color = 'white';
-    //     }
-    //     if (geneRadioContainer.style.display === 'block') {
-    //         geneRadioContainer.style.display = 'none';
-    //         toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
-    //         toggleGeneRadio.style.color = 'white';
-    //     }
-    //     if (pointSizeSliderBox.style.display === 'block') {
-    //         pointSizeSliderBox.style.display = 'none';
-    //     }
-    //     if (geneSliderBox.style.display === 'block') {
-    //         geneSliderBox.style.display = 'none';
-    //     }
-
-    //     const newZoom = ButtonState.value.cameraPositionZ + 25;
-    //     updateCameraPositionZ(newZoom);
-    // })
-
     // point size slider function
     
     togglePointSize.addEventListener('click', () => {
@@ -186,13 +130,20 @@ export const toggleButton = () => {
     }
 
     pointSizeSliderValue.oninput = function() {
-        if (this.value < 0) {
-            this.value = 0;
-        } else if (this.value > 50) {
-            this.value = 50;
+        if (this.value < 0.1) {
+            this.value = 0.1;
+        } else if (this.value > 15) {
+            this.value = 15;
         }
         pointSizeSlider.value = parseFloat(this.value).toFixed(2);
         updateDotSize(parseFloat(this.value).toFixed(2));
+    }
+
+    // unfocus on enter
+    pointSizeSliderValue.onkeydown = function(e) {
+        if (e.key === "Enter") {
+            document.activeElement.blur();
+        }
     }
 
     // gene percentile slider function
@@ -217,11 +168,6 @@ export const toggleButton = () => {
 
         geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
     })
-    
-    // geneSlider.oninput = function() {
-    //     geneSliderValue.value = parseFloat(this.value).toFixed(2);
-    //     updateGenePercentile(parseFloat(this.value).toFixed(2));
-    // }
 
     geneSlider.addEventListener('mouseup', function() {
         geneSliderValue.value = parseFloat(this.value).toFixed(2);
@@ -229,12 +175,19 @@ export const toggleButton = () => {
     });
 
     geneSliderValue.oninput = function() {
-        if (this.value < 0) {
-            this.value = 0;
+        if (this.value < 80) {
+            this.value = 80;
         } else if (this.value > 99.99) {
             this.value = 99.99;
         }
         geneSlider.value = parseFloat(this.value).toFixed(2);
         updateGenePercentile(parseFloat(this.value).toFixed(2));
+    }
+
+    // unfocus on enter
+    geneSliderValue.onkeydown = function(e) {
+        if (e.key === "Enter") {
+            document.activeElement.blur();
+        }
     }
 }

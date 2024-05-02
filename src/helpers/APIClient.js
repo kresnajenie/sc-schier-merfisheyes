@@ -8,7 +8,7 @@ export async function fetchDataFromAPI(columnName, prefix) {
     }
     const data = await response.json(); // Wait for the JSON conversion
 
-    const list = ["clusters", "clusters_pal", 'genes'];
+    const list = ['clusters', 'clusters_pal', 'genes', 'hierarchical_clusters'];
     const searchTerm = data._id;
 
     const exists = list.includes(searchTerm);

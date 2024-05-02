@@ -105,7 +105,7 @@ export function updatePrefix(prefix) {
  * Example Usage:
  * updatePrefix(["ectoderm", "endoderm"]);
  */
-export function updateGroup(groups) {
+export function updateGroups(groups) {
 
     const currentState = ApiState.getValue();
 
