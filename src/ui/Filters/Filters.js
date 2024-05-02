@@ -4,14 +4,26 @@ export function createFilter() {
     const filter = document.createElement("div");
     filter.className = "filter";
 
-    const cellToggle = createButton("toggleCellCheckbox", "Celltype")
-    filter.appendChild(cellToggle);
+    const cellDescDiv = document.createElement("div");
+    cellDescDiv.className = "desc-container";
+    const cellToggle = createButton("toggleCellCheckbox", "Celltype", "cell-desc")
+    const cellDesc = createDescBox("cell-desc", "Click to filter by celltypes")
+
+    cellDescDiv.appendChild(cellToggle);
+    cellDescDiv.appendChild(cellDesc);
+    filter.appendChild(cellDescDiv);
 
     const checkbox = createCheckboxContainer();
     filter.appendChild(checkbox);
 
-    const geneToggle = createButton("toggleGeneRadio", "Gene")
-    filter.appendChild(geneToggle);
+    const geneDescDiv = document.createElement("div");
+    geneDescDiv.className = "desc-container";
+    const geneToggle = createButton("toggleGeneRadio", "Gene", "gene-desc")
+    const geneDesc = createDescBox("gene-desc", "Click to filter by genes")
+
+    geneDescDiv.appendChild(geneToggle)
+    geneDescDiv.appendChild(geneDesc)
+    filter.appendChild(geneDescDiv);
 
     const radio = createGeneRadioContainer();
     filter.appendChild(radio);
@@ -22,9 +34,11 @@ export function createFilter() {
     return filter;
 }
 
-function createButton(id, text) {
+function createButton(id, text, target) {
     const button = document.createElement("button");
     button.setAttribute("type", "button");
+    button.setAttribute("data-target", target);
+
     button.classList.add("toggles", "btn");
     button.id = id;
     button.textContent = text;

@@ -8,6 +8,11 @@ export async function fetchDataFromAPI(columnName, prefix) {
     }
     const data = await response.json(); // Wait for the JSON conversion
 
+    // no data available
+    if (data === null) {
+        return '[]';
+    }
+
     const list = ['clusters', 'clusters_pal', 'genes', 'hierarchical_clusters'];
     const searchTerm = data._id;
 
@@ -22,14 +27,4 @@ export async function fetchDataFromAPI(columnName, prefix) {
         console.log(floatList)
         return floatList
     }
-    
-    // try {
-    //     const floatList = JSON.parse(data.values).map(item => parseFloat(item));
-    //     console.log("float")
-    //     console.log(floatList); // Log the actual data
-    //     return floatList; // Return the parsed data
-    // } catch{
-    //     console.log(data.values); // Log the actual data
-    //     return JSON.parse(data.values); // Return the parsed data
-    // }
 }

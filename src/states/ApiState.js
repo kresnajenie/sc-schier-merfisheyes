@@ -21,15 +21,7 @@ const apiData = {
     items: [],
 
     // capitalization doesn't matter
-    groups: [
-        "adaxial cells",
-        "cephalic",
-        "endoderm",
-        "floor Plate",
-        "hindbrain",
-        "ectoderm",
-        "spinal cord"
-    ]
+    groups: []
 };
 
 

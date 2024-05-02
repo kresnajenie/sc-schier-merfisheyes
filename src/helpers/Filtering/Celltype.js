@@ -100,7 +100,17 @@ export function createCellCheckboxes(cellTypesWithColors) {
         let groupLabel;
         let groupList;
 
-        let c = ApiState.value.groups.find(s => celltype.toLowerCase().startsWith(s));
+        const findKeyByValue = (dictionary, target) => {
+            for (const key in dictionary) {
+                const values = dictionary[key];
+                if (values.includes(target)) {
+                    return key;
+                }
+            }
+            return false; // Return false if the target is not found in any list
+        }
+
+        let c = findKeyByValue(ApiState.value.groups, celltype);
 
         // if c is true meaning found
         if (c) {

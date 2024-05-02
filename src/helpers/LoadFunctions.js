@@ -63,7 +63,7 @@ export async function loadItems() {
 export async function loadGroups() {
     try {
         const data = await fetchDataFromAPI("hierarchical_clusters", prefix); 
-        // updateGroups(JSON.parse(data));
+        updateGroups(JSON.parse(data));
     } catch (error) {
         console.error('Failed to load items:', error);
     }

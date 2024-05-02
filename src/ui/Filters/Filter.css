@@ -47,7 +47,12 @@
 .toggles:hover {
   background-color: rgb(255, 255, 255) !important;
   color: black !important;
+
+  & .descBox {
+    display: block;
+  }
 }
+
 
 .checkbox-container {
   gap: 5px;
@@ -129,9 +134,9 @@
   gap: 5px;
 }
 
-.iconBtn:hover .descBox {
+/* .iconBtn:hover .descBox {
   display: block;
-}
+} */
 
 .icon {
   display: flex;
@@ -172,6 +177,9 @@
   text-align: center;
   width: 200px;
   float: right;
+
+  justify-self: center;
+  align-self: center;
 }
 
 .slider-container {
