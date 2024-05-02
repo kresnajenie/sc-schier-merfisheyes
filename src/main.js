@@ -1,34 +1,34 @@
 import { SceneInitializer } from './scene/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
-import { clearGenes, createGeneRadio, geneSearch, toggleMode } from './helpers/Filtering/Gene.js';
+import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
+// import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
 import { updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
-import { createFilter } from './ui/Filters/Filters.js';
+// import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
-import { createNavbar } from './ui/Navbar/Navbar.js';
+// import { createNavbar } from './ui/Navbar/Navbar.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
 // import { createGenomeBrowser } from './ui/GenomeBrowser/GenomeBrowser.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const navbar = createNavbar();
+    // const navbar = createNavbar();
     createOverlay();
     // createGenomeBrowser();
     const loading = createLoadingIndicator();
-    const filter = createFilter();
+    // const filter = createFilter();
 
-    document.body.insertBefore(navbar, document.body.firstChild);
+    // document.body.insertBefore(navbar, document.body.firstChild);
     // document.body.appendChild(overlay);
     document.body.appendChild(loading);
-    document.body.appendChild(filter);
+    // document.body.appendChild(filter);
 
     // for clicking on the toggles
-    toggleCellFilter();
-    toggleGeneFilter();
-    toggleButton();
-    toggleMode();
+    // toggleCellFilter();
+    // toggleGeneFilter();
+    // toggleButton();
+    // toggleMode();
 
     updateLoadingState(true); // Assume loading starts
 

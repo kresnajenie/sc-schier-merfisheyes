@@ -71,6 +71,9 @@ export class SceneInitializer {
         ).subscribe(items => {
             console.log("Prefix changed:", items);
             console.log(ApiState.value.prefix);
+
+            const prefix = document.getElementById("dropdownMenuButton");
+            prefix.innerText = ApiState.value.prefix;
         });
 
         UIState.pipe(

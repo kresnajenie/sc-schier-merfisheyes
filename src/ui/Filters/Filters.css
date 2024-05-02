@@ -53,7 +53,6 @@
   }
 }
 
-
 .checkbox-container {
   gap: 5px;
 
@@ -67,6 +66,8 @@
   scrollbar-color: dark;
 
   overflow: auto;
+
+  display: none;
 }
 
 .checkbox-container::-webkit-scrollbar {
@@ -87,7 +88,8 @@
   background-color: black;
 }
 
-.clearButton, .modeButton {
+.clearButton,
+.modeButton {
   width: 100%;
   height: 30px;
 
@@ -135,10 +137,6 @@
   gap: 5px;
 }
 
-/* .iconBtn:hover .descBox {
-  display: block;
-} */
-
 .icon {
   display: flex;
   flex-direction: column;
@@ -181,6 +179,15 @@
 
   justify-self: center;
   align-self: center;
+
+  display: none;
+}
+
+.slider-input {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  gap: 5px;
 }
 
 .slider-container {
@@ -195,12 +202,14 @@
   border: rgba(58, 58, 58, 0.5) solid;
   padding: 0px 10px 10px 10px;
   border-radius: 5px;
+
+  display: none;
 }
 
 .slider {
   border-radius: 5px;
   background: #d3d3d3;
-  outline: none;  
+  outline: none;
   width: 100%;
   padding: 5px;
 }

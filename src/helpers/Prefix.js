@@ -1,19 +1,25 @@
 import { ApiState, updatePrefix } from "../states/ApiState";
 import { changeURL } from "./URL";
 
-export const selectPrefix = (prefix) => {
+// window.addEventListener('DOMContentLoaded', selectPrefix);
+
+export function selectPrefix() {
     const dropdownMenuButton = document.getElementById("dropdownMenuButton");
+    const prefixItems = document.getElementsByClassName("dropdown-item");
 
-    const url = new URL(window.location);
-    const params = new URLSearchParams(""); // clears out the params
+    for (let i = 0; i < prefixItems.length; i++) {
+        
+        prefixItems.item(i).addEventListener("click", () => {
 
-    params.append('prefix', prefix);
-    changeURL(params);
+            const params = new URLSearchParams(""); // clears out the params
 
-    if (prefix !== ApiState.value.prefix) {
-        updatePrefix(prefix)
-        dropdownMenuButton.innerHTML = ApiState.value.prefix;
+            params.append('prefix', prefixItems.item(i).innerText);
+            changeURL(params);
 
-        window.location.reload();
+            if (prefixItems.item(i).innerText !== ApiState.value.prefix) {
+                dropdownMenuButton.innerHTML = ApiState.value.prefix;
+                window.location.reload();
+            }
+        })
     }
 }

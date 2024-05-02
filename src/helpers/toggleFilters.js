@@ -10,7 +10,13 @@ export const toggleCellFilter = () => {
 
     toggleCellCheckbox.addEventListener('click', () => {
 
+        console.log("checking sdf");
+
+        console.log(cellCheckbox.style.display);
+
         cellCheckbox.style.display = cellCheckbox.style.display === 'none' ? 'block' : 'none';
+
+        console.log(cellCheckbox.style.display);
 
         // set to highlight mode
         toggleCellCheckbox.style.backgroundColor = 'white';

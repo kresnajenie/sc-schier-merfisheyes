@@ -1,0 +1,75 @@
+<link rel="stylesheet" href="/src/ui/Filters/Filters.css">
+<div class="desc-container"><button type="button" data-target="cell-desc" class="toggles btn"
+        id="toggleCellCheckbox">Celltype</button>
+    <div class="descBox" id="cell-desc">Click to filter by celltypes</div>
+</div>
+<div class="checkbox-container" id="cellCheckbox" style="display: none">
+    <div class="input-elements"><input type="text" class="textInput" id="cellTextbox"
+            placeholder="Search celltype"><button type="button" class="clearButton btn btn-danger" id="cellClearButton"
+            title="Clear all celltype filters.">Clear</button></div>
+    <div class="checkboxes" id="cellCheckboxes"></div>
+    <div class="notfound alert alert-danger alert-dismissible fade show" id="cellNotFound">No cell types of that name found.</div>
+</div>
+<div class="desc-container">
+    <button type="button" data-target="gene-desc" class="toggles btn" id="toggleGeneRadio">Gene</button>
+    <div class="descBox" id="gene-desc">Click to filter by genes</div>
+</div>
+<div class="checkbox-container" id="geneRadioContainer" style="display: none">
+    <div class="input-elements">
+        <input type="text" class="textInput" id="geneTextbox" placeholder="Search gene (only 2 can be selected)">
+        <button type="button" class="clearButton btn btn-danger" id="geneClearButton" title="Clear all gene filters.">
+            Clear
+        </button>
+        <button type="button" class="modeButton btn btn-info" id="modeButton" value="1"
+            title="Change between only being able to select 1 gene or 2 genes.">Single Gene Mode
+        </button>
+    </div>
+    <div class="checkboxes" id="geneRadio"></div>
+    <div class="notfound alert alert-danger alert-dismissible fade show" id="geneNotFound">No genes of that name found.
+    </div>
+</div>
+<div class="icon">
+    <div class="slider-input">
+        <button type="button" data-target="pointSizeBox" class="iconBtn btn" id="togglePointSize">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12ZM12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z"
+                    fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z"
+                    fill="currentColor"></path>
+            </svg>
+        </button>
+        <div class="descBox" id="pointSizeBox">Click to change dot size.</div>
+    </div>
+    <div id="pointSizeSliderBox" class="slider-container" style="display: none">
+        <input type="range" min="0.1" max="15" value="5" step="0.01" class="slider" id="pointSizeSlider">
+        <div id="pointSizeSliderNumContainer" class="slider-container-inner">
+            <div class="slider-min-max" id="pointSizeMinId">Min: 0.10</div><input class="slider-value"
+                id="pointSizeSliderValue" step="0.01" type="text" min="0.1" max="15">
+            <div class="slider-min-max" id="pointSizeMaxId">Max: 15.00</div>
+        </div>
+    </div>
+    <div class="slider-input">
+        <button type="button" data-target="genePercentileBox" class="iconBtn btn" id="toggleGenePercentile">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7 3C8.86384 3 10.4299 4.27477 10.874 6H19V8H10.874C10.4299 9.72523 8.86384 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3ZM7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z"
+                    fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M17 20C15.1362 20 13.5701 18.7252 13.126 17H5V15H13.126C13.5701 13.2748 15.1362 12 17 12C19.2091 12 21 13.7909 21 16C21 18.2091 19.2091 20 17 20ZM17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z"
+                    fill="currentColor"></path>
+            </svg>
+        </button>
+        <div class="descBox" id="genePercentileBox">Click to change the gene percentile.
+        </div>
+    </div>
+    <div id="geneSliderBox" class="slider-container" style="display: none">
+        <input type="range" min="80" max="99.99" value="99" step="0.01" class="slider" id="geneSlider">
+        <div id="geneSliderNumContainer" class="slider-container-inner">
+            <div class="slider-min-max" id="geneMinId">Min: 80.00</div>
+            <input class="slider-value" id="geneSliderValue" step="0.01" type="text" min="80" max="99.99">
+            <div class="slider-min-max" id="geneMaxId">Max: 99.99</div>
+        </div>
+    </div>
+</div>

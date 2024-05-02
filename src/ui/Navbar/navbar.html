@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/src/ui/Navbar/Navbar.css">
+<link rel="stylesheet" href="/src/ui/Navbar/FilterIndicator.css">
+<div class="container-fluid nav-container">
+    <div id="title">
+        <b class="navbar-brand">FISHEYES</b>
+        <div class="title-paragraph">
+            <p>by <i>Bintu Lab</i>, </p>
+            <p>data by <i>Schier Lab</i></p>
+        </div>
+    </div>
+    <div class="dropdown dropdown-center" id="filter-container"><button
+            class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false" title="View all selected filters.">Show Selected Filters</button>
+        <ul class="dropdown-menu list">
+            <div><b>Celltype Filters: </b>
+                <div class="listFilters" id="cellFilters">No celltype filters selected</div>
+            </div>
+            <hr>
+            <div><b>Gene Filter: </b>
+                <p class="listFilters" id="geneFilters">No gene filters selected</p>
+            </div>
+        </ul>
+    </div>
+    <div id="prefix-dropdown-container">
+        <div class="dropdown dropdown-center">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false" title="Set the prefix."></button>
+            <ul class="dropdown-menu">
+                <p><a class="dropdown-item">50pe</a></p>
+                <p><a class="dropdown-item">75pe</a></p=>
+                <p><a class="dropdown-item">6s</a></p>
+            </ul>
+        </div>
+    </div>
+</div>

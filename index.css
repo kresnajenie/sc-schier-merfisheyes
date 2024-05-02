@@ -1,0 +1,15 @@
+body {
+    background-color: black !important;
+    margin: 0;
+    overflow: hidden;
+    font: 16px Arial;
+}
+
+canvas {
+    display: block;
+}
+
+/* hides everything to prevent flickering */
+body * {
+    visibility: hidden;
+}
