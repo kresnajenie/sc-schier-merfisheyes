@@ -122,6 +122,8 @@ export function createOverlay() {
     }
 
     function resizeMouseMove(e) {
+
+        resizeHandle.style.backgroundColor = "red";
         
         const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
 
@@ -164,6 +166,9 @@ export function createOverlay() {
     }
 
     function resizeMouseUp() {
+
+        resizeHandle.style.backgroundColor = "#ffe432";
+        
         window.removeEventListener('mousemove', resizeMouseMove);
         window.removeEventListener('mouseup', resizeMouseUp);
     }
@@ -205,6 +210,8 @@ export function createOverlay() {
 
     function resizeTouchMove(e) {
 
+        resizeHandle.style.backgroundColor = "red";
+
         const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
 
         // Bound the size to the window
@@ -245,7 +252,10 @@ export function createOverlay() {
         renderer.setSize(newWidth, newHeight);
     }
     
-    function resizeTouchEnd() {
+    function resizeTouchEnd(e) {
+
+        resizeHandle.style.backgroundColor = "#ffe432";
+
         window.removeEventListener('touchmove', resizeTouchMove);
         window.removeEventListener('touchend', resizeTouchEnd);
     }
