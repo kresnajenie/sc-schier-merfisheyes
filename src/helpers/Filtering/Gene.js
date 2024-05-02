@@ -2,9 +2,6 @@
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateSelectedGene } from "../../states/SelectedState";
 
-
-let checked = 0;
-
 // Toggle gene checkbox container
 export const geneSearch = () => {
     const geneTextbox = document.getElementById('geneTextbox');

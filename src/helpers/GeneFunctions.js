@@ -1,6 +1,5 @@
 import { ApiState } from "../states/ApiState";
 import { fetchDataFromAPI } from "./APIClient";
-import chroma from "chroma-js"
 
 export function getGene(gene) {
     return fetchDataFromAPI(gene, ApiState.value.prefix);

@@ -4,7 +4,7 @@ import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gen
 import { loadGenes, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
 import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
-import { SelectedState, updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
+import { updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
