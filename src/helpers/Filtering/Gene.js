@@ -181,7 +181,7 @@ export const showGeneFilters = () => {
         SelectedState.value.selectedGenes.forEach((type, index) => {
 
             const f = document.createElement("p");
-            f.style.color = index === 0 ? 'red' : 'cyan';
+            f.style.color = index === 0 ? 'magenta' : 'green';
             f.style.fontStyle = 'italic'
             f.style.fontWeight = 'bold'
             f.innerHTML = type;
