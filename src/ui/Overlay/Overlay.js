@@ -308,6 +308,7 @@ export function createOverlay() {
 
     controls.touches = {
         ONE: THREE.TOUCH.PAN,
+        TWO: THREE.TOUCH.DOLLY_PAN
     }
 
     // Make the camera look at the object
