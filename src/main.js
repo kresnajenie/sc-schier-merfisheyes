@@ -1,10 +1,10 @@
-import { SceneInitializer } from './components/SceneInitializer.js';
+import { SceneInitializer } from './scene/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
 import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/toggleFilters.js';
+import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
-import { SelectedState, updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
+import { updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';

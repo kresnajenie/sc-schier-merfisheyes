@@ -3,8 +3,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { SceneState } from '../../states/SceneState';
 
-
-
 export function createOverlay() {
     const overlay = document.createElement('div');
     overlay.id = 'overlay';
