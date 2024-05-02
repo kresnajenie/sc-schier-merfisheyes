@@ -28,6 +28,7 @@ export function createOverlay() {
     const resizeHandle = document.createElement('div');
     resizeHandle.id = 'resizeHandle';
     resizeHandle.className = 'resize-handle';
+    resizeHandle.title = "Drag to resize UMAP."
 
     // Append drag button and resize handle to the top controls container
     topControls.appendChild(dragButton);

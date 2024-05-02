@@ -11,6 +11,7 @@ export function createFilterIndicator() {
     button.dataset.bsToggle = 'dropdown';
     button.setAttribute('aria-expanded', 'false');
     button.textContent = 'Show Selected Filters';
+    button.title = "View all selected filters."
 
     const dropdownMenu = document.createElement('ul');
     dropdownMenu.classList.add('dropdown-menu', 'list');

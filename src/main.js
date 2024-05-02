@@ -1,6 +1,6 @@
 import { SceneInitializer } from './scene/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
-import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
+import { clearGenes, createGeneRadio, geneSearch, toggleMode } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
 import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleCellFilter();
     toggleGeneFilter();
     toggleButton();
+    toggleMode();
 
     updateLoadingState(true); // Assume loading starts
 

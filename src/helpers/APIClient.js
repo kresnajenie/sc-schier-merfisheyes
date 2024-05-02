@@ -20,11 +20,11 @@ export async function fetchDataFromAPI(columnName, prefix) {
 
     console.log(columnName, prefix)
     if (exists) {
-        console.log(data["values"])
+        // console.log(data["values"])
         return data["values"]
     } else {
         const floatList = data.values.map(item => parseFloat(item));
-        console.log(floatList)
+        // console.log(floatList)
         return floatList
     }
 }

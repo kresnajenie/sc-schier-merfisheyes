@@ -1,3 +1,4 @@
+import { toggleMode } from '../../helpers/Filtering/Gene';
 import './Filter.css'
 
 export function createFilter() {
@@ -69,6 +70,7 @@ function createCheckboxContainer() {
     clearButton.classList.add("clearButton", "btn", "btn-danger");
     clearButton.id = "cellClearButton";
     clearButton.textContent = "Clear";
+    clearButton.title = "Clear all celltype filters."
 
     inputDiv.appendChild(textBox);
     inputDiv.appendChild(clearButton);
@@ -114,12 +116,15 @@ function createGeneRadioContainer() {
     clearButton.classList.add("clearButton", "btn", "btn-danger");
     clearButton.id = "geneClearButton";
     clearButton.textContent = "Clear";
+    clearButton.title = "Clear all gene filters."
 
     const modeButton = document.createElement("button");
     modeButton.setAttribute("type", "button");
-    modeButton.classList.add("modeButton", "btn", "btn-success");
+    modeButton.classList.add("modeButton", "btn", "btn-info");
     modeButton.id = "modeButton";
-    modeButton.textContent = "2 Genes Mode"
+    modeButton.textContent = "Single Gene Mode"
+    modeButton.value = "1";
+    modeButton.title = "Change between only being able to select 1 gene or 2 genes."
 
     inputDiv.appendChild(textBox);
     inputDiv.appendChild(clearButton);

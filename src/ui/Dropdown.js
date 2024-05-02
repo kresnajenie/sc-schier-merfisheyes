@@ -20,6 +20,7 @@ export function createDropdown() {
     dropdownButton.dataset.bsToggle = 'dropdown';
     dropdownButton.setAttribute('aria-expanded', 'false');
     dropdownButton.innerHTML = ApiState.value.prefix;
+    dropdownButton.title = "Set the prefix."
 
     dropdownButton.style.width = '80px'
 
@@ -28,11 +29,13 @@ export function createDropdown() {
 
     dropdownMenu.style.minWidth = '80px';
     dropdownMenu.style.maxWidth = '80px';
-    
 
-    dropdownMenu.appendChild(createDropdownItem('#50pe', '50pe'));
-    dropdownMenu.appendChild(createDropdownItem('#75pe', '75pe'));
-    dropdownMenu.appendChild(createDropdownItem('#6s', '6s'));
+    dropdownMenu.style.backgroundColor = "rgb(60, 60, 60)";
+    dropdownMenu.style.boxShadow = "0 4px 8px 0 rgba(255, 255, 255, 0.2), 0 6px 20px 0 rgba(255, 255, 255, 0.19)"
+    
+    dropdownMenu.appendChild(createDropdownItem('50pe'));
+    dropdownMenu.appendChild(createDropdownItem('75pe'));
+    dropdownMenu.appendChild(createDropdownItem('6s'));
 
     dropdownDiv.appendChild(dropdownButton);
     dropdownDiv.appendChild(dropdownMenu);
@@ -40,13 +43,25 @@ export function createDropdown() {
     return dropdownContainer;
 }
 
-function createDropdownItem(href, text) {
+function createDropdownItem(text) {
     const listItem = document.createElement('p');
     const link = document.createElement('a');
     link.className = 'dropdown-item';
     link.style.cursor = 'pointer';
     link.innerHTML = text;
     link.style.textAlign = 'center';
+    link.style.color = "white"
+    listItem.style.margin = "7.5px"
+
+    link.onmouseover = () => {
+        listItem.style.backgroundColor = "rgb(33, 37, 41)";
+        link.style.backgroundColor = "rgb(33, 37, 41)"
+    }
+
+    link.onmouseout = () => {
+        listItem.style.backgroundColor = "rgb(60, 60, 60)";
+        link.style.backgroundColor = "rgb(60, 60, 60)";
+    }
 
     link.onclick = () => {selectPrefix(text)};
 

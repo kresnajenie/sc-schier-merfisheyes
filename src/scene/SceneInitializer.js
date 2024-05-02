@@ -39,18 +39,6 @@ export class SceneInitializer {
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-        // if (ApiState.value.prefix == "6s") {
-        //     // Disable the rotation of the camera
-        //     this.controls.enableRotate = false;
-
-        //     // Set left mouse button for panning instead of rotating
-        //     this.controls.mouseButtons = {
-        //         LEFT: THREE.MOUSE.PAN,
-        //         MIDDLE: THREE.MOUSE.DOLLY,
-        //         RIGHT: THREE.MOUSE.ROTATE
-        //     };
-        // }
-
         // controls.target.copy(sharedTarget); // Initially set target for cameraOne
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.25;
@@ -144,6 +132,7 @@ export class SceneInitializer {
 
             if (SelectedState.value.selectedGenes) {
                 await this.updateInstancedMesh(SelectedState.value.selectedGenes);
+                await this.updateInstancedMesh(SelectedState.value.selectedGenes); // JANK FIX FOR QUICK GENE SWITCHING
             } else {
                 await this.updateInstancedMesh([]);
             }
@@ -215,8 +204,6 @@ export class SceneInitializer {
     }
 
     async updateInstancedMesh(filterType = []) {
-
-        // print("reached!")
 
         // Clear existing mesh
         if (this.instancedMesh) {
@@ -328,13 +315,7 @@ export class SceneInitializer {
             }
 
             //plot projection
-            // proj.position.set(jsonData[i]["global_sphere0_norm"], jsonData[i]["global_sphere1_norm"], jsonData[i]["global_sphere2_norm"]);
             proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
-            // if (ApiState.value.prefix == "6s") {
-            //     proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, 0);
-            // } else {
-            //     proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
-            // }
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);

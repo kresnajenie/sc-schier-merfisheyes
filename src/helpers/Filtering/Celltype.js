@@ -285,8 +285,8 @@ export const showCellFilters = () => {
 
             const f = document.createElement("p");
             f.style.color = ApiState.value.pallete[type];
-            f.style.fontStyle = 'normal'
-            f.style.webkitTextStroke = "0.2px black";   
+            f.style.fontStyle = 'italic'
+            f.style.fontWeight = 'bold'
             f.innerHTML = type;
             cellFilters.appendChild(f);
         })

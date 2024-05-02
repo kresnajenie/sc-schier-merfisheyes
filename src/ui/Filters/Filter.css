@@ -89,7 +89,7 @@
 
 .clearButton, .modeButton {
   width: 100%;
-  height: 25px;
+  height: 30px;
 
   line-height: 10px;
 
@@ -101,6 +101,7 @@
 }
 
 .textInput {
+  margin-top: 5px;
   width: 100%;
   height: 40px;
   border-radius: 5px;

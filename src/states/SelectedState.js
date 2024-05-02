@@ -2,6 +2,8 @@ import { BehaviorSubject } from 'rxjs';
 
 const selectedData = {
     selectedCelltypes: [],
+    mode: 1,
+    selectedSingleGene: "",
     selectedGenes: [],
 }
 
@@ -21,6 +23,34 @@ export function updateSelectedCelltype(newCelltypes) {
     const updatedState = {
         ...currentState,
         selectedCelltypes: [...new Set(newCelltypes)]
+    };
+
+    // Emit the updated state
+    SelectedState.next(updatedState);
+}
+
+export function updateMode(newMode) {
+    // Get the current state from the BehaviorSubject
+    const currentState = SelectedState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        mode: newMode
+    };
+
+    // Emit the updated state
+    SelectedState.next(updatedState);
+}
+
+export function updateSelectedSingleGene(newSingleGene) {
+    // Get the current state from the BehaviorSubject
+    const currentState = SelectedState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        selectedSingleGene: newSingleGene
     };
 
     // Emit the updated state

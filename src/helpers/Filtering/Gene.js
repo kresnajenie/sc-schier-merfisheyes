@@ -1,6 +1,7 @@
 
 import { ApiState } from "../../states/ApiState";
-import { SelectedState, updateSelectedGene } from "../../states/SelectedState";
+import { SelectedState, updateMode, updateSelectedGene } from "../../states/SelectedState";
+import { updateLoadingState } from "../../states/UIState";
 
 // Toggle gene checkbox container
 export const geneSearch = () => {
@@ -91,13 +92,50 @@ export function createGeneRadio(geneList) {
         // Attach event listener
         radio.addEventListener('change', (e) => {
             // limits it to only 2 genes selected at a time
-            if (SelectedState.value.selectedGenes.length >= 2) {
+
+            if (SelectedState.value.selectedGenes.length >= SelectedState.value.mode) {
                 // alert("Only 2 genes selected at a time") // temporary for now
                 e.target.checked = false;
             }
+
+            // single gene mode
+            if (SelectedState.value.mode === 1 && SelectedState.value.selectedGenes.length === 1) {
+
+                // deselect the first gene selected
+                const prevGene = document.querySelector(`[value=${CSS.escape(SelectedState.value.selectedGenes[0])}]`);
+
+                prevGene.checked = false;
+
+                // not the same gene
+                if (prevGene.value !== e.target.value) {
+                    updateSelectedGene([]); // remove prev gene
+                    e.target.checked = true;
+                }
+            }
+
             updateRadioItem(gene, e.target.checked);
         });
     });
+}
+
+export function toggleMode() {
+    const modeButton = document.getElementById("modeButton");
+
+    modeButton.onclick = () => {
+
+        const mode = modeButton.value === "1";
+
+        if (mode) {
+            modeButton.innerText = "2 Gene Mode";
+            modeButton.classList.replace("btn-info", "btn-success");
+        } else {
+            modeButton.innerText = "Single Gene Mode";
+            modeButton.classList.replace("btn-success", "btn-info");
+        }
+
+        modeButton.value = mode ? "2" : "1";
+        updateMode(Number(modeButton.value));
+    }
 }
 
 function updateRadioItem(gene, isChecked) {
@@ -144,7 +182,8 @@ export const showGeneFilters = () => {
 
             const f = document.createElement("p");
             f.style.color = index === 0 ? 'red' : 'cyan';
-            f.style.fontStyle = 'normal'
+            f.style.fontStyle = 'italic'
+            f.style.fontWeight = 'bold'
             f.innerHTML = type;
             geneFilters.appendChild(f);
         })
