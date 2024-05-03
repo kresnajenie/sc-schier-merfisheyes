@@ -86,6 +86,12 @@
 
   height: fit-content;
   background-color: black;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  padding-bottom: 5px;
 }
 
 .clearButton,
@@ -95,7 +101,7 @@
 
   line-height: 10px;
 
-  margin-top: 5px;
+  margin-top: 2.5px;
 }
 
 .modeButton {
