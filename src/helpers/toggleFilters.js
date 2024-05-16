@@ -10,8 +10,6 @@ export const toggleCellFilter = () => {
 
     toggleCellCheckbox.addEventListener('click', () => {
 
-        console.log("checking sdf");
-
         console.log(cellCheckbox.style.display);
 
         cellCheckbox.style.display = cellCheckbox.style.display === 'none' ? 'block' : 'none';

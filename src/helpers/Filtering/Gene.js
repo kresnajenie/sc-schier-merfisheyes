@@ -119,23 +119,22 @@ export function createGeneRadio(geneList) {
 }
 
 export function toggleMode() {
-    const modeButton = document.getElementById("modeButton");
+    modeButton.onclick = () => {
 
-    modeButton.onchange = () => {
+        const modeButton = document.getElementById("modeButton");
 
-        const mode = modeButton.checked;
+        let mode = modeButton.value === "true"
 
-        console.log(mode);
+        if (mode) {
+            modeButton.innerText = "Two Gene Mode";
+            modeButton.classList.replace("btn-info", "btn-success");
+        } else {
+            modeButton.innerText = "Single Gene Mode";
+            modeButton.classList.replace("btn-success", "btn-info");
+        }
 
-        // if (mode) {
-        //     modeButton.innerText = "2 Gene Mode";
-        //     modeButton.classList.replace("btn-info", "btn-success");
-        // } else {
-        //     modeButton.innerText = "Single Gene Mode";
-        //     modeButton.classList.replace("btn-success", "btn-info");
-        // }
-
-        updateMode(Number(modeButton.checked ? 1 : 2));
+        modeButton.value = mode ? "false" : "true";
+        updateMode(Number(mode ? 2 : 1));
     }
 }
 
