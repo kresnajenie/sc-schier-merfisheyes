@@ -9,7 +9,7 @@ export async function loadPallete() {
     const pal_col = ApiState.value.palleteColumn;
     try {
         const data = await fetchDataFromAPI(pal_col, prefix); 
-        console.log(data)
+        // console.log(data)
         updateDataPalette(JSON.parse(data));
     } catch (error) {
         console.error('Failed to load items:', error);
@@ -34,14 +34,13 @@ export async function loadItems() {
         // Fetch data for all columns asynchronously
         const results = await Promise.all(columns.map(col => fetchDataFromAPI(col, prefix)));
         
-        console.log(results);
+        console.log("Load Results", results);
         columns.forEach((col, index) => {
-            console.log(col);
+            // console.log(col);
             transformedData[col] = results[index];
         });
 
-        console.log("trfdata");
-        console.log(transformedData);
+        console.log("trfdata", transformedData);
     
         // Assuming 'clusters' is a valid key in your transformedData
         // Make sure this logic aligns with how your data is structured

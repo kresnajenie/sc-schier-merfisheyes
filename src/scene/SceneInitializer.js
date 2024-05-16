@@ -70,7 +70,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => isEqual(prev, curr))
         ).subscribe(items => {
             console.log("Prefix changed:", items);
-            console.log(ApiState.value.prefix);
+            // console.log(ApiState.value.prefix);
 
             const prefix = document.getElementById("dropdownMenuButton");
             prefix.innerText = ApiState.value.prefix;
@@ -81,7 +81,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => isEqual(prev, curr))
         ).subscribe(items => {
             console.log("Loading changed:", items);
-            console.log(UIState.value.isLoading);
+            // console.log(UIState.value.isLoading);
 
             loading(UIState.value.isLoading);
         });
@@ -92,7 +92,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => prev.join() === curr.join())
         ).subscribe(async items => {
             console.log("Selected celltypes changed:", items);
-            console.log(SelectedState.value.selectedCelltypes);
+            // console.log(SelectedState.value.selectedCelltypes);
 
             // update the url params
             if (params.has("celltype")) {
@@ -124,7 +124,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => prev.join() === curr.join())
         ).subscribe(async items => {
             console.log("Selected genes changed:", items);
-            console.log(SelectedState.value.selectedGenes);
+            // console.log(SelectedState.value.selectedGenes);
 
             // update the url params
             if (params.has("gene")) {
@@ -135,7 +135,7 @@ export class SceneInitializer {
 
             if (SelectedState.value.selectedGenes) {
                 await this.updateInstancedMesh(SelectedState.value.selectedGenes);
-                await this.updateInstancedMesh(SelectedState.value.selectedGenes); // JANK FIX FOR QUICK GENE SWITCHING
+                // await this.updateInstancedMesh(SelectedState.value.selectedGenes); // JANK FIX FOR QUICK GENE SWITCHING
             } else {
                 await this.updateInstancedMesh([]);
             }
@@ -160,7 +160,7 @@ export class SceneInitializer {
             distinctUntilChanged()
         ).subscribe(async items => {
             console.log("Dot Size Changed:", items);
-            console.log(ButtonState.value.dotSize);
+            // console.log(ButtonState.value.dotSize);
 
             updateLoadingState(true);
 
@@ -192,7 +192,7 @@ export class SceneInitializer {
             distinctUntilChanged()
         ).subscribe(async items => {
             console.log("Gene Percentile", items);
-            console.log(ButtonState.value.genePercentile);
+            // console.log(ButtonState.value.genePercentile);
 
             updateLoadingState(true);
 
@@ -224,13 +224,10 @@ export class SceneInitializer {
         let pallete = ApiState.value.pallete;
         let jsonData = MatrixState.value.items;
 
-        // console.log(pallete);
-        // console.log(jsonData);
-
         const sphereGeometry = new THREE.CircleGeometry(0.1, 32, 32);
         const material = new THREE.MeshBasicMaterial();
         const count = jsonData.length;
-        console.log(count)
+        console.log("Count", count)
 
         this.instancedMesh = new THREE.InstancedMesh(sphereGeometry, material, count);
         this.instancedMeshUmap = new THREE.InstancedMesh(sphereGeometry, material, count);

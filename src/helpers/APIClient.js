@@ -18,7 +18,7 @@ export async function fetchDataFromAPI(columnName, prefix) {
 
     const exists = list.includes(searchTerm);
 
-    console.log(columnName, prefix)
+    // console.log(columnName, prefix)
     if (exists) {
         // console.log(data["values"])
         return data["values"]

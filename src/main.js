@@ -2,33 +2,17 @@ import { SceneInitializer } from './scene/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
 import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
-// import { toggleCellFilter, toggleGeneFilter, toggleButton } from './helpers/ToggleFilters.js';
 import { ApiState } from './states/ApiState.js';
 import { updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
-// import { createFilter } from './ui/Filters/Filters.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
-// import { createNavbar } from './ui/Navbar/Navbar.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
-// import { createGenomeBrowser } from './ui/GenomeBrowser/GenomeBrowser.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // const navbar = createNavbar();
     createOverlay();
-    // createGenomeBrowser();
     const loading = createLoadingIndicator();
-    // const filter = createFilter();
 
-    // document.body.insertBefore(navbar, document.body.firstChild);
-    // document.body.appendChild(overlay);
     document.body.appendChild(loading);
-    // document.body.appendChild(filter);
-
-    // for clicking on the toggles
-    // toggleCellFilter();
-    // toggleGeneFilter();
-    // toggleButton();
-    // toggleMode();
 
     updateLoadingState(true); // Assume loading starts
 
@@ -36,18 +20,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Wait for the palette items to be loaded
         await loadPallete();
 
-        console.log(ApiState.value.pallete);
+        // console.log(ApiState.value.pallete);
 
         await loadItems();
         await loadGenes();
-        console.log(ApiState.value.genes);
+        // console.log(ApiState.value.genes);
 
         await loadGroups();
-        console.log(ApiState.value.groups);
-
-        // // Fetch additional data items
-        // const data = await firstValueFrom(fetchDataFromAPI(pal_col, prefix));
-        // updateDataItems(data);
+        // console.log(ApiState.value.groups);
 
         const sceneContainer = document.body;
         new SceneInitializer(sceneContainer);
@@ -61,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // remove invalid celltypes
             const filteredCells = cells.filter((cell) => Object.keys(ApiState.value.pallete).includes(cell))
-            console.log("new cells", filteredCells);
+            // console.log("new cells", filteredCells);
 
             updateSelectedCelltype(filteredCells);
         }
@@ -72,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // remove invalid genes
             const filteredGenes = genes.filter((gene) => ApiState.value.genes.includes(gene))
-            console.log("new genes", filteredGenes);
+            // console.log("new genes", filteredGenes);
 
             updateSelectedGene(filteredGenes);
         }
