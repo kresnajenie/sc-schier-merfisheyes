@@ -12,7 +12,7 @@ import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
 import { calculateGenePercentile, coolwarm, getGene, normalizeArray } from '../helpers/GeneFunctions.js';
-import { showGeneFilters } from '../helpers/Filtering/Gene.js';
+import { showGeneFilters, showSelectedGeneFilters } from '../helpers/Filtering/Gene.js';
 import { changeURL } from '../helpers/URL.js';
 
 const url = new URL(window.location);
@@ -129,6 +129,10 @@ export class SceneInitializer {
             // update the url params
             if (params.has("gene")) {
                 params.delete("gene");
+            }
+
+            if (SelectedState.value.mode === 2) {
+                showSelectedGeneFilters();
             }
 
             updateLoadingState(true);

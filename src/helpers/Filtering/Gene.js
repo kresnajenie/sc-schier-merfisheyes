@@ -1,7 +1,6 @@
 
 import { ApiState } from "../../states/ApiState";
 import { SelectedState, updateMode, updateSelectedGene } from "../../states/SelectedState";
-import { updateLoadingState } from "../../states/UIState";
 
 // Toggle gene checkbox container
 export const geneSearch = () => {
@@ -50,7 +49,7 @@ export function filterGeneSearchQuery(searchQuery) {
 }
 
 export function createGeneRadio(geneList) {
-    const radios = document.getElementById('geneRadio');
+    const radios = document.getElementById('geneContainer');
 
     radios.innerHTML = ''; // clear checkbox container
 
@@ -80,7 +79,7 @@ export function createGeneRadio(geneList) {
         label.textContent = gene;
         label.style.color = "white";
 
-        const radioGroup = document.createElement('geneRadioGroup');
+        const radioGroup = document.createElement('div');
 
         // Append checkbox and label to container
         radioGroup.appendChild(radio);
@@ -94,7 +93,6 @@ export function createGeneRadio(geneList) {
             // limits it to only 2 genes selected at a time
 
             if (SelectedState.value.selectedGenes.length >= SelectedState.value.mode) {
-                // alert("Only 2 genes selected at a time") // temporary for now
                 e.target.checked = false;
             }
 
@@ -104,10 +102,12 @@ export function createGeneRadio(geneList) {
                 // deselect the first gene selected
                 const prevGene = document.querySelector(`[value=${CSS.escape(SelectedState.value.selectedGenes[0])}]`);
 
-                prevGene.checked = false;
+                if (prevGene) {
+                    prevGene.checked = false;
+                }
 
-                // not the same gene
-                if (prevGene.value !== e.target.value) {
+                // not in shown or not the same gene
+                if (prevGene === null || prevGene.value !== e.target.value) {
                     updateSelectedGene([]); // remove prev gene
                     e.target.checked = true;
                 }
@@ -135,6 +135,9 @@ export function toggleMode() {
 
         modeButton.value = mode ? "false" : "true";
         updateMode(Number(mode ? 2 : 1));
+
+        // update to show any selected genes
+        showSelectedGeneFilters();
     }
 }
 
@@ -191,5 +194,74 @@ export const showGeneFilters = () => {
         // no gene filters
     } else {
         geneFilters.innerHTML = "No gene filters selected";
+    }
+}
+
+export const showSelectedGeneFilters = () => {
+
+    // create the element to store selected gene filters
+    const container = document.getElementById("selectedContainer");
+    
+    // clear all
+    container.innerHTML = ''
+    
+    // reuse the checkbox code from above
+    SelectedState.value.selectedGenes.forEach(gene => {
+
+        const radio = document.createElement('input');
+        radio.type = 'checkbox';
+        radio.className = 'box';
+        radio.id = 'select-' + gene;
+        radio.value = gene;
+        radio.name = "radio";
+
+        if (SelectedState.value.selectedGenes.includes(gene)) {
+            radio.checked = true;
+        }
+
+        // Create label
+        const label = document.createElement('label');
+        label.htmlFor = 'select-' + gene;
+        label.textContent = gene;
+        label.style.color = "white";
+
+        const radioGroup = document.createElement('div');
+
+        // Append checkbox and label to container
+        radioGroup.appendChild(radio);
+        radioGroup.appendChild(label);
+        radioGroup.appendChild(document.createElement('br'));
+    
+        container.appendChild(radioGroup);
+
+        // Attach event listener
+        radio.addEventListener('change', (e) => {
+
+            // if exists in our radio list, uncheck it and update
+
+            // gets the checkbox inside the gene container
+            const checkedGene = document.querySelector(`#geneContainer [value=${CSS.escape(SelectedState.value.selectedGenes[0])}]`);
+
+            // if exists in our radio list
+            if (checkedGene !== null) {
+                checkedGene.checked = false;
+            }
+
+            updateRadioItem(radio.value, false);
+        });
+    })
+
+    if (SelectedState.value.selectedGenes.length > 0) {
+        const title = document.createElement('p');
+        title.innerText = "Selected genes"
+        title.style.color = 'white';
+        title.style.margin = 0;
+        container.prepend(title);
+
+        const separator = document.createElement('hr')
+        separator.style.borderColor = 'white';
+        separator.style.margin = "2px";
+
+        container.appendChild(separator);
     }
 }
