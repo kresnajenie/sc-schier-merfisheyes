@@ -36,7 +36,9 @@ export class SceneInitializer {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.container.appendChild(this.renderer.domElement);
         this.camera.position.z = ButtonState.value.cameraPositionZ;
-
+        this.camera.position.y = ButtonState.value.cameraPositionY;
+        this.camera.position.x = ButtonState.value.cameraPositionX;
+        
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         // controls.target.copy(sharedTarget); // Initially set target for cameraOne
