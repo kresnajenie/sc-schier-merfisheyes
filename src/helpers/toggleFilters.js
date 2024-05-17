@@ -146,6 +146,11 @@ export const toggleButton = () => {
         updateDotSize(parseFloat(this.value).toFixed(2));
     }
 
+    pointSizeSlider.addEventListener('mouseup', function() {
+        pointSizeSliderValue.value = parseFloat(this.value).toFixed(2);
+        updateDotSize(parseFloat(this.value).toFixed(2));
+    });
+
     pointSizeSliderValue.oninput = function() {
         if (this.value < 0.1) {
             this.value = 0.1;
