@@ -1,4 +1,4 @@
-import { ApiState, updatePrefix } from "../states/ApiState";
+import { ApiState } from "../states/ApiState";
 import { changeURL } from "./URL";
 
 // window.addEventListener('DOMContentLoaded', selectPrefix);

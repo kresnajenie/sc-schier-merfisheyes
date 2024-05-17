@@ -94,11 +94,6 @@ export class SceneInitializer {
             console.log("Selected celltypes changed:", items);
             // console.log(SelectedState.value.selectedCelltypes);
 
-            // update the url params
-            if (params.has("celltype")) {
-                params.delete("celltype");
-            }
-
             updateLoadingState(true);
 
             if (SelectedState.value.selectedCelltypes) {
@@ -113,7 +108,17 @@ export class SceneInitializer {
 
             if (SelectedState.value.selectedCelltypes.length > 0) {
                 const newCelltype = encodeURIComponent(JSON.stringify(SelectedState.value.selectedCelltypes));
-                params.append("celltype", newCelltype)
+                
+                // params not in celltype
+                if (params.has("celltype")) {
+                    params.set("celltype", newCelltype)
+                } else {
+                    params.append("celltype", newCelltype)
+                }
+            
+            // there's no celltypes selected
+            } else {
+                params.delete("celltype");
             }
 
             changeURL(params);
@@ -125,11 +130,6 @@ export class SceneInitializer {
         ).subscribe(async items => {
             console.log("Selected genes changed:", items);
             // console.log(SelectedState.value.selectedGenes);
-
-            // update the url params
-            if (params.has("gene")) {
-                params.delete("gene");
-            }
 
             if (SelectedState.value.mode === 2) {
                 showSelectedGeneFilters();
@@ -152,6 +152,32 @@ export class SceneInitializer {
                 // hype boy
                 const newGenes = encodeURIComponent(JSON.stringify(SelectedState.value.selectedGenes));
                 params.append("gene", newGenes)
+
+                // params not in celltype
+                if (params.has("gene")) {
+                    params.set("gene", newGenes)
+                } else {
+                    params.append("gene", newGenes)
+                }
+            
+            // there's no genes selected
+            } else {
+                params.delete("gene");
+            }
+
+            changeURL(params);
+        });
+
+        SelectedState.pipe(
+            map(state => state.mode),
+            distinctUntilChanged()
+        ).subscribe(items => {
+            console.log("Selected genes changed:", items);
+
+            if (params.has("mode")) {
+                params.set("mode", items)
+            } else {
+                params.append("mode", items);
             }
 
             changeURL(params);

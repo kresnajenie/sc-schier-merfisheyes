@@ -119,11 +119,23 @@ export function createGeneRadio(geneList) {
 }
 
 export function toggleMode() {
+
+    const modeButton = document.getElementById("modeButton");
+
+    modeButton.value = SelectedState.value.mode
+
+    // update based on param
+    if (modeButton.value === "1") {
+        modeButton.innerText = "Single Gene Mode";
+        modeButton.classList.replace("btn-success", "btn-info");
+    } else {
+        modeButton.innerText = "Two Gene Mode";
+        modeButton.classList.replace("btn-info", "btn-success");
+    }
+
     modeButton.onclick = () => {
 
-        const modeButton = document.getElementById("modeButton");
-
-        let mode = modeButton.value === "true"
+        let mode = modeButton.value === "1"
 
         if (mode) {
             modeButton.innerText = "Two Gene Mode";
@@ -133,11 +145,15 @@ export function toggleMode() {
             modeButton.classList.replace("btn-success", "btn-info");
         }
 
-        modeButton.value = mode ? "false" : "true";
+        modeButton.value = mode ? 2 : 1;
         updateMode(Number(mode ? 2 : 1));
 
         // update to show any selected genes
-        showSelectedGeneFilters();
+        if (mode) {
+            showSelectedGeneFilters()
+        } else {
+            document.getElementById("selectedContainer").innerHTML = '';
+        }
     }
 }
 
@@ -201,7 +217,7 @@ export const showSelectedGeneFilters = () => {
 
     // create the element to store selected gene filters
     const container = document.getElementById("selectedContainer");
-    
+
     // clear all
     container.innerHTML = ''
     

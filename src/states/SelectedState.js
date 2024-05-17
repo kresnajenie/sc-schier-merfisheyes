@@ -1,8 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
 
+const url = new URL(window.location);
+const params = new URLSearchParams(url.search);
+
 const selectedData = {
     selectedCelltypes: [],
-    mode: 1,
+    mode: params.has("mode") ? Number(params.get("mode")) : 1,
     selectedSingleGene: "",
     selectedGenes: [],
 }
