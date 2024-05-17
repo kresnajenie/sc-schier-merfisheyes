@@ -1,13 +1,12 @@
 import { SceneInitializer } from './scene/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
-import { clearGenes, createGeneRadio, geneSearch, toggleMode } from './helpers/Filtering/Gene.js';
+import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
 import { loadGenes, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
 import { ApiState } from './states/ApiState.js';
-import { updateMode, updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
+import { updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
-import { changeURL } from './helpers/URL.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     createOverlay();
