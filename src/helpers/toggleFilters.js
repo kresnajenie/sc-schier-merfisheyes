@@ -4,9 +4,11 @@ export const toggleCellFilter = () => {
 
     const cellCheckbox = document.getElementById("cellCheckbox");
     const geneRadioContainer = document.getElementById('geneRadioContainer');
+    const atacRadioContainer = document.getElementById('atacRadioContainer');
 
     const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
     const toggleGeneRadio = document.getElementById('toggleGeneRadio');
+    const toggleATACRadio = document.getElementById('toggleATACRadio');
 
     toggleCellCheckbox.addEventListener('click', () => {
 
@@ -23,10 +25,16 @@ export const toggleCellFilter = () => {
         // clear other toggle's style
         toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
         toggleGeneRadio.style.color = 'white';
+        toggleATACRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleATACRadio.style.color = 'white';
 
         // check if gene checkbox is visible, if yes disable it
         if (geneRadioContainer.style.display === 'block') {
             geneRadioContainer.style.display = 'none';
+        }
+
+        if (atacRadioContainer.style.display === 'block') {
+            atacRadioContainer.style.display = 'none';
         }
 
         // reset it if clicked again
@@ -42,9 +50,11 @@ export const toggleGeneFilter = () => {
 
     const cellCheckbox = document.getElementById("cellCheckbox");
     const geneRadioContainer = document.getElementById('geneRadioContainer');
+    const atacRadioContainer = document.getElementById('atacRadioContainer');
 
     const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
     const toggleGeneRadio = document.getElementById('toggleGeneRadio');
+    const toggleATACRadio = document.getElementById('toggleATACRadio');
 
     toggleGeneRadio.addEventListener('click', () => {
 
@@ -57,16 +67,65 @@ export const toggleGeneFilter = () => {
         // clear other toggle's style
         toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
         toggleCellCheckbox.style.color = 'white';
+        toggleATACRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleATACRadio.style.color = 'white';
 
         // check if cell checkbox is visible, if yes disable it
         if (cellCheckbox.style.display === 'block') {
             cellCheckbox.style.display = 'none';
         }
 
+        if (atacRadioContainer.style.display === 'block') {
+            atacRadioContainer.style.display = 'none';
+        }
+
         // reset it if clicked again
         if (geneRadioContainer.style.display === 'none') {
             toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
             toggleGeneRadio.style.color = 'white';
+        }
+    })
+}
+
+// toggles the gene filter popup
+export const toggleATACFilter = () => {
+
+    const cellCheckbox = document.getElementById("cellCheckbox");
+    const geneRadioContainer = document.getElementById('geneRadioContainer');
+    const atacRadioContainer = document.getElementById('atacRadioContainer');
+
+    const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
+    const toggleGeneRadio = document.getElementById('toggleGeneRadio');
+    const toggleATACRadio = document.getElementById('toggleATACRadio');
+
+    toggleATACRadio.addEventListener('click', () => {
+
+        atacRadioContainer.style.display = atacRadioContainer.style.display === 'none' ? 'block' : 'none';
+
+        // set to highlight mode
+        toggleATACRadio.style.backgroundColor = 'white';
+        toggleATACRadio.style.color = 'black';
+
+        // clear other toggle's style
+        toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleCellCheckbox.style.color = 'white';
+        toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleGeneRadio.style.color = 'white';
+
+
+        // check if cell checkbox is visible, if yes disable it
+        if (cellCheckbox.style.display === 'block') {
+            cellCheckbox.style.display = 'none';
+        }
+
+        if (geneRadioContainer.style.display === 'block') {
+            geneRadioContainer.style.display = 'none';
+        }
+
+        // reset it if clicked again
+        if (atacRadioContainer.style.display === 'none') {
+            toggleATACRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleATACRadio.style.color = 'white';
         }
     })
 }
