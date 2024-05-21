@@ -256,13 +256,16 @@ export class SceneInitializer {
         let pallete = ApiState.value.pallete;
         let jsonData = MatrixState.value.items;
 
-        const sphereGeometry = new THREE.CircleGeometry(0.1, 32, 32);
+        const sphereGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+
+        const circleGeometry = new THREE.CircleGeometry(0.1, 32, 32);
+
         const material = new THREE.MeshBasicMaterial();
         const count = jsonData.length;
         console.log("Count", count)
 
         this.instancedMesh = new THREE.InstancedMesh(sphereGeometry, material, count);
-        this.instancedMeshUmap = new THREE.InstancedMesh(sphereGeometry, material, count);
+        this.instancedMeshUmap = new THREE.InstancedMesh(circleGeometry, material, count);
 
         const proj = new THREE.Object3D();
         const umap = new THREE.Object3D();
@@ -375,22 +378,22 @@ export class SceneInitializer {
         requestAnimationFrame(this.animate);
         this.controls.update(); // Only needed if controls.enableDamping is true
         // Assume your instanced mesh is global or accessible within this scope
-        const cameraQuaternion = this.camera.quaternion;
-        let jsonData = MatrixState.value.items;
+        // const cameraQuaternion = this.camera.quaternion;
+        // let jsonData = MatrixState.value.items;
 
-        for (let i = 0; i < jsonData.length * 2; i++) {
-            const matrix = new THREE.Matrix4();
-            const position = new THREE.Vector3();
-            const scale = new THREE.Vector3();
+        // for (let i = 0; i < jsonData.length * 2; i++) {
+        //     const matrix = new THREE.Matrix4();
+        //     const position = new THREE.Vector3();
+        //     const scale = new THREE.Vector3();
 
-            // Extract position and scale from the current instance matrix
-            this.instancedMesh.getMatrixAt(i, matrix);
-            matrix.decompose(position, new THREE.Quaternion(), scale);
+        //     // Extract position and scale from the current instance matrix
+        //     this.instancedMesh.getMatrixAt(i, matrix);
+        //     matrix.decompose(position, new THREE.Quaternion(), scale);
 
-            // Rebuild the matrix using the camera's quaternion for rotation
-            matrix.compose(position, cameraQuaternion, scale);
-            this.instancedMesh.setMatrixAt(i, matrix);
-        }
+        //     // Rebuild the matrix using the camera's quaternion for rotation
+        //     matrix.compose(position, cameraQuaternion, scale);
+        //     this.instancedMesh.setMatrixAt(i, matrix);
+        // }
 
         this.instancedMesh.instanceMatrix.needsUpdate = true; // Important!
         this.renderer.render(this.scene, this.camera);
