@@ -98,11 +98,7 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            if (SelectedState.value.selectedCelltypes) {
-                await this.updateInstancedMesh(SelectedState.value.selectedCelltypes);
-            } else {
-                await this.updateInstancedMesh([]);
-            }
+            await this.updateInstancedMesh();
 
             updateLoadingState(false);
 
@@ -139,12 +135,7 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            if (SelectedState.value.selectedGenes) {
-                await this.updateInstancedMesh(SelectedState.value.selectedGenes);
-                // await this.updateInstancedMesh(SelectedState.value.selectedGenes); // JANK FIX FOR QUICK GENE SWITCHING
-            } else {
-                await this.updateInstancedMesh([]);
-            }
+            await this.updateInstancedMesh();
 
             updateLoadingState(false);
 
@@ -196,28 +187,10 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            if (ButtonState.value.dotSize) {
-                await this.updateInstancedMesh(ButtonState.value.dotSize);
-            } else {
-                await this.updateInstancedMesh([]);
-            }
+            await this.updateInstancedMesh();
 
             updateLoadingState(false);
         });
-
-        ButtonState.pipe(
-            map(state => state.cameraPositionZ),
-            distinctUntilChanged()
-        ).subscribe(async items => {
-            console.log("Zoom", items);
-            console.log(ButtonState.value.cameraPositionZ);
-
-            if (ButtonState.value.cameraPositionZ) {
-                await this.updateInstancedMesh(ButtonState.value.cameraPositionZ);
-            } else {
-                await this.updateInstancedMesh([]);
-            }
-        })
 
         ButtonState.pipe(
             map(state => state.genePercentile),
@@ -228,17 +201,13 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            if (ButtonState.value.genePercentile) {
-                await this.updateInstancedMesh(ButtonState.value.genePercentile);
-            } else {
-                await this.updateInstancedMesh([]);
-            }
+            await this.updateInstancedMesh();
 
             updateLoadingState(false);
         })
     }
 
-    async updateInstancedMesh(filterType = []) {
+    async updateInstancedMesh() {
 
         // Clear existing mesh
         if (this.instancedMesh) {
