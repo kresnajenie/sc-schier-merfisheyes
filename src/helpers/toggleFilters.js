@@ -200,7 +200,7 @@ export const toggleButton = () => {
         pointSizeSliderBox.style.display = pointSizeSliderBox.style.display === 'none' ? 'block' : 'none';
     })
     
-    pointSizeSlider.oninput = function() {
+    pointSizeSlider.onchange = function() {
         pointSizeSliderValue.value = parseFloat(this.value).toFixed(2);
         updateDotSize(parseFloat(this.value).toFixed(2));
     }
@@ -210,7 +210,7 @@ export const toggleButton = () => {
         updateDotSize(parseFloat(this.value).toFixed(2));
     });
 
-    pointSizeSliderValue.oninput = function() {
+    pointSizeSliderValue.onchange = function() {
         if (this.value < 0.1) {
             this.value = 0.1;
         } else if (this.value > 15) {
@@ -255,7 +255,7 @@ export const toggleButton = () => {
         updateGenePercentile(parseFloat(this.value).toFixed(2));
     });
 
-    geneSliderValue.oninput = function() {
+    geneSliderValue.onchange = function() {
         if (this.value < 80) {
             this.value = 80;
         } else if (this.value > 99.99) {
