@@ -44,7 +44,7 @@ export function filterGeneSearchQuery(searchQuery) {
             geneAlert.style.display = "none"
         }
     } else {
-        createGeneRadio(ApiState.value.genes.slice(0,10)); // reset to show all
+        createGeneRadio(ApiState.value.genes.slice(0,1000)); // reset to show all
     }
 }
 
@@ -180,7 +180,7 @@ export const clearGenes = () => {
 
     geneClearButton.addEventListener('click', () => {
         updateSelectedGene([]);
-        createGeneRadio(ApiState.value.genes.slice(0, 10))
+        createGeneRadio(ApiState.value.genes.slice(0,1000))
 
         geneTextbox.value = ''; // clears search field
     });

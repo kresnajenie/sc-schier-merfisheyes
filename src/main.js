@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         clearCells();
         cellSearch()
 
-        createGeneRadio(ApiState.value.genes.slice(0, 10));
+        createGeneRadio(ApiState.value.genes.slice(0, 1000));
         clearGenes();
         geneSearch();
 
