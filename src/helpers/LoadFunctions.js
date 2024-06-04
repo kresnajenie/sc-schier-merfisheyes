@@ -9,8 +9,23 @@ export async function loadPallete() {
     const pal_col = ApiState.value.palleteColumn;
     try {
         const data = await fetchDataFromAPI(pal_col, prefix); 
-        // console.log(data)
-        updateDataPalette(JSON.parse(data));
+        console.log(data)
+        // Remove the first element
+        data.shift();
+
+        // Initialize an empty object for the dictionary
+        let dictionary = {};
+
+        // Iterate over the list and split each string to create key-value pairs
+        data.forEach(item => {
+            let [key, value] = item.split(':');
+            key = key.replace(/'/g, '').trim();  // Remove quotes and trim whitespace
+            value = value.replace(/'/g, '').trim();  // Remove quotes and trim whitespace
+            dictionary[key] = value;
+        });
+
+        updateDataPalette(dictionary);
+
     } catch (error) {
         console.error('Failed to load items:', error);
     }
@@ -19,7 +34,9 @@ export async function loadPallete() {
 export async function loadGenes() {
     try {
         const data = await fetchDataFromAPI("genes", prefix); 
-        updateGenes(JSON.parse(data));
+        data.shift();
+
+        updateGenes(data);
     } catch (error) {
         console.error('Failed to load items:', error);
     }
