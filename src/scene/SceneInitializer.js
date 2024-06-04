@@ -319,7 +319,7 @@ export class SceneInitializer {
             }
 
             //plot projection
-            proj.position.set(jsonData[i]["global_sphere0_norm"] * mod, jsonData[i]["global_sphere1_norm"] * mod, jsonData[i]["global_sphere2_norm"] * mod);
+            proj.position.set(jsonData[i]["X_spatial0_norm"] * mod, jsonData[i]["X_spatial1_norm"] * mod, jsonData[i]["X_spatial2_norm"] * mod);
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);
@@ -331,7 +331,7 @@ export class SceneInitializer {
             if (ApiState.value.prefix == "75pe") {
                 umap.position.set(jsonData[i]["X_umap0_norm"] * 80 + offset, jsonData[i]["X_umap1_norm"] * 80, 10);
             } else {
-                umap.position.set(jsonData[i]["X_umap0_norm"] * 60 + offset - 25, jsonData[i]["X_umap1_norm"] * 60, 10);
+                umap.position.set(jsonData[i]["X_umap0_norm"] * 200 + offset - 25, jsonData[i]["X_umap1_norm"] * 200, 10);
             }
             umap.updateMatrix();
             this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
