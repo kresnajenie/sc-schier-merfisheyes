@@ -9,13 +9,13 @@ export async function fetchDataFromAPI(columnName, prefix) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json(); // Wait for the JSON conversion
-    let _d = data.gene_values.split(',').filter(item => item !== "");
-
 
     // no data available
-    if (data === null) {
+    if (data === undefined || data.gene_values == undefined) {
         return '[]';
     }
+
+    let _d = data.gene_values.split(',').filter(item => item !== "");
 
     const list = ['clusters', 'clusters_pal', 'genes', 'hierarchical_clusters'];
 
