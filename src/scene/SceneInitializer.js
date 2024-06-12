@@ -11,8 +11,9 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
-import { calculateGenePercentile, coolwarm, getGene, normalizeArray } from '../helpers/GeneFunctions.js';
+import { calculateGenePercentile, coolwarm, getGene, getAtac, normalizeArray } from '../helpers/GeneFunctions.js';
 import { showGeneFilters, showSelectedGeneFilters } from '../helpers/Filtering/Gene.js';
+import { showAtacFilters, showSelectedAtacFilters } from '../helpers/Filtering/Atac.js';
 import { changeURL } from '../helpers/URL.js';
 
 const url = new URL(window.location);
@@ -162,6 +163,45 @@ export class SceneInitializer {
         });
 
         SelectedState.pipe(
+            map(state => state.selectedAtacs),
+            distinctUntilChanged((prev, curr) => prev.join() === curr.join())
+        ).subscribe(async items => {
+            console.log("Selected atacs changed:", items);
+            // console.log(SelectedState.value.selectedGenes);
+
+            if (SelectedState.value.mode === 2) {
+                showSelectedAtacFilters();
+            }
+
+            updateLoadingState(true);
+
+            await this.updateInstancedMesh();
+
+            updateLoadingState(false);
+
+            showAtacFilters();
+
+            if (SelectedState.value.selectedAtacs.length > 0) {
+                // hype boy
+                const newAtacs = encodeURIComponent(JSON.stringify(SelectedState.value.selectedAtacs));
+                params.append("atac", newAtacs)
+
+                // params not in celltype
+                if (params.has("atac")) {
+                    params.set("atac", newAtacs)
+                } else {
+                    params.append("atac", newAtacs)
+                }
+            
+            // there's no genes selected
+            } else {
+                params.delete("atac");
+            }
+
+            changeURL(params);
+        });
+
+        SelectedState.pipe(
             map(state => state.mode),
             distinctUntilChanged()
         ).subscribe(items => {
@@ -250,12 +290,14 @@ export class SceneInitializer {
 
         let celltypes = SelectedState.value.selectedCelltypes;
         let genes = SelectedState.value.selectedGenes;
+        let atacs = SelectedState.value.selectedAtacs;
 
         let dotSize = ButtonState.value.dotSize;
         let smallDotSize = Math.floor(dotSize / 5);
 
         // this.camera.position.z = ButtonState.value.cameraPositionZ;
         let genePercentile = ButtonState.value.genePercentile;
+        let atacPercentile = ButtonState.value.genePercentile;
 
         if (genes.length > 0) {
             try {
@@ -267,6 +309,24 @@ export class SceneInitializer {
                 }
                 // You can use cts here
                 let nmax1 = calculateGenePercentile(count1, genePercentile);
+                // console.log(cts);
+                ctsClipped1 = normalizeArray(count1, nmax1);
+            } catch (error) {
+                // Handle errors if the promise is rejected
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        if (atacs.length > 0) {
+            try {
+                let count1 = await getAtac(atacs[0]);
+                if (atacs.length == 2) {
+                    let count2 = await getAtac(atacs[1]);
+                    let nmax2 = calculateGenePercentile(count2, atacPercentile);
+                    ctsClipped2 = normalizeArray(count2, nmax2);
+                }
+                // You can use cts here
+                let nmax1 = calculateGenePercentile(count1, atacPercentile);
                 // console.log(cts);
                 ctsClipped1 = normalizeArray(count1, nmax1);
             } catch (error) {
@@ -305,7 +365,34 @@ export class SceneInitializer {
                     umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
                 }
                 // has celltype filters
-            } else {
+            } else if (atacs.length > 0) {
+                // no celltypes or matches celltype
+                if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
+
+                    let colorrgb;
+                    let scale;
+
+                    // if there's a second gene
+                    if (ctsClipped2) {
+                        colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 5;
+                    } else {
+                        colorrgb = coolwarm(ctsClipped1[i]);
+                        scale = ctsClipped1[i] * dotSize + dotSize / 5;
+                    }
+
+                    // console.log(colorrgb);
+                    color = new THREE.Color(colorrgb);
+
+                    proj.scale.set(scale, scale, scale);
+                    umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
+                } else { // don't color if not
+                    color = new THREE.Color('#5e5e5e');
+                    proj.scale.set(1, 1, 1);
+                    umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
+                }
+                // has celltype filters
+            }else {
                 if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
                     // color = new THREE.Color(jsonData[i]["clusters_colors"]);
                     color = new THREE.Color(pallete[jsonData[i]["clusters"]]);

@@ -7,7 +7,9 @@ const selectedData = {
     selectedCelltypes: [],
     mode: params.has("mode") ? Number(params.get("mode")) : 1,
     selectedSingleGene: "",
+    selectedSingleAtac: "",
     selectedGenes: [],
+    selectedAtacs: [],
 }
 
 export const SelectedState = new BehaviorSubject(selectedData);
@@ -74,6 +76,40 @@ export function updateSelectedGene(newGenes) {
     const updatedState = {
         ...currentState,
         selectedGenes: newGenes
+    };
+
+    // Emit the updated state
+    SelectedState.next(updatedState);
+}
+
+export function updateSelectedSingleAtac(newSingleAtac) {
+    // Get the current state from the BehaviorSubject
+    const currentState = SelectedState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        selectedSingleAtac: newSingleAtac
+    };
+
+    // Emit the updated state
+    SelectedState.next(updatedState);
+}
+
+/**
+ * Updates the selected celltypes within the application's constant data state.
+ * @param {Array} newAtacs - The new selected celltypes array to set in the state.
+ * Example Usage:
+ * updateGenes("gene1");
+ */
+export function updateSelectedAtac(newAtacs) {
+    // Get the current state from the BehaviorSubject
+    const currentState = SelectedState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        selectedAtacs: newAtacs
     };
 
     // Emit the updated state

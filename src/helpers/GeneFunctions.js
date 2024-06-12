@@ -4,7 +4,9 @@ import { fetchDataFromAPI } from "./APIClient";
 export function getGene(gene) {
     return fetchDataFromAPI(gene, ApiState.value.prefix);
 }
-
+export function getAtac(atac) {
+    return fetchDataFromAPI(atac, ApiState.value.prefix, true);
+}
 // for two genes
 function interpolatePercentages(percent1, percent2) {
 

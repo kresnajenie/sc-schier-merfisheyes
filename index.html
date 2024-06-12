@@ -33,7 +33,7 @@
 
     <script type="module">
         import { selectPrefix } from "/src/helpers/Prefix.js";
-        import { toggleCellFilter, toggleGeneFilter, toggleButton } from "/src/helpers/ToggleFilters.js"
+        import { toggleCellFilter, toggleGeneFilter, toggleAtacFilter,toggleButton } from "/src/helpers/ToggleFilters.js"
         import { toggleMode } from "/src/helpers/Filtering/Gene.js"
 
         $(function () {
@@ -46,6 +46,7 @@
             $(".filter").load("/src/ui/Filters/filters.html", () => {
                 toggleCellFilter();
                 toggleGeneFilter();
+                toggleAtacFilter();
                 toggleButton();
                 toggleMode();
             })

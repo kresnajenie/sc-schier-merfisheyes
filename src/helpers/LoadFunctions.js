@@ -1,6 +1,6 @@
 // /src/helpers/LoadFunctions.js
 import { fetchDataFromAPI } from './APIClient';
-import { updateDataPalette, updateGenes, ApiState, updateGroups } from '../states/ApiState';
+import { updateDataPalette, updateGenes, ApiState, updateGroups, updateAtacs } from '../states/ApiState';
 import { updateDataItems } from '../states/MatrixState';
 
 const prefix = ApiState.value.prefix;
@@ -37,6 +37,19 @@ export async function loadGenes() {
         data.shift();
 
         updateGenes(data);
+    } catch (error) {
+        console.error('Failed to load items:', error);
+    }
+}
+
+export async function loadAtacs() {
+    try {
+        const data = await fetchDataFromAPI("genes", prefix, true); 
+        data.shift();
+        console.log("ATACCC")
+        console.log(data)
+
+        updateAtacs(data);
     } catch (error) {
         console.error('Failed to load items:', error);
     }

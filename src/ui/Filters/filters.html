@@ -39,16 +39,18 @@
 </div>
 <div class="checkbox-container" id="atacRadioContainer" style="display: none">
     <div class="input-elements">
-        <input type="text" class="textInput" id="atacTextbox" placeholder="Search genes">
-        <button type="button" class="clearButton btn btn-danger" id="atacClearButton" title="Clear all atac filters.">
-            Clear
+        <input type="text" class="textInput" id="atacTextbox" placeholder="Search atac peaks">
+        <button type="button" class="EnterButton btn btn-danger" id="atacEnterButton" title="Enter all atac filters.">
+            Enter 
         </button>
-
+        <button type="button" class="clearButton btn btn-danger" id="atacClearButton" title="Clear all atac filters.">
+            Clear 
+        </button>
     </div>
     <div id="atacRadio">
         <div class="checkboxes" id="atacContainer"></div>
     </div>
-    <div class="notfound alert alert-danger alert-dismissible fade show" id="geneNotFound">No genes of that name found.
+        <div class="notfound alert alert-danger alert-dismissible fade show" id="atacNotFound">No ATAC peaks of that position found.
     </div>
 </div>
 <div class="icon">

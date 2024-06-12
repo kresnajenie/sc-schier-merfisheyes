@@ -1,12 +1,13 @@
 import { SceneInitializer } from './scene/SceneInitializer.js';
 import { cellSearch, clearCells, createCellCheckboxes } from './helpers/Filtering/Celltype.js';
 import { clearGenes, createGeneRadio, geneSearch } from './helpers/Filtering/Gene.js';
-import { loadGenes, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
+import { loadGenes, loadAtacs, loadGroups, loadItems, loadPallete } from './helpers/LoadFunctions.js';
 import { ApiState } from './states/ApiState.js';
 import { updateSelectedCelltype, updateSelectedGene } from './states/SelectedState.js';
 import { updateLoadingState } from './states/UIState.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
+import { atacSearch, clearAtacs, enterAtacs, createAtacRadio } from './helpers/Filtering/Atac.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     createOverlay();
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         await loadItems();
         await loadGenes();
+        await loadAtacs();
         // console.log(ApiState.value.genes);
 
         await loadGroups();
@@ -70,6 +72,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         createGeneRadio(ApiState.value.genes.slice(0, 1000));
         clearGenes();
         geneSearch();
+
+        createAtacRadio(ApiState.value.atacs.slice(0, 1000));
+        clearAtacs();
+        enterAtacs();
+        atacSearch();
 
     } catch (err) {
         console.error('Failed to load data:', err);

@@ -18,6 +18,7 @@ const apiData = {
     listPalette: [], // list version of palette
     palleteColumn: "clusters_pal",
     genes: [],
+    atacs: [],
     items: [],
 
     // capitalization doesn't matter
@@ -65,6 +66,26 @@ export function updateGenes(newGenes) {
     const updatedState = {
         ...currentState,
         genes: newGenes
+    };
+
+    // Emit the updated state
+    ApiState.next(updatedState);
+}
+
+/**
+ * Updates the genes within the application's constant data state.
+ * @param {Array} newAtacs - The new genes array to set in the state.
+ * Example Usage:
+ * updateGenes(["gene1", "gene2", "gene3"]);
+ */
+export function updateAtacs(newAtacs) {
+    // Get the current state from the BehaviorSubject
+    const currentState = ApiState.getValue();
+
+    // Update the items in the current state
+    const updatedState = {
+        ...currentState,
+        atacs: newAtacs
     };
 
     // Emit the updated state

@@ -57,7 +57,7 @@ export const toggleGeneFilter = () => {
     const toggleATACRadio = document.getElementById('toggleATACRadio');
 
     toggleGeneRadio.addEventListener('click', () => {
-
+        
         geneRadioContainer.style.display = geneRadioContainer.style.display === 'none' ? 'block' : 'none';
 
         // set to highlight mode
@@ -88,7 +88,7 @@ export const toggleGeneFilter = () => {
 }
 
 // toggles the gene filter popup
-export const toggleATACFilter = () => {
+export const toggleAtacFilter = () => {
 
     const cellCheckbox = document.getElementById("cellCheckbox");
     const geneRadioContainer = document.getElementById('geneRadioContainer');
@@ -99,7 +99,8 @@ export const toggleATACFilter = () => {
     const toggleATACRadio = document.getElementById('toggleATACRadio');
 
     toggleATACRadio.addEventListener('click', () => {
-
+        // alert("clicked")
+        console.log("halo atac clicked")
         atacRadioContainer.style.display = atacRadioContainer.style.display === 'none' ? 'block' : 'none';
 
         // set to highlight mode
