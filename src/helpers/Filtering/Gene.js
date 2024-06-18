@@ -188,19 +188,25 @@ export const clearGenes = () => {
 
 
 /**
- * Records the celltype filters in use
+ * Records the gene filters in use
  */
 export const showGeneFilters = () => {
 
     const geneFilters = document.getElementById("geneFilters");
     geneFilters.innerHTML = "";
 
-    // if there are celltype filters
+    // if there are gene filters
     if (SelectedState.value.selectedGenes.length !== 0) {
         SelectedState.value.selectedGenes.forEach((type, index) => {
 
             const f = document.createElement("p");
-            f.style.color = index === 0 ? 'magenta' : 'green';
+
+            if (SelectedState.value.selectedGenes.length === 1) {
+                f.style.color = 'white';
+            } else {
+                f.style.color = index === 0 ? 'green' : 'magenta';
+            }
+            
             f.style.fontStyle = 'italic'
             f.style.fontWeight = 'bold'
             f.innerHTML = type;
