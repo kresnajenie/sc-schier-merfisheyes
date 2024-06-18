@@ -32,12 +32,13 @@
     <script type="module" src="/src/main.js"></script>
 
     <script type="module">
-        import { selectPrefix } from "/src/helpers/Prefix.js";
+        import { loadPrefixOptions, selectPrefix } from "/src/helpers/Prefix.js";
         import { toggleCellFilter, toggleGeneFilter, toggleAtacFilter,toggleButton } from "/src/helpers/ToggleFilters.js"
         import { toggleMode } from "/src/helpers/Filtering/Gene.js"
 
         $(function () {
             $(".navbar").load("/src/ui/Navbar/navbar.html", () => {
+                loadPrefixOptions()
                 selectPrefix()
             });
         });

@@ -1,8 +1,25 @@
 import { ApiState } from "../states/ApiState";
 import { changeURL } from "./URL";
 
-// window.addEventListener('DOMContentLoaded', selectPrefix);
+/**
+ * Function to load prefix options into the dropdown menu.
+ */
+export function loadPrefixOptions() {
+    const prefixOptions = ApiState.value.prefixOptions;
 
+    const prefixDropdown = document.querySelector('#prefix-dropdown-container .dropdown-menu');
+
+    for (let i = 0; i < prefixOptions.length; i++) {
+        const prefixItem = document.createElement('p');
+        prefixItem.innerHTML = `<a class="dropdown-item">${prefixOptions[i]}</a>`
+
+        prefixDropdown.appendChild(prefixItem);
+    }
+}
+
+/**
+ * Selects a prefix from the dropdown menu and updates the URL and page reload if necessary.
+ */
 export function selectPrefix() {
     const dropdownMenuButton = document.getElementById("dropdownMenuButton");
     const prefixItems = document.getElementsByClassName("dropdown-item");
