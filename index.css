@@ -13,3 +13,18 @@ canvas {
 body * {
     visibility: hidden;
 }
+
+footer {
+    position: absolute;
+    bottom: 0;    
+    z-index: 999;
+
+    opacity: 0.85;
+}
+
+footer p {
+    margin: 5px;
+
+    font-size: 13.5px;
+    color: white;
+}
