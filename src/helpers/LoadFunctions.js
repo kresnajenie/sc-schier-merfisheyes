@@ -11,7 +11,7 @@ export async function loadPallete() {
         const data = await fetchDataFromAPI(pal_col, prefix); 
         console.log(data)
         // Remove the first element
-        data.shift();
+        // data.shift();
 
         // Initialize an empty object for the dictionary
         let dictionary = {};
@@ -34,7 +34,7 @@ export async function loadPallete() {
 export async function loadGenes() {
     try {
         const data = await fetchDataFromAPI("genes", prefix); 
-        data.shift();
+        // data.shift();
 
         updateGenes(data);
     } catch (error) {
@@ -45,9 +45,9 @@ export async function loadGenes() {
 export async function loadAtacs() {
     try {
         const data = await fetchDataFromAPI("genes", prefix, true); 
-        data.shift();
+        // data.shift();
         console.log("ATACCC")
-        console.log(data)
+        // console.log(data)
 
         updateAtacs(data);
     } catch (error) {

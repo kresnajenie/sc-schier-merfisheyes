@@ -135,10 +135,10 @@ export class SceneInitializer {
             }
 
             updateLoadingState(true);
+            console.log("ANJINGNGINGIGNGING")
 
             await this.updateInstancedMesh();
 
-            updateLoadingState(false);
 
             showGeneFilters();
 
@@ -160,6 +160,8 @@ export class SceneInitializer {
             }
 
             changeURL(params);
+            updateLoadingState(false);
+
         });
 
         SelectedState.pipe(
@@ -406,7 +408,7 @@ export class SceneInitializer {
             }
 
             //plot projection
-            proj.position.set(jsonData[i]["X_spatial0_norm"] * mod, jsonData[i]["X_spatial1_norm"] * mod, jsonData[i]["X_spatial2_norm"] * mod);
+            proj.position.set(jsonData[i]["X_spatial0_norm"] * mod, jsonData[i]["X_spatial1_norm"] * -1*mod, jsonData[i]["X_spatial2_norm"] * mod);
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);

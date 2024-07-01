@@ -14,7 +14,7 @@ const apiData = {
     ],
 
     prefixOptions: ["50pe", "75pe", "6s"],
-    prefix: params.has("prefix") ? params.get("prefix") : "50pe",
+    prefix: params.has("prefix") ? params.get("prefix") : "6s",
     pallete: {},
     listPalette: [], // list version of palette
     palleteColumn: "clusters_pal",

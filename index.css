@@ -28,3 +28,12 @@ footer p {
     font-size: 13.5px;
     color: white;
 }
+a:link, a:visited {
+    color: white;
+    text-decoration: underline;
+}
+
+a:hover, a:focus, a:active {
+    color: gray;
+    text-decoration: underline;
+}

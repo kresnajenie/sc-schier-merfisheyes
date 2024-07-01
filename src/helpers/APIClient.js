@@ -8,12 +8,14 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
     if (atac == true) {
         console.log("ATACATACATACATACATACATACATAC")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
-        response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
+        // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
+        response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
 
     }   else {
         console.log("MATRIXMATRIXMATRIXMATRIXMATRIXMATRIX")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
-        response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
+        // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
+        response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
     }
     // https://fisheyes.techkyra.com/get-gene-values?gene=tbxta&dbname=genedb&dbcollection=6s&username=zebra&csv_filename=6somite_matrix.csv
     if (!response.ok) {
@@ -31,21 +33,24 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
     const list = ['clusters', 'clusters_pal', 'genes', 'hierarchical_clusters'];
 
     const exists = list.includes(columnName);
-    // console.log(columnName)
-    // console.log(typeof columnName)
-    // console.log(exists)
+    console.log(columnName)
+    console.log(typeof columnName)
+    console.log(exists)
 
     // console.log(columnName, prefix)
     if (exists == true) {
         // console.log(data["values"])
-        // console.log(_d)
+        _d.shift()
+        console.log(_d)
         return _d
     } else {
+        if (columnName == "clusters") {
+            console.log("sini bang")
+        }
         _d.shift();
-        // console.log("float")
+        console.log("float")
 
         let floatList = _d.map(item => parseFloat(item));
-        // console.log(floatList)
         // console.log(floatList)
         return floatList
     }
