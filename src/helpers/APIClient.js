@@ -6,13 +6,13 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
     // const response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
     let response = ""
     if (atac == true) {
-        console.log("ATACATACATACATACATACATACATAC")
+        // console.log("ATACATACATACATACATACATACATAC")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
         // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
         response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
 
     }   else {
-        console.log("MATRIXMATRIXMATRIXMATRIXMATRIXMATRIX")
+        // console.log("MATRIXMATRIXMATRIXMATRIXMATRIXMATRIX")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
         // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
         response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
@@ -33,22 +33,22 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
     const list = ['clusters', 'clusters_pal', 'genes', 'hierarchical_clusters'];
 
     const exists = list.includes(columnName);
-    console.log(columnName)
-    console.log(typeof columnName)
-    console.log(exists)
+    // console.log(columnName)
+    // console.log(typeof columnName)
+    // console.log(exists)
 
     // console.log(columnName, prefix)
     if (exists == true) {
         // console.log(data["values"])
         _d.shift()
-        console.log(_d)
+        // console.log(_d)
         return _d
     } else {
         if (columnName == "clusters") {
-            console.log("sini bang")
+            // console.log("sini bang")
         }
         _d.shift();
-        console.log("float")
+        // console.log("float")
 
         let floatList = _d.map(item => parseFloat(item));
         // console.log(floatList)

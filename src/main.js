@@ -8,6 +8,7 @@ import { updateLoadingState } from './states/UIState.js';
 import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
 import { atacSearch, clearAtacs, enterAtacs, createAtacRadio } from './helpers/Filtering/Atac.js';
+import {addBoxes} from './helpers/ATACPlot/Peaks.js'
 
 document.addEventListener('DOMContentLoaded', async () => {
     createOverlay();
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateLoadingState(true); // Assume loading starts
 
     try {
+
         // Wait for the palette items to be loaded
         await loadPallete();
 
@@ -29,6 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // console.log(ApiState.value.genes);
 
         await loadGroups();
+        addBoxes();
+
         // console.log(ApiState.value.groups);
 
         const sceneContainer = document.body;

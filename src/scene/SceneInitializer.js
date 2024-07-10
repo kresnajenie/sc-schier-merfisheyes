@@ -12,12 +12,16 @@ import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
 import { calculateGenePercentile, coolwarm, getGene, getAtac, normalizeArray } from '../helpers/GeneFunctions.js';
-import { showGeneFilters, showSelectedGeneFilters } from '../helpers/Filtering/Gene.js';
-import { showAtacFilters, showSelectedAtacFilters } from '../helpers/Filtering/Atac.js';
+import { showGeneFilters, showSelectedGeneFilters, clearGenes } from '../helpers/Filtering/Gene.js';
+import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers/Filtering/Atac.js';
 import { changeURL } from '../helpers/URL.js';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
+
+
 
 export class SceneInitializer {
     constructor(container) {
@@ -27,6 +31,45 @@ export class SceneInitializer {
         this.initScene();
         this.subscribeToStateChanges();
     }
+
+    addText() {
+        const loader = new FontLoader();
+        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+            const textGeometry = new TextGeometry('Dorsal', {
+                font: font,
+                size: 10,
+                height: 1,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 1,
+                bevelSize: 0.5,
+                bevelOffset: 0,
+                bevelSegments: 5
+            });
+            const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const dorsal = new THREE.Mesh(textGeometry, textMaterial);
+            dorsal.position.set(-30, 190, 0); // Set the position as needed
+            this.scene.add(dorsal);
+
+            const textGeometryVentral = new TextGeometry('Ventral', {
+                font: font,
+                size: 10,
+                height: 1,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 1,
+                bevelSize: 0.5,
+                bevelOffset: 0,
+                bevelSegments: 5
+            });
+            const ventral = new THREE.Mesh(textGeometryVentral, textMaterial);
+            ventral.position.set(-30, -190, 0); // Set the position as needed
+            this.scene.add(ventral);
+
+
+        });
+    };
+    
 
     initScene() {
         // this.scene = new THREE.Scene();
@@ -41,6 +84,10 @@ export class SceneInitializer {
         this.camera.position.x = ButtonState.value.cameraPositionX;
         
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+
+        this.addText(); // Add this line to include the text
+
 
         // controls.target.copy(sharedTarget); // Initially set target for cameraOne
         this.controls.enableDamping = true;
@@ -136,6 +183,7 @@ export class SceneInitializer {
 
             updateLoadingState(true);
             console.log("ANJINGNGINGIGNGING")
+            clearAtacs();
 
             await this.updateInstancedMesh();
 
@@ -153,9 +201,12 @@ export class SceneInitializer {
                 } else {
                     params.append("gene", newGenes)
                 }
+
             
             // there's no genes selected
             } else {
+                console.log("ASSALAM")
+                
                 params.delete("gene");
             }
 
@@ -170,6 +221,7 @@ export class SceneInitializer {
         ).subscribe(async items => {
             console.log("Selected atacs changed:", items);
             // console.log(SelectedState.value.selectedGenes);
+            clearGenes();
 
             if (SelectedState.value.mode === 2) {
                 showSelectedAtacFilters();
@@ -179,7 +231,6 @@ export class SceneInitializer {
 
             await this.updateInstancedMesh();
 
-            updateLoadingState(false);
 
             showAtacFilters();
 
@@ -201,6 +252,8 @@ export class SceneInitializer {
             }
 
             changeURL(params);
+            updateLoadingState(false);
+
         });
 
         SelectedState.pipe(
@@ -288,14 +341,14 @@ export class SceneInitializer {
         let ctsClipped2;
 
         let mod = 200;
-        let umapmod = 0.5;
+        let umapmod = 2;
 
         let celltypes = SelectedState.value.selectedCelltypes;
         let genes = SelectedState.value.selectedGenes;
         let atacs = SelectedState.value.selectedAtacs;
 
         let dotSize = ButtonState.value.dotSize;
-        let smallDotSize = Math.floor(dotSize / 5);
+        let smallDotSize = Math.floor(dotSize / 2);
 
         // this.camera.position.z = ButtonState.value.cameraPositionZ;
         let genePercentile = ButtonState.value.genePercentile;
@@ -350,10 +403,10 @@ export class SceneInitializer {
                     // if there's a second gene
                     if (ctsClipped2) {
                         colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
-                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 5;
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 1.5;
                     } else {
                         colorrgb = coolwarm(ctsClipped1[i]);
-                        scale = ctsClipped1[i] * dotSize + dotSize / 5;
+                        scale = ctsClipped1[i] * dotSize + dotSize / 1.5;
                     }
 
                     // console.log(colorrgb);
@@ -377,10 +430,10 @@ export class SceneInitializer {
                     // if there's a second gene
                     if (ctsClipped2) {
                         colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
-                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 5;
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 1.5;
                     } else {
                         colorrgb = coolwarm(ctsClipped1[i]);
-                        scale = ctsClipped1[i] * dotSize + dotSize / 5;
+                        scale = ctsClipped1[i] * dotSize + dotSize / 1.5;
                     }
 
                     // console.log(colorrgb);
@@ -408,20 +461,21 @@ export class SceneInitializer {
             }
 
             //plot projection
-            proj.position.set(jsonData[i]["X_spatial0_norm"] * mod, jsonData[i]["X_spatial1_norm"] * -1*mod, jsonData[i]["X_spatial2_norm"] * mod);
+            let ymod = 1;
+            if (ApiState.value.prefix == "6s") {
+                ymod = -1;
+            }
+
+            proj.position.set(jsonData[i]["X_spatial0_norm"] * mod, jsonData[i]["X_spatial1_norm"] *ymod*mod, jsonData[i]["X_spatial2_norm"] * mod);
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);
 
             //plot umap
 
-            let offset = 10000;
+            let offset = ButtonState.value.umapOffset;
 
-            if (ApiState.value.prefix == "75pe") {
-                umap.position.set(jsonData[i]["X_umap0_norm"] * 80 + offset, jsonData[i]["X_umap1_norm"] * 80, 10);
-            } else {
-                umap.position.set(jsonData[i]["X_umap0_norm"] * 200 + offset - 25, jsonData[i]["X_umap1_norm"] * 200, 10);
-            }
+            umap.position.set(jsonData[i]["X_umap0_norm"] * 300 + offset - 25, jsonData[i]["X_umap1_norm"] * 300, 10);
             umap.updateMatrix();
             this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
             this.instancedMeshUmap.setColorAt(i, color);
@@ -452,6 +506,7 @@ export class SceneInitializer {
         //     matrix.compose(position, cameraQuaternion, scale);
         //     this.instancedMesh.setMatrixAt(i, matrix);
         // }
+        // console.log(this.camera.position)
 
         this.instancedMesh.instanceMatrix.needsUpdate = true; // Important!
         this.renderer.render(this.scene, this.camera);

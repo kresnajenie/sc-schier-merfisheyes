@@ -9,6 +9,9 @@ export function loadPrefixOptions() {
 
     const prefixDropdown = document.querySelector('#prefix-dropdown-container .dropdown-menu');
 
+    console.log("PREFIXXXX")
+    console.log(prefixDropdown)
+
     for (let i = 0; i < prefixOptions.length; i++) {
         const prefixItem = document.createElement('p');
         prefixItem.innerHTML = `<a class="dropdown-item">${prefixOptions[i]}</a>`

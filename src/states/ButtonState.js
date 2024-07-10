@@ -1,11 +1,14 @@
 import { BehaviorSubject } from 'rxjs';
 
 const buttonData = {
-    dotSize: 12.00,
+    dotSize: 6.00,
     genePercentile: 0.9900,
     cameraPositionZ: 300,
-    cameraPositionY: 100,
-    cameraPositionX: 300,
+    cameraPositionY: 50,
+    cameraPositionX: 40,
+    umapOffset: 10000,
+    cameraUmapPositionY: 0,
+    cameraUmapPositionZ: 400,
 }
 
 export const ButtonState = new BehaviorSubject(buttonData);

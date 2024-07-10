@@ -2,6 +2,7 @@ import './Overlay.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { SceneState } from '../../states/SceneState';
+import { ButtonState } from '../../states/ButtonState';
 
 export function createOverlay() {
     const overlay = document.createElement('div');
@@ -290,8 +291,9 @@ export function createOverlay() {
     renderer.render(scene, camera);
     sceneContainer.appendChild(renderer.domElement);
 
-    camera.position.x = 10000;
-    camera.position.z = 150;
+    camera.position.x = ButtonState.value.umapOffset;
+    camera.position.y = ButtonState.value.cameraUmapPositionY;
+    camera.position.z = ButtonState.value.cameraUmapPositionZ;
 
     // Add orbit controls to the camera
     const controls = new OrbitControls(camera, renderer.domElement);

@@ -1,46 +1,231 @@
 .nav-container {
+  display: flex;
   width: 100%;
-  flex-wrap: wrap;
   gap: 5px;
-}
-
-.nav-container > * {
-  flex: 1 1 0px;
+  justify-content: space-between; /* Distribute space between child elements */
+  align-items: center;
+  height: 50px; /* Set a fixed height for the navbar */
 }
 
 #title {
   display: flex;
   flex-direction: column;
-
   justify-content: center;
-
-  flex-grow: 1;
-
   color: white;
 }
 
-#title p {
-  margin: 0;
-  color: rgb(189, 189, 189);
-
-  width: fit-content;
-  white-space: nowrap;
+#middle-space {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 15% 85%; /* Define the grid with 25% and 75% columns */
+  height: 100%; /* Make the height 100% of the navbar */
+  align-items: center; /* Center the content vertically */
+  background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
+  transition: transform 0.3s, background-color 0.3s, height 0.3s; /* Smooth transition */
+  border-radius: 10px; /* Rounded corners */
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
-.title-paragraph {
+#middle-space:hover {
+  height: 200px; /* Increase height on hover */
+  transform: translateY(75px); /* Move the element down */
+  background-color: rgba(0, 0, 0, 1); /* Solid background on hover */
+}
+
+.left-text {
+  background-color: rgba(255, 217, 0, 0.205);
+  color: white;
+  font-size: 16px; /* Adjust as needed */
   display: flex;
-  flex-direction: row;
+  align-items: center; /* Center the text vertically */
+}
+
+.line-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.line {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 4px; /* Line height */
+  background-color: rgb(97, 97, 97);
+  z-index: 1000;
+}
+
+.atac-peaks {
+  position: absolute;
+  bottom: 0px;
+  min-width: 1px;
+  height: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  border-radius: 2px;
+  z-index: 1; /* Default z-index for boxes and genes */
+}
+
+.atac-peaks {
+  background-color: red;
+}
+
+.atac-peaks:hover {
+  background: rgb(4, 255, 100); /* Change color on hover */
+}
+.gene, .gene-left, .gene-border, .gene-left-border {
+  position: absolute;
+  bottom: 25%; 
+  height: 50%; 
+  width: 80%; /* Adjust width as necessary */
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s; 
+  z-index: 98;
+  pointer-events: none; 
+}
+
+.gene::before, .gene-left::before, .gene-border::before, .gene-left-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: auto; 
+}
+
+.gene::before, .gene-left::before {
+  background-color: rgb(27, 236, 255);
+}
+
+/* Specific styles for .gene */
+.gene::before, .gene-border::before {
+  clip-path: polygon(0% 25%, 85% 25%, 85% 0, 100% 50%, 85% 100%, 85% 75%, 0% 75%, 0 50%);
+}
+
+/* Specific styles for .gene-left (left-pointing arrow) */
+.gene-left::before, .gene-left-border::before {
+  clip-path: polygon(100% 25%, 15% 25%, 15% 0, 0% 50%, 15% 100%, 15% 75%, 100% 75%, 100% 50%);
+}
+
+
+.gene-border::before, .gene-left-border::before {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.2px);
+  -webkit-backdrop-filter: blur(10.2px);
+  /* background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      #848484 10px,
+      #848484 20px
+  );  */
+}
+
+
+.gene .tooltip, .gene-left .tooltip, .gene-border .tooltip, .gene-left-border .tooltip {
+  position: absolute;
+  transform: translateX(-50%) translateY(300%);
+  pointer-events: none; /* Disable pointer events for the tooltip */
+  z-index: 9999;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+.gene:hover .tooltip, .gene-left:hover .tooltip, .gene-border:hover .tooltip, .gene-left-border:hover .tooltip {
+  opacity: 1;
+}
+
+
+.gene:hover::before, .gene-left:hover::before, .gene-border:hover::before, .gene-left-border:hover::before {
+  background: rgb(4, 255, 100); /* Change color on hover */
+}
+
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  transform: translateY(300%);
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 100; /* Default z-index for tooltips */
+}
+
+.atac-peaks:hover .tooltip {
+  opacity: 1;
+  z-index: 9999; /* High z-index for tooltips when parent is hovered */
+}
+
+
+
+#prefix-dropdown-container, 
+#filter-container {
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+
+#filter-container {
+  justify-content: flex-end;
+}
+
+#prefix-dropdown-container {
+  justify-content: flex-end;
+}
+
+
+#dropdownMenuButton {
+  width: 80px;
+}
+
+.dropdown-menu {
+  min-width: 80px;
+  max-width: 80px;
+  background-color: rgb(60, 60, 60);
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 8px 0px, rgba(255, 255, 255, 0.19) 0px 6px 20px 0px;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  padding: 7.5px;
+}
+
+.dropdown-item:hover {
+  background-color: rgb(33, 37, 41);
+  color: white;
 }
 
 @media (max-width: 526px) {
   .nav-container {
     padding-bottom: 10px;
-    justify-content: center !important; 
+    justify-content: center !important;
   }
 
   #title {
     flex-basis: 100%;
-
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
@@ -51,43 +236,11 @@
   .nav-container {
     flex-direction: column;
     padding-bottom: 10px;
-    
-    justify-content: flex-start !important; 
-
+    justify-content: flex-start !important;
     gap: 10px;
   }
 
   .title-paragraph {
     flex-direction: column;
   }
-}
-
-#prefix-dropdown-container {
-  display: flex;
-  justify-content: flex-end;
-  z-index: 1000;
-}
-
-#dropdownMenuButton {
-  width: 80px;
-}
-
-.dropdown-menu {
-  min-width: 80px;
-  max-width: 80px; 
-  background-color: rgb(60, 60, 60); 
-  box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 8px 0px, rgba(255, 255, 255, 0.19) 0px 6px 20px 0px;
-}
-
-.dropdown-item {
-  cursor: pointer;  
-  text-align: center; 
-  color: white;
-
-  padding: 7.5px;
-}
-
-.dropdown-item:hover {
-  background-color: rgb(33, 37, 41);
-  color: white;
 }
