@@ -55,3 +55,24 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
         return floatList
     }
 }
+
+
+
+export async function fetchIntervalGene(gene, range=100000) {
+    let response = ""
+    response = await fetch(`https://backendbasel.techkyra.com/get-intervals?gene=${gene}&range=${range}`);
+
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json(); // Wait for the JSON conversion
+
+    // no data available
+    if (data === undefined) {
+        return '[]';
+    }
+
+    return data
+}

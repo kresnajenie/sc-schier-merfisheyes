@@ -16,28 +16,30 @@
 
 #middle-space {
   flex-grow: 1;
-  display: grid;
+  display: none;
   grid-template-columns: 15% 85%; /* Define the grid with 25% and 75% columns */
   height: 100%; /* Make the height 100% of the navbar */
   align-items: center; /* Center the content vertically */
-  background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
+  /* background-color: transparent;  */
+  background-color: rgba(0, 0, 0, 0.9); 
   transition: transform 0.3s, background-color 0.3s, height 0.3s; /* Smooth transition */
   border-radius: 10px; /* Rounded corners */
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+  box-shadow: rgba(255, 255, 255, 0.16) 0px 1px 4px;
 }
 
 #middle-space:hover {
   height: 200px; /* Increase height on hover */
   transform: translateY(75px); /* Move the element down */
-  background-color: rgba(0, 0, 0, 1); /* Solid background on hover */
+  background-color: rgba(0, 0, 0, 1); 
 }
 
 .left-text {
-  background-color: rgba(255, 217, 0, 0.205);
+  /* background-color: rgba(255, 255, 255, 0.205); */
   color: white;
   font-size: 16px; /* Adjust as needed */
   display: flex;
@@ -60,7 +62,7 @@
   z-index: 1000;
 }
 
-.atac-peaks {
+.atac-peaks, .atac-peaks-enriched {
   position: absolute;
   bottom: 0px;
   min-width: 1px;
@@ -72,12 +74,17 @@
 }
 
 .atac-peaks {
-  background-color: red;
+  background-color: rgb(119, 119, 119);
 }
 
-.atac-peaks:hover {
+.atac-peaks-enriched {
+  background-color: rgb(255, 0, 0);
+}
+
+.atac-peaks:hover, .atac-peaks-enriched:hover {
   background: rgb(4, 255, 100); /* Change color on hover */
 }
+
 .gene, .gene-left, .gene-border, .gene-left-border {
   position: absolute;
   bottom: 25%; 
@@ -86,7 +93,7 @@
   background-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s; 
-  z-index: 98;
+  z-index: 199;
   pointer-events: none; 
 }
 
@@ -168,10 +175,10 @@
   white-space: nowrap;
   pointer-events: none;
   transition: opacity 0.3s;
-  z-index: 100; /* Default z-index for tooltips */
+  z-index: 200; /* Default z-index for tooltips */
 }
 
-.atac-peaks:hover .tooltip {
+.atac-peaks:hover .tooltip, .atac-peaks-enriched:hover .tooltip {
   opacity: 1;
   z-index: 9999; /* High z-index for tooltips when parent is hovered */
 }

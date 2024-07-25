@@ -1,6 +1,7 @@
 
 import { ApiState } from "../../states/ApiState";
-import { SelectedState, updateMode, updateSelectedAtac } from "../../states/SelectedState";
+import { SelectedState, updateMode, updateSelectedAtac, updateSelectedGene } from "../../states/SelectedState";
+import { updateSelectedInterval } from "../../states/SelectedState";
 
 // Toggle gene checkbox container
 export const atacSearch = () => {
@@ -157,8 +158,7 @@ export function createAtacRadio(atacList) {
 //     }
 // }
 
-function updateRadioItem(atac, isChecked) {
-
+export function updateRadioItem(atac, isChecked) {
     // deep copies the selected atac array
     let copy = SelectedState.value.selectedAtacs.map(i => i);
 
@@ -181,6 +181,13 @@ export const clearAtacs = () => {
     atacClearButton.addEventListener('click', () => {
         updateSelectedAtac([]);
         createAtacRadio(ApiState.value.atacs.slice(0,1000))
+
+        updateSelectedGene([]);
+        updateSelectedInterval([]);
+        createGeneRadio(ApiState.value.genes.slice(0,1000))
+
+        geneTextbox.value = ''; // clears search field
+
 
         atacTextbox.value = ''; // clears search field
     });
@@ -214,24 +221,24 @@ export const enterAtacs = () => {
  */
 export const showAtacFilters = () => {
 
-    const geneFilters = document.getElementById("geneFilters");
-    geneFilters.innerHTML = "";
+    const atacFilters = document.getElementById("atacFilters");
+    atacFilters.innerHTML = "";
 
     // if there are celltype filters
-    if (SelectedState.value.selectedGenes.length !== 0) {
-        SelectedState.value.selectedGenes.forEach((type, index) => {
+    if (SelectedState.value.selectedAtacs.length !== 0) {
+        SelectedState.value.selectedAtacs.forEach((type, index) => {
 
             const f = document.createElement("p");
             f.style.color = index === 0 ? 'magenta' : 'green';
             f.style.fontStyle = 'italic'
             f.style.fontWeight = 'bold'
             f.innerHTML = type;
-            geneFilters.appendChild(f);
+            atacFilters.appendChild(f);
         })
 
         // no gene filters
     } else {
-        geneFilters.innerHTML = "No atac filters selected";
+        atacFilters.innerHTML = "No ATAC filters selected";
     }
 }
 
@@ -302,4 +309,20 @@ export const showSelectedAtacFilters = () => {
 
         container.appendChild(separator);
     }
+}
+
+export function convertToChrFormat(input) {
+    const match = input.match(/^(\d+)-(\d+)-(\d+)$/);
+    if (match) {
+        return `chr${match[1]}:${match[2]}-${match[3]}`;
+    }
+    return null;
+}
+
+export function convertToNumberFormat(input) {
+    const match = input.match(/^chr(\d+):(\d+)-(\d+)$/);
+    if (match) {
+        return `${match[1]}-${match[2]}-${match[3]}`;
+    }
+    return null;
 }

@@ -2,6 +2,7 @@
 import { fetchDataFromAPI } from './APIClient';
 import { updateDataPalette, updateGenes, ApiState, updateGroups, updateAtacs } from '../states/ApiState';
 import { updateDataItems } from '../states/MatrixState';
+import {convertToChrFormat} from '../helpers/Filtering/Atac'
 
 const prefix = ApiState.value.prefix;
 
@@ -45,15 +46,25 @@ export async function loadGenes() {
 export async function loadAtacs() {
     try {
         const data = await fetchDataFromAPI("genes", prefix, true); 
-        // data.shift();
-        // console.log("ATACCC")
-        // console.log(data)
+        console.log("ATACCC")
+        const convertedData = data.map(item => convertToChrFormat(item)).filter(item => item !== null);
+        console.log(convertedData)
 
-        updateAtacs(data);
+        updateAtacs(convertedData);
     } catch (error) {
         console.error('Failed to load items:', error);
     }
 }
+
+async function fetchDataSequentially(columns, prefix) {
+    const results = [];
+    for (const col of columns) {
+        const result = await fetchDataFromAPI(col, prefix);
+        results.push(result);
+    }
+    return results;
+}
+
 
 export async function loadItems() {
     const columns = ApiState.value.columns;
@@ -63,6 +74,8 @@ export async function loadItems() {
     try {
         // Fetch data for all columns asynchronously
         const results = await Promise.all(columns.map(col => fetchDataFromAPI(col, prefix)));
+        // const results = await fetchDataSequentially(columns, prefix);
+
         
         // console.log("Load Results", results);
         columns.forEach((col, index) => {

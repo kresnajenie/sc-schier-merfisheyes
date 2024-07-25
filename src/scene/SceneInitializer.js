@@ -4,7 +4,7 @@ import { MatrixState } from '../states/MatrixState.js';
 import { ApiState } from '../states/ApiState.js';
 import { SceneState } from '../states/SceneState.js';
 import { UIState, updateLoadingState } from '../states/UIState.js';
-import { SelectedState } from '../states/SelectedState.js';
+import { SelectedState, updateSelectedInterval } from '../states/SelectedState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -17,6 +17,8 @@ import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers
 import { changeURL } from '../helpers/URL.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import { fetchIntervalGene } from '../helpers/APIClient.js';
+import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
@@ -35,7 +37,7 @@ export class SceneInitializer {
     addText() {
         const loader = new FontLoader();
         loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-            const textGeometry = new TextGeometry('Dorsal', {
+            const textGeometry = new TextGeometry('Anterior', {
                 font: font,
                 size: 10,
                 height: 1,
@@ -51,7 +53,7 @@ export class SceneInitializer {
             dorsal.position.set(-30, 190, 0); // Set the position as needed
             this.scene.add(dorsal);
 
-            const textGeometryVentral = new TextGeometry('Ventral', {
+            const textGeometryVentral = new TextGeometry('Posterior', {
                 font: font,
                 size: 10,
                 height: 1,
@@ -179,10 +181,10 @@ export class SceneInitializer {
 
             if (SelectedState.value.mode === 2) {
                 showSelectedGeneFilters();
-            }
+            } 
 
             updateLoadingState(true);
-            console.log("ANJINGNGINGIGNGING")
+            // console.log("ANJINGNGINGIGNGING")
             clearAtacs();
 
             await this.updateInstancedMesh();
@@ -192,8 +194,27 @@ export class SceneInitializer {
 
             if (SelectedState.value.selectedGenes.length > 0) {
                 // hype boy
+                console.log("BANGABNGABNGBANG")
+                console.log(SelectedState.value.selectedGenes)
+
+                // Assuming SelectedState.value.selectedGenes[0] contains the string value
+                let selectedGene = SelectedState.value.selectedGenes[0];
+
+                // Split the string by underscore and get the first element
+                let firstElement = selectedGene.split('_')[0];
+
+                console.log(firstElement);
+
+                try {
+                    const interval = await fetchIntervalGene(firstElement);
+                    updateSelectedInterval(interval["intervals"])
+                } catch (error) {
+                    console.error('Error fetching interval gene:', error);
+                }
+
                 const newGenes = encodeURIComponent(JSON.stringify(SelectedState.value.selectedGenes));
                 params.append("gene", newGenes)
+
 
                 // params not in celltype
                 if (params.has("gene")) {
@@ -209,6 +230,8 @@ export class SceneInitializer {
                 
                 params.delete("gene");
             }
+
+
 
             changeURL(params);
             updateLoadingState(false);

@@ -1,7 +1,7 @@
 
 import { ApiState } from "../../states/ApiState";
-import { SelectedState, updateMode, updateSelectedGene } from "../../states/SelectedState";
-
+import { SelectedState, updateMode, updateSelectedGene, updateSelectedInterval } from "../../states/SelectedState";
+import { updateSelectedAtac } from "../../states/SelectedState";
 // Toggle gene checkbox container
 export const geneSearch = () => {
     const geneTextbox = document.getElementById('geneTextbox');
@@ -32,7 +32,7 @@ export function filterGeneSearchQuery(searchQuery) {
             return gene.toLowerCase().startsWith(searchQuery); // checks if has substring
         })
 
-        console.log(filteredGene);
+        // console.log(filteredGene);
 
         createGeneRadio(filteredGene);
 
@@ -180,7 +180,10 @@ export const clearGenes = () => {
 
     geneClearButton.addEventListener('click', () => {
         updateSelectedGene([]);
+        updateSelectedInterval([]);
         createGeneRadio(ApiState.value.genes.slice(0,1000))
+        updateSelectedAtac([]);
+
 
         geneTextbox.value = ''; // clears search field
     });

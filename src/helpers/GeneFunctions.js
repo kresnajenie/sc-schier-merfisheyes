@@ -1,11 +1,12 @@
 import { ApiState } from "../states/ApiState";
 import { fetchDataFromAPI } from "./APIClient";
-
+import { convertToNumberFormat } from "./Filtering/Atac";
 export function getGene(gene) {
     return fetchDataFromAPI(gene, ApiState.value.prefix);
 }
 export function getAtac(atac) {
-    return fetchDataFromAPI(atac, ApiState.value.prefix, true);
+
+    return fetchDataFromAPI(convertToNumberFormat(atac), ApiState.value.prefix, true);
 }
 // for two genes
 function interpolatePercentages(percent1, percent2) {
