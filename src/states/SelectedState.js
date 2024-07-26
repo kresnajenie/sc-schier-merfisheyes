@@ -92,12 +92,26 @@ export function updateSelectedSingleGene(newSingleGene) {
 export function updateSelectedGene(newGenes) {
     // Get the current state from the BehaviorSubject
     const currentState = SelectedState.getValue();
+    const oldGenes = currentState.selectedGenes
+    if (oldGenes.length > 0) {
+        const radioButton = document.getElementById(oldGenes[0]);
+        console.log(radioButton)
+        if (radioButton) {
+            radioButton.checked = false; // Uncheck the radio button
+        }
+    }
 
     // Update the items in the current state
     const updatedState = {
         ...currentState,
         selectedGenes: newGenes
     };
+
+    const radioButtonNew = document.getElementById(newGenes[0]);
+    console.log(radioButtonNew)
+    if (radioButtonNew) {
+        radioButtonNew.checked = true; // Uncheck the radio button
+    }
 
     // Emit the updated state
     SelectedState.next(updatedState);
@@ -126,12 +140,28 @@ export function updateSelectedSingleAtac(newSingleAtac) {
 export function updateSelectedAtac(newAtacs) {
     // Get the current state from the BehaviorSubject
     const currentState = SelectedState.getValue();
+    const oldAtacs = currentState.selectedAtacs
+    if (oldAtacs.length > 0) {
+        const radioButton = document.getElementById(oldAtacs[0]);
+        console.log(radioButton)
+        if (radioButton) {
+            radioButton.checked = false; // Uncheck the radio button
+        }
+    }
+
 
     // Update the items in the current state
     const updatedState = {
         ...currentState,
         selectedAtacs: newAtacs
     };
+
+    const radioButtonNew = document.getElementById(newAtacs[0]);
+    console.log(radioButtonNew)
+    if (radioButtonNew) {
+        radioButtonNew.checked = true; // Uncheck the radio button
+    }
+
 
     // Emit the updated state
     SelectedState.next(updatedState);

@@ -180,13 +180,17 @@ export const clearAtacs = () => {
 
     atacClearButton.addEventListener('click', () => {
         updateSelectedAtac([]);
-        createAtacRadio(ApiState.value.atacs.slice(0,1000))
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach((radioButton) => {
+            radioButton.checked = false;
+        });
+        // createAtacRadio(ApiState.value.atacs.slice(0,1000))
 
-        updateSelectedGene([]);
-        updateSelectedInterval([]);
-        createGeneRadio(ApiState.value.genes.slice(0,1000))
+        // updateSelectedGene([]);
+        // updateSelectedInterval([]);
+        // createGeneRadio(ApiState.value.genes.slice(0,1000))
 
-        geneTextbox.value = ''; // clears search field
+        // geneTextbox.value = ''; // clears search field
 
 
         atacTextbox.value = ''; // clears search field

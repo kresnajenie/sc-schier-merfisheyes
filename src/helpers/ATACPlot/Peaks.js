@@ -1,6 +1,7 @@
-import { SelectedState, updateSelectedAtac } from "../../states/SelectedState";
+import { SelectedState, updateSelectedAtac, updateSelectedGene } from "../../states/SelectedState";
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { updateRadioItem } from "../Filtering/Atac";
+import { ApiState } from "../../states/ApiState";
 
 
 // listens for changing celltype
@@ -8,8 +9,8 @@ SelectedState.pipe(
     map(state => state.intervalsData),
     distinctUntilChanged((prev, curr) => prev.join() === curr.join())
 ).subscribe(async items => {
-    console.log("Dari peaks ya")
-    console.log(items)
+    // console.log("Dari peaks ya")
+    // console.log(items)
     updateLeftText(SelectedState.value.selectedGenes[0]);
     addBoxes(items);
 });
@@ -36,7 +37,7 @@ export function addBoxes(data = []) {
     } else {
         middleSpace.style.display = 'grid';
 
-        console.log("line-container found");
+        // console.log("line-container found");
         let zIndex = 1; // Initialize zIndex
 
         // Clear all existing elements in the line container
@@ -76,10 +77,10 @@ export function addBoxes(data = []) {
                 //// check if mygene or not
                 let mygene = item.label.split('__')[1] === "mygene";
 
-                console.log(item.label);
-                console.log(item.label.split('__')[1]);
-                console.log("isleft", isLeft);
-                console.log("mygene", mygene);
+                // console.log(item.label);
+                // console.log(item.label.split('__')[1]);
+                // console.log("isleft", isLeft);
+                // console.log("mygene", mygene);
 
                 if (mygene) {
                     if (isLeft) {
@@ -117,17 +118,17 @@ export function addBoxes(data = []) {
             atacPeak.appendChild(tooltip);
 
             lineContainer.appendChild(atacPeak);
-            console.log(`Added box with tooltip ${item.tooltip}`);
+            // console.log(`Added box with tooltip ${item.tooltip}`);
         });
     }
 }
 
 // Function to handle click events on peaks
 function handlePeakClick(item) {
-    console.log('Peak clicked:', item);
+    // console.log('Peak clicked:', item);
     // Add your custom logic here
     // For example, you could display more information about the peak, navigate to another page, etc.
-    console.log(typeof item.interval)
+    // console.log(typeof item.interval)
     // checkRadioButtonById(item.interval)
     updateSelectedAtac([item.interval])
 }
@@ -173,8 +174,27 @@ function checkRadioButtonById(id) {
 
 // Function to handle click events on peaks
 function handleGeneClick(item) {
-    console.log('Gene clicked:', item);
+    // console.log('Gene clicked:', item);
     // Add your custom logic here
     // For example, you could display more information about the peak, navigate to another page, etc.
-    alert(`You clicked on: ${item.label}`);
+    let gene = findGene(item.label.split("__").pop());
+    if (gene == null) {
+        // alert(`You clicked on: ${item.label.split("__")}`);
+        alert(`Gene was not measured`);
+    }
+
+    updateSelectedGene([gene])
+    // alert(`You clicked on: ${item.label.split("__")}`);
+}
+
+function findGene(gene) {
+    // console.log(`${gene}_measured`)
+    if (ApiState.value.genes.includes(`${gene}_measured`)) {
+        return `${gene}_measured`
+    } else if (ApiState.value.genes.includes(`${gene}_imputed`)) {
+        return `${gene}_imputed`
+    } else {
+        return null
+    }
+
 }

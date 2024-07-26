@@ -181,7 +181,11 @@ export const clearGenes = () => {
     geneClearButton.addEventListener('click', () => {
         updateSelectedGene([]);
         updateSelectedInterval([]);
-        createGeneRadio(ApiState.value.genes.slice(0,1000))
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach((radioButton) => {
+            radioButton.checked = false;
+        });
+        // createGeneRadio(ApiState.value.genes.slice(0,1000))
         updateSelectedAtac([]);
 
 
