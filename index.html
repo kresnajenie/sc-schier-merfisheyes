@@ -45,6 +45,12 @@
         });
 
         $(function () {
+            $(".showing-container").load("/src/ui/Showing/showing.html", () => {
+                console.log("showing")
+            })
+        });
+
+        $(function () {
             $(".filter").load("/src/ui/Filters/filters.html", () => {
                 toggleCellFilter();
                 toggleGeneFilter();
@@ -69,6 +75,8 @@
     <nav class="sidenav navbar navbar-expand-lg navbar-dark bg-dark" data-mdb-sidenav-init data-mdb-right="true"></nav>
     <!-- filter and toggles -->
     <div class="filter"></div>
+    <!-- showing container -->
+    <div class="showing-container"></div>
 
     <footer>
         <p>&copy; 2023-2024, 

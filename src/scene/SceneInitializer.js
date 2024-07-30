@@ -4,7 +4,7 @@ import { MatrixState } from '../states/MatrixState.js';
 import { ApiState } from '../states/ApiState.js';
 import { SceneState } from '../states/SceneState.js';
 import { UIState, updateLoadingState } from '../states/UIState.js';
-import { SelectedState, updateSelectedInterval } from '../states/SelectedState.js';
+import { SelectedState, updateSelectedInterval, updateSelectedShowing } from '../states/SelectedState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -18,7 +18,8 @@ import { changeURL } from '../helpers/URL.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { fetchIntervalGene } from '../helpers/APIClient.js';
-import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
+// import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
+import { updateBadge } from '../ui/Showing/Showing.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
@@ -280,6 +281,14 @@ export class SceneInitializer {
         });
 
         SelectedState.pipe(
+            map(state => state.showing),
+            distinctUntilChanged()
+        ).subscribe(item => {
+            console.log("Selected showing changed:", item);
+            updateBadge(item)
+        });
+
+        SelectedState.pipe(
             map(state => state.mode),
             distinctUntilChanged()
         ).subscribe(items => {
@@ -377,23 +386,7 @@ export class SceneInitializer {
         let genePercentile = ButtonState.value.genePercentile;
         let atacPercentile = ButtonState.value.genePercentile;
 
-        if (genes.length > 0) {
-            try {
-                let count1 = await getGene(genes[0]);
-                if (genes.length == 2) {
-                    let count2 = await getGene(genes[1]);
-                    let nmax2 = calculateGenePercentile(count2, genePercentile);
-                    ctsClipped2 = normalizeArray(count2, nmax2);
-                }
-                // You can use cts here
-                let nmax1 = calculateGenePercentile(count1, genePercentile);
-                // console.log(cts);
-                ctsClipped1 = normalizeArray(count1, nmax1);
-            } catch (error) {
-                // Handle errors if the promise is rejected
-                console.error('Error fetching data:', error);
-            }
-        }
+        
 
         if (atacs.length > 0) {
             try {
@@ -411,12 +404,30 @@ export class SceneInitializer {
                 // Handle errors if the promise is rejected
                 console.error('Error fetching data:', error);
             }
+        } else if (genes.length > 0) {
+            try {
+                let count1 = await getGene(genes[0]);
+                if (genes.length == 2) {
+                    let count2 = await getGene(genes[1]);
+                    let nmax2 = calculateGenePercentile(count2, genePercentile);
+                    ctsClipped2 = normalizeArray(count2, nmax2);
+                }
+                // You can use cts here
+                let nmax1 = calculateGenePercentile(count1, genePercentile);
+                // console.log(cts);
+                ctsClipped1 = normalizeArray(count1, nmax1);
+            } catch (error) {
+                // Handle errors if the promise is rejected
+                console.error('Error fetching data:', error);
+            }
         }
 
 
         for (let i = 0; i < count; i++) {
-            // if have gene filter
-            if (genes.length > 0) {
+            
+            if (atacs.length > 0) {
+                updateSelectedShowing("atac")
+                // updateBadge("atac")
                 // no celltypes or matches celltype
                 if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
 
@@ -443,7 +454,10 @@ export class SceneInitializer {
                     umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
                 }
                 // has celltype filters
-            } else if (atacs.length > 0) {
+            } else if (genes.length > 0) {
+                updateSelectedShowing("gene")
+                // updateBadge("gene")
+
                 // no celltypes or matches celltype
                 if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
 
@@ -470,7 +484,9 @@ export class SceneInitializer {
                     umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
                 }
                 // has celltype filters
-            }else {
+            }  else {
+                updateSelectedShowing("celltype")
+                // updateBadge("celltype")
                 if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
                     // color = new THREE.Color(jsonData[i]["clusters_colors"]);
                     color = new THREE.Color(pallete[jsonData[i]["clusters"]]);

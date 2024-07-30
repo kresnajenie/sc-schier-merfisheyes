@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.showing-badge {
+    display: flex;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.showing-label {
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bold;
+    display: none; /* Hide by default */
+}
+
+.showing-celltype {
+    background-color: #28a745; /* Green color (Success) */
+}
+
+.showing-gene {
+    background-color: #007bff; /* Blue color (Primary) */
+}
+
+.showing-atac {
+    background-color: #dc3545; /* Red color (Danger) */
+}

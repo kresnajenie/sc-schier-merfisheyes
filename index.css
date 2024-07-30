@@ -37,3 +37,10 @@ a:hover, a:focus, a:active {
     color: gray;
     text-decoration: underline;
 }
+
+.showing-container {
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    z-index: 1000; /* Ensure it's above other content */
+}
