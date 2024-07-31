@@ -42,5 +42,28 @@ a:hover, a:focus, a:active {
     position: fixed;
     top: 70px;
     right: 10px;
-    z-index: 1000; /* Ensure it's above other content */
+    /* z-index: 1000; */
+}
+
+.colorbar-wrapper {
+    display: none;
+    position: fixed;
+    top: 120px;
+    right: 10px;
+    width: 50px;
+    text-align: center;
+}
+
+.colorbar {
+    width: 30px;
+    height: 100px;
+    background: linear-gradient(to bottom, #B40426, #FFFFFF, #3B4CC0); /* Gradient for coolwarm color map */
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.colorbar-label {
+    color: white;
+    font-size: 14px;
+    margin: 5px 0;
 }

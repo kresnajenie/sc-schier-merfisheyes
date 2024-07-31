@@ -174,7 +174,6 @@ export function updateSelectedAtac(newAtacs) {
     };
 
     const radioButtonNew = document.getElementById(newAtacs[0]);
-    console.log(radioButtonNew)
     if (radioButtonNew) {
         radioButtonNew.checked = true; // Uncheck the radio button
     }

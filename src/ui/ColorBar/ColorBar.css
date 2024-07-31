@@ -1,0 +1,13 @@
+.colorbar {
+    width: 30px;
+    height: 100px;
+    background: linear-gradient(to bottom, #B40426, #FFFFFF, #3B4CC0); /* Gradient for coolwarm color map */
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.colorbar-label {
+    color: white;
+    font-size: 14px;
+    margin: 5px 0;
+}

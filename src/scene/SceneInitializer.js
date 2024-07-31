@@ -20,6 +20,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { fetchIntervalGene } from '../helpers/APIClient.js';
 // import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
 import { updateBadge } from '../ui/Showing/Showing.js';
+import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
@@ -31,6 +32,8 @@ export class SceneInitializer {
         this.container = container;
         this.instancedMesh;
         this.instancedMeshUmap;
+
+
         this.initScene();
         this.subscribeToStateChanges();
     }
@@ -75,21 +78,37 @@ export class SceneInitializer {
     
 
     initScene() {
+        if (ApiState.value.prefix != "6s") {
+        // Hide the button and descBox when the page loads
+        document.getElementById("toggleATACRadio").style.display = "none";
+        document.getElementById("atac-desc").style.display = "none";
+        }
+
+
         // this.scene = new THREE.Scene();
+
+
         this.scene = SceneState.value.scene;
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.container.appendChild(this.renderer.domElement);
+        if (ApiState.value.prefix == "6s") {
+            this.camera.position.y = ButtonState.value.cameraPositionY;
+            this.camera.position.x = ButtonState.value.cameraPositionX;
+            this.addText(); // Add this line to include the text
+        } else {
+            this.camera.position.y = 0;
+            this.camera.position.x = 0;
+        }
         this.camera.position.z = ButtonState.value.cameraPositionZ;
-        this.camera.position.y = ButtonState.value.cameraPositionY;
-        this.camera.position.x = ButtonState.value.cameraPositionX;
+
+
         
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
 
-        this.addText(); // Add this line to include the text
 
 
         // controls.target.copy(sharedTarget); // Initially set target for cameraOne
@@ -149,6 +168,10 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
+            // if (SelectedState.value.selectedGenes.length == 0 && SelectedState.value.selectedGenes.length == 0) {
+            //     updateBadge("celltype")
+            // }
+
             await this.updateInstancedMesh();
 
             updateLoadingState(false);
@@ -188,10 +211,13 @@ export class SceneInitializer {
             // console.log("ANJINGNGINGIGNGING")
             clearAtacs();
 
-            await this.updateInstancedMesh();
 
 
             showGeneFilters();
+
+            // if (SelectedState.value.selectedGenes.length > 0 && SelectedState.value.selectedGenes.length == 0) {
+            //     updateBadge("gene")
+            // }
 
             if (SelectedState.value.selectedGenes.length > 0) {
                 // hype boy
@@ -206,16 +232,17 @@ export class SceneInitializer {
 
                 console.log(firstElement);
 
-                try {
-                    const interval = await fetchIntervalGene(firstElement);
-                    updateSelectedInterval(interval["intervals"])
-                } catch (error) {
-                    console.error('Error fetching interval gene:', error);
+                if (ApiState.value.prefix == "6s") {
+                    try {
+                        const interval = await fetchIntervalGene(firstElement);
+                        updateSelectedInterval(interval["intervals"])
+                    } catch (error) {
+                        console.error('Error fetching interval gene:', error);
+                    }
                 }
 
                 const newGenes = encodeURIComponent(JSON.stringify(SelectedState.value.selectedGenes));
                 params.append("gene", newGenes)
-
 
                 // params not in celltype
                 if (params.has("gene")) {
@@ -231,6 +258,9 @@ export class SceneInitializer {
                 
                 params.delete("gene");
             }
+
+            await this.updateInstancedMesh();
+
 
 
 
@@ -253,12 +283,12 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            await this.updateInstancedMesh();
 
 
             showAtacFilters();
 
             if (SelectedState.value.selectedAtacs.length > 0) {
+                // updateBadge("atac")
                 // hype boy
                 const newAtacs = encodeURIComponent(JSON.stringify(SelectedState.value.selectedAtacs));
                 params.append("atac", newAtacs)
@@ -275,18 +305,21 @@ export class SceneInitializer {
                 params.delete("atac");
             }
 
+            await this.updateInstancedMesh();
+
+
             changeURL(params);
             updateLoadingState(false);
 
         });
 
-        SelectedState.pipe(
-            map(state => state.showing),
-            distinctUntilChanged()
-        ).subscribe(item => {
-            console.log("Selected showing changed:", item);
-            updateBadge(item)
-        });
+        // SelectedState.pipe(
+        //     map(state => state.showing),
+        //     distinctUntilChanged()
+        // ).subscribe(item => {
+        //     console.log("Selected showing changed:", item);
+            // updateBadge(item)
+        // });
 
         SelectedState.pipe(
             map(state => state.mode),
@@ -387,6 +420,7 @@ export class SceneInitializer {
         let atacPercentile = ButtonState.value.genePercentile;
 
         
+        let nmax1 = 1;
 
         if (atacs.length > 0) {
             try {
@@ -397,7 +431,7 @@ export class SceneInitializer {
                     ctsClipped2 = normalizeArray(count2, nmax2);
                 }
                 // You can use cts here
-                let nmax1 = calculateGenePercentile(count1, atacPercentile);
+                nmax1 = calculateGenePercentile(count1, atacPercentile);
                 // console.log(cts);
                 ctsClipped1 = normalizeArray(count1, nmax1);
             } catch (error) {
@@ -413,7 +447,7 @@ export class SceneInitializer {
                     ctsClipped2 = normalizeArray(count2, nmax2);
                 }
                 // You can use cts here
-                let nmax1 = calculateGenePercentile(count1, genePercentile);
+                nmax1 = calculateGenePercentile(count1, genePercentile);
                 // console.log(cts);
                 ctsClipped1 = normalizeArray(count1, nmax1);
             } catch (error) {
@@ -422,11 +456,15 @@ export class SceneInitializer {
             }
         }
 
+        console.log("KESINI KANNNN")
+        console.log(nmax1);
+        setLabels(0, nmax1);
+
 
         for (let i = 0; i < count; i++) {
             
             if (atacs.length > 0) {
-                updateSelectedShowing("atac")
+                // updateSelectedShowing("atac")
                 // updateBadge("atac")
                 // no celltypes or matches celltype
                 if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
@@ -455,7 +493,7 @@ export class SceneInitializer {
                 }
                 // has celltype filters
             } else if (genes.length > 0) {
-                updateSelectedShowing("gene")
+                // updateSelectedShowing("gene")
                 // updateBadge("gene")
 
                 // no celltypes or matches celltype
@@ -485,7 +523,7 @@ export class SceneInitializer {
                 }
                 // has celltype filters
             }  else {
-                updateSelectedShowing("celltype")
+                // updateSelectedShowing("celltype")
                 // updateBadge("celltype")
                 if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
                     // color = new THREE.Color(jsonData[i]["clusters_colors"]);
@@ -518,6 +556,22 @@ export class SceneInitializer {
             umap.updateMatrix();
             this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
             this.instancedMeshUmap.setColorAt(i, color);
+        }
+
+        console.log(atacs);
+
+        if (atacs.length > 0) {
+
+                console.log("EMG KESINI BANG")
+                updateBadge("atac")
+                showColorbar();
+            } else if (genes.length > 0) {
+                updateBadge("gene")
+                showColorbar();
+
+            }  else {
+                updateBadge("celltype")
+                hideColorbar();
         }
 
         this.scene.add(this.instancedMesh);

@@ -1,7 +1,7 @@
 import { SelectedState, updateSelectedAtac, updateSelectedGene } from "../../states/SelectedState";
 import { map, distinctUntilChanged } from 'rxjs/operators';
-import { updateRadioItem } from "../Filtering/Atac";
-import { ApiState } from "../../states/ApiState";
+import { clearAtacs, updateRadioItem } from "../Filtering/Atac";
+import { ApiState, updateAtacs } from "../../states/ApiState";
 
 
 // listens for changing celltype
@@ -180,11 +180,12 @@ function handleGeneClick(item) {
     let gene = findGene(item.label.split("__").pop());
     if (gene == null) {
         // alert(`You clicked on: ${item.label.split("__")}`);
-        alert(`Gene was not measured`);
+        alert(`Gene ${item} was not measured`);
+    } else {
+        updateSelectedAtac([]);
+        updateSelectedGene([gene]);
     }
 
-    updateSelectedGene([gene])
-    // alert(`You clicked on: ${item.label.split("__")}`);
 }
 
 function findGene(gene) {
