@@ -7,7 +7,7 @@ import { UIState, updateLoadingState } from '../states/UIState.js';
 import { SelectedState, updateSelectedInterval, updateSelectedShowing } from '../states/SelectedState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isEqual } from 'lodash';
-import { map, distinctUntilChanged } from 'rxjs/operators';
+import { map, distinctUntilChanged, tap } from 'rxjs/operators';
 import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
@@ -29,12 +29,14 @@ const params = new URLSearchParams(url.search);
 
 export class SceneInitializer {
     constructor(container) {
+
         this.container = container;
         this.instancedMesh;
         this.instancedMeshUmap;
 
 
         this.initScene();
+
         this.subscribeToStateChanges();
     }
 
@@ -44,7 +46,7 @@ export class SceneInitializer {
             const textGeometry = new TextGeometry('Anterior', {
                 font: font,
                 size: 10,
-                height: 1,
+                height: 0.1,
                 curveSegments: 12,
                 bevelEnabled: true,
                 bevelThickness: 1,
@@ -60,7 +62,7 @@ export class SceneInitializer {
             const textGeometryVentral = new TextGeometry('Posterior', {
                 font: font,
                 size: 10,
-                height: 1,
+                height: 0.1,
                 curveSegments: 12,
                 bevelEnabled: true,
                 bevelThickness: 1,
@@ -78,16 +80,6 @@ export class SceneInitializer {
     
 
     initScene() {
-        if (ApiState.value.prefix != "6s") {
-        // Hide the button and descBox when the page loads
-        document.getElementById("toggleATACRadio").style.display = "none";
-        document.getElementById("atac-desc").style.display = "none";
-        }
-
-
-        // this.scene = new THREE.Scene();
-
-
         this.scene = SceneState.value.scene;
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -99,6 +91,9 @@ export class SceneInitializer {
             this.camera.position.x = ButtonState.value.cameraPositionX;
             this.addText(); // Add this line to include the text
         } else {
+            // Hide the button and descBox when the page loads
+            document.getElementById("toggleATACRadio").style.display = "none";
+            document.getElementById("atac-desc").style.display = "none";
             this.camera.position.y = 0;
             this.camera.position.x = 0;
         }
@@ -115,7 +110,7 @@ export class SceneInitializer {
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.25;
         this.controls.update();
-        this.updateInstancedMesh();
+        this.updateInstancedMesh("initScene");
 
         this.animate();
 
@@ -172,7 +167,7 @@ export class SceneInitializer {
             //     updateBadge("celltype")
             // }
 
-            await this.updateInstancedMesh();
+            await this.updateInstancedMesh("selectedCelltype");
 
             updateLoadingState(false);
 
@@ -198,6 +193,13 @@ export class SceneInitializer {
 
         SelectedState.pipe(
             map(state => state.selectedGenes),
+            tap((curr, index) => {
+                if (index > 0) {
+                    console.log("Previous selected genes:", prev);
+                    console.log("Current selected genes:", curr);
+                }
+                // prev = curr;
+            }),
             distinctUntilChanged((prev, curr) => prev.join() === curr.join())
         ).subscribe(async items => {
             console.log("Selected genes changed:", items);
@@ -259,7 +261,7 @@ export class SceneInitializer {
                 params.delete("gene");
             }
 
-            await this.updateInstancedMesh();
+            await this.updateInstancedMesh("selectedGene");
 
 
 
@@ -305,7 +307,7 @@ export class SceneInitializer {
                 params.delete("atac");
             }
 
-            await this.updateInstancedMesh();
+            await this.updateInstancedMesh("selectedAtac");
 
 
             changeURL(params);
@@ -347,7 +349,7 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            await this.updateInstancedMesh();
+            await this.updateInstancedMesh("dotSize");
 
             updateLoadingState(false);
         });
@@ -361,13 +363,16 @@ export class SceneInitializer {
 
             updateLoadingState(true);
 
-            await this.updateInstancedMesh();
+            await this.updateInstancedMesh("genePercentile");
 
             updateLoadingState(false);
         })
     }
 
-    async updateInstancedMesh() {
+    async updateInstancedMesh(where) {
+        console.log("^^^^^^^^^")
+        console.log(where)
+        console.log("^^^^^^^^^")
 
         // Clear existing mesh
         if (this.instancedMesh) {
@@ -574,7 +579,12 @@ export class SceneInitializer {
                 hideColorbar();
         }
 
+        console.log(atacs);
+
         this.scene.add(this.instancedMesh);
+        console.log(this.instancedMesh);
+        console.log(this.scene);
+
         this.scene.add(this.instancedMeshUmap);
     }
 

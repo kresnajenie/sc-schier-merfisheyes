@@ -46,9 +46,9 @@ export async function loadGenes() {
 export async function loadAtacs() {
     try {
         const data = await fetchDataFromAPI("genes", prefix, true); 
-        console.log("ATACCC")
+        // console.log("ATACCC")
         const convertedData = data.map(item => convertToChrFormat(item)).filter(item => item !== null);
-        console.log(convertedData)
+        // console.log(convertedData)
 
         updateAtacs(convertedData);
     } catch (error) {

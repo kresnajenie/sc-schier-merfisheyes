@@ -1,10 +1,10 @@
 export function setLabels(min,max) {
     const topLabel = document.getElementById('top-label');
     const bottomLabel = document.getElementById('bottom-label');
-    console.log(min,max)
-    console.log("KONTOTLOBNTONTONTOTONTONTONTONLLLLLLLLL")
-    console.log(topLabel)
-    console.log(bottomLabel)
+    // console.log(min,max)
+    // console.log("KONTOTLOBNTONTONTOTONTONTONTONLLLLLLLLL")
+    // console.log(topLabel)
+    // console.log(bottomLabel)
 
     let actual_max = max;
     if (max < 1) {

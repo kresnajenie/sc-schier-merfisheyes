@@ -30,13 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadAtacs();
         // console.log(ApiState.value.genes);
 
-        await loadGroups();
-        addBoxes();
+        // await loadGroups();
+        // addBoxes();
 
         // console.log(ApiState.value.groups);
 
-        const sceneContainer = document.body;
-        new SceneInitializer(sceneContainer);
+
 
         // dictionary of all search paramaters in url
         const url = new URL(window.location);
@@ -65,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // params.delete("gene")
             // changeURL(params)
-
             updateSelectedGene(filteredGenes);
         }
 
@@ -82,9 +80,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         enterAtacs();
         atacSearch();
 
+        const sceneContainer = document.body;
+        new SceneInitializer(sceneContainer);
+
     } catch (err) {
         console.error('Failed to load data:', err);
     } finally {
-        updateLoadingState(false); // Loading ends after all async operations
+        console.log("GAAA KESINSINI YAA")
+        // updateLoadingState(false); // Loading ends after all async operations
     }
 });

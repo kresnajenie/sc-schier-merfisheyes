@@ -251,6 +251,7 @@ export const toggleButton = () => {
         geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
     })
 
+
     geneSlider.addEventListener('mouseup', function() {
         geneSliderValue.value = parseFloat(this.value).toFixed(2);
         updateGenePercentile(parseFloat(this.value).toFixed(2));
