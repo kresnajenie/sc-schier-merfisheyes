@@ -12,261 +12,287 @@ export function createOverlay() {
     // Create a container for top controls
     const topControls = document.createElement('div');
     topControls.className = 'top-controls';
-    topControls.style.zIndex = 1;
-    topControls.style.position = 'absolute';
-    
-    // const isMobile = window.innerWidth <= 425
-    
-    // if (isMobile) { topControls.style.display = 'none' }
 
-    // Drag Button
-    const dragButton = document.createElement('button');
-    dragButton.id = 'dragButton';
-    dragButton.textContent = 'Drag';
-    dragButton.className = 'btn btn-primary';
-
-    // Resize Handle
-    const resizeHandle = document.createElement('div');
-    resizeHandle.id = 'resizeHandle';
-    resizeHandle.className = 'resize-handle';
-    resizeHandle.title = "Drag to resize UMAP."
-
-    // Append drag button and resize handle to the top controls container
-    topControls.appendChild(dragButton);
-    topControls.appendChild(resizeHandle);
-
-    // Then append the top controls container to the overlay
+    // Append the top controls container to the overlay
     overlay.appendChild(topControls);
 
     // Function to handle dragging
     let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let overlayStartX = 0;
+    let overlayStartY = 0;
 
-    dragButton.addEventListener("mousedown", (e) => {
+    topControls.addEventListener("mousedown", (e) => {
         isDragging = true;
-        offsetX = e.offsetX;
-        offsetY = e.offsetY;
-    })
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        const rect = overlay.getBoundingClientRect();
+        overlayStartX = rect.left;
+        overlayStartY = rect.top;
+    });
 
     const keepInBounds = () => {
-        // touching left
         if (overlay.offsetLeft < 0) {
             overlay.style.left = "0%";
         }
 
-        // touching right
         if (overlay.offsetLeft + overlay.offsetWidth > window.innerWidth) {
-            overlay.style.left = `${(window.innerWidth - overlay.offsetWidth) / window.innerWidth * 100}%`
+            overlay.style.left = `${(window.innerWidth - overlay.offsetWidth) / window.innerWidth * 100}%`;
         }
 
-        // navbar height
-        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+        const topBound = document.getElementsByClassName('navbar')[0]?.offsetHeight || 0;
 
-        // touching navbar
         if (overlay.offsetTop < topBound) {
             overlay.style.top = `${topBound / window.innerHeight * 100}%`;
         }
 
-        // touching bottom
         if (overlay.offsetTop + overlay.offsetHeight > window.innerHeight) {
-            overlay.style.top = `${(window.innerHeight - overlay.offsetHeight) / window.innerHeight * 100}%`
+            overlay.style.top = `${(window.innerHeight - overlay.offsetHeight) / window.innerHeight * 100}%`;
         }
 
-        // touching both top and bottom means we have to shrink it
         if (overlay.offsetTop <= topBound && overlay.offsetTop + overlay.offsetHeight >= window.innerHeight) {
-
             overlay.style.top = `${topBound / window.innerHeight * 100}%`;
-            overlay.style.height = `${window.innerHeight - topBound}px`
+            overlay.style.height = `${window.innerHeight - topBound}px`;
 
-            // Update camera and renderer
             camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
         }
 
-        // touching both left and right means we have to shrink it
         if (overlay.offsetLeft <= 0 && overlay.offsetLeft + overlay.offsetWidth >= window.innerWidth) {
             overlay.style.left = `${0}%`;
-            overlay.style.width = `${window.innerWidth}px`
+            overlay.style.width = `${window.innerWidth}px`;
 
-            // Update camera and renderer
             camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
         }
-    }
+    };
 
     document.addEventListener("mousemove", (e) => {
-
         if (isDragging) {
-            overlay.style.left = `${(e.clientX - offsetX) / window.innerWidth * 100}%`;
-            overlay.style.top = `${(e.clientY - offsetY) / window.innerHeight * 100}%`;
+            const newLeft = overlayStartX + (e.clientX - dragStartX);
+            const newTop = overlayStartY + (e.clientY - dragStartY);
+
+            overlay.style.left = `${newLeft / window.innerWidth * 100}%`;
+            overlay.style.top = `${newTop / window.innerHeight * 100}%`;
 
             keepInBounds();
         }
-    })
-    
+    });
+
     document.addEventListener("mouseup", () => {
         isDragging = false;
-    })
+    });
 
-    // Add more content or functionality to the overlay as needed...
+    // Handle resizing from any edge or corner
+    overlay.addEventListener('mousemove', (e) => {
+        const rect = overlay.getBoundingClientRect();
+        const offset = 10; // Sensitivity for edge detection
 
-    // Handle MOUSE resizing
-    resizeHandle.addEventListener('mousedown', resizeMouseDown);
+        const isRight = e.clientX > rect.right - offset && e.clientX < rect.right + offset;
+        const isLeft = e.clientX > rect.left - offset && e.clientX < rect.left + offset;
+        const isBottom = e.clientY > rect.bottom - offset && e.clientY < rect.bottom + offset;
+        const isTop = e.clientY > rect.top - offset && e.clientY < rect.top + offset;
 
-    function resizeMouseDown(e) {
-        window.addEventListener('mousemove', resizeMouseMove);
-        window.addEventListener('mouseup', resizeMouseUp);
-        e.preventDefault();
-    }
+        const isTopLeft = isLeft && isTop;
+        const isTopRight = isRight && isTop;
+        const isBottomLeft = isLeft && isBottom;
+        const isBottomRight = isRight && isBottom;
 
-    function resizeMouseMove(e) {
-
-        resizeHandle.style.backgroundColor = "red";
-        
-        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
-
-        // Bound the size to the window
-        let x = e.clientX < 0 ? 0 : e.clientX
-        let y = e.clientY < topBound ? topBound : e.clientY
-
-        // Apply minimum constraints to prevent the overlay from disappearing or getting too small
-        const minWidth = 100; // Minimum width
-        const minHeight = 100; // Minimum height
-
-        // if min size already and shrinking
-        if (overlay.offsetWidth == minWidth && x > overlay.offsetLeft) {
-            x = overlay.offsetLeft
-        } 
-        
-        if (overlay.offsetHeight == minHeight && y > overlay.offsetTop) {
-            y = overlay.offsetTop
+        if (isTopLeft) {
+            overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
+            overlay.style.cursor = 'nwse-resize';
+        } else if (isTopRight) {
+            overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
+            overlay.style.cursor = 'nesw-resize';
+        } else if (isBottomLeft) {
+            overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
+            overlay.style.cursor = 'nesw-resize';
+        } else if (isBottomRight) {
+            overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
+            overlay.style.cursor = 'nwse-resize';
+        } else if (isRight) {
+            overlay.classList.add('resizable-right');
+            overlay.classList.remove('resizable-corner', 'resizable-bottom', 'resizable-top', 'resizable-left');
+            overlay.style.cursor = 'ew-resize';
+        } else if (isLeft) {
+            overlay.classList.add('resizable-left');
+            overlay.classList.remove('resizable-corner', 'resizable-right', 'resizable-bottom', 'resizable-top');
+            overlay.style.cursor = 'ew-resize';
+        } else if (isBottom) {
+            overlay.classList.add('resizable-bottom');
+            overlay.classList.remove('resizable-corner', 'resizable-right', 'resizable-top', 'resizable-left');
+            overlay.style.cursor = 'ns-resize';
+        } else if (isTop) {
+            overlay.classList.add('resizable-top');
+            overlay.classList.remove('resizable-corner', 'resizable-right', 'resizable-bottom', 'resizable-left');
+            overlay.style.cursor = 'ns-resize';
+        } else {
+            overlay.style.cursor = 'default';
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-corner', 'resizable-top', 'resizable-left');
         }
+    });
 
-        const newWidth = overlay.offsetWidth + (overlay.offsetLeft - x);
-        const newHeight = overlay.offsetHeight + (overlay.offsetTop - y);
+    overlay.addEventListener('mousedown', (e) => {
+        const rect = overlay.getBoundingClientRect();
+        const isRight = e.clientX > rect.right - 10 && e.clientX < rect.right + 10;
+        const isLeft = e.clientX > rect.left - 10 && e.clientX < rect.left + 10;
+        const isBottom = e.clientY > rect.bottom - 10 && e.clientY < rect.bottom + 10;
+        const isTop = e.clientY > rect.top - 10 && e.clientY < rect.top + 10;
 
-        overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
-        overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
+        const isTopLeft = isLeft && isTop;
+        const isTopRight = isRight && isTop;
+        const isBottomLeft = isLeft && isBottom;
+        const isBottomRight = isRight && isBottom;
 
-        // Adjust the overlay's top and left positions to move along with the resize handle
-        if (newWidth > minWidth) {
-            overlay.style.left = `${x}px`;
+        if (isRight || isLeft || isBottom || isTop) {
+            window.addEventListener('mousemove', resize);
+            window.addEventListener('mouseup', stopResize);
+
+            function resize(event) {
+                if (isBottomRight) {
+                    overlay.style.width = `${event.clientX - rect.left}px`;
+                    overlay.style.height = `${event.clientY - rect.top}px`;
+                } else if (isBottomLeft) {
+                    const newWidth = rect.right - event.clientX;
+                    overlay.style.width = `${newWidth}px`;
+                    overlay.style.height = `${event.clientY - rect.top}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                } else if (isTopRight) {
+                    overlay.style.width = `${event.clientX - rect.left}px`;
+                    overlay.style.height = `${rect.bottom - event.clientY}px`;
+                    overlay.style.top = `${event.clientY}px`;
+                } else if (isTopLeft) {
+                    const newWidth = rect.right - event.clientX;
+                    const newHeight = rect.bottom - event.clientY;
+                    overlay.style.width = `${newWidth}px`;
+                    overlay.style.height = `${newHeight}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
+                } else if (isRight) {
+                    overlay.style.width = `${event.clientX - rect.left}px`;
+                } else if (isLeft) {
+                    const newWidth = rect.right - event.clientX;
+                    overlay.style.width = `${newWidth}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                } else if (isBottom) {
+                    overlay.style.height = `${event.clientY - rect.top}px`;
+                } else if (isTop) {
+                    const newHeight = rect.bottom - event.clientY;
+                    overlay.style.height = `${newHeight}px`;
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
+                }
+
+                camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
+            }
+
+            function stopResize() {
+                window.removeEventListener('mousemove', resize);
+                window.removeEventListener('mouseup', stopResize);
+            }
         }
+    });
 
-        if (newHeight > minHeight) {
-            overlay.style.top = `${y}px`;
-        }
-
-        // Update camera and renderer
-        camera.aspect = newWidth / newHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(newWidth, newHeight);
-    }
-
-    function resizeMouseUp() {
-
-        resizeHandle.style.backgroundColor = "#ffe432";
-        
-        window.removeEventListener('mousemove', resizeMouseMove);
-        window.removeEventListener('mouseup', resizeMouseUp);
-    }
-
-    // if (!isMobile) {
-    // Tablet DRAG Overlay
-    dragButton.addEventListener("touchstart", (e) => {
+    // Handle touch events for dragging and resizing
+    topControls.addEventListener("touchstart", (e) => {
         isDragging = true;
-        offsetX = e.changedTouches[0].clientX;
-        offsetY = e.changedTouches[0].clientY;
-    })
+        dragStartX = e.changedTouches[0].clientX;
+        dragStartY = e.changedTouches[0].clientY;
+        const rect = overlay.getBoundingClientRect();
+        overlayStartX = rect.left;
+        overlayStartY = rect.top;
+    });
 
     document.addEventListener("touchmove", (e) => {
         if (isDragging) {
-
             let x = e.changedTouches[0].clientX;
             if (x + overlay.offsetWidth > window.innerWidth) {
                 x = window.innerWidth - overlay.offsetWidth;
             }
 
-            overlay.style.left = `${x / window.innerWidth * 100}%`;
-            overlay.style.top = `${(e.changedTouches[0].clientY) / window.innerHeight * 100}%`;
+            const newLeft = overlayStartX + (e.changedTouches[0].clientX - dragStartX);
+            const newTop = overlayStartY + (e.changedTouches[0].clientY - dragStartY);
 
-            keepInBounds()
+            overlay.style.left = `${newLeft / window.innerWidth * 100}%`;
+            overlay.style.top = `${newTop / window.innerHeight * 100}%`;
+
+            keepInBounds();
         }
     });
 
     document.addEventListener("touchend", () => {
         isDragging = false;
-    })
+    });
 
-    resizeHandle.addEventListener('touchstart', resizeTouchStart);
+    overlay.addEventListener('touchstart', (e) => {
+        const rect = overlay.getBoundingClientRect();
+        const isRight = e.changedTouches[0].clientX > rect.right - 10 && e.changedTouches[0].clientX < rect.right + 10;
+        const isLeft = e.changedTouches[0].clientX > rect.left - 10 && e.changedTouches[0].clientX < rect.left + 10;
+        const isBottom = e.changedTouches[0].clientY > rect.bottom - 10 && e.changedTouches[0].clientY < rect.bottom + 10;
+        const isTop = e.changedTouches[0].clientY > rect.top - 10 && e.changedTouches[0].clientY < rect.top + 10;
 
-    function resizeTouchStart(e) {
-        window.addEventListener('touchmove', resizeTouchMove);
-        window.addEventListener('touchend', resizeTouchEnd);
-        e.preventDefault();
-    }
+        const isTopLeft = isLeft && isTop;
+        const isTopRight = isRight && isTop;
+        const isBottomLeft = isLeft && isBottom;
+        const isBottomRight = isRight && isBottom;
 
-    function resizeTouchMove(e) {
+        if (isRight || isLeft || isBottom || isTop) {
+            window.addEventListener('touchmove', resizeTouchMove);
+            window.addEventListener('touchend', stopResizeTouch);
 
-        resizeHandle.style.backgroundColor = "red";
+            function resizeTouchMove(event) {
+                if (isBottomRight) {
+                    overlay.style.width = `${event.changedTouches[0].clientX - rect.left}px`;
+                    overlay.style.height = `${event.changedTouches[0].clientY - rect.top}px`;
+                } else if (isBottomLeft) {
+                    const newWidth = rect.right - event.changedTouches[0].clientX;
+                    overlay.style.width = `${newWidth}px`;
+                    overlay.style.height = `${event.changedTouches[0].clientY - rect.top}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                } else if (isTopRight) {
+                    overlay.style.width = `${event.changedTouches[0].clientX - rect.left}px`;
+                    overlay.style.height = `${rect.bottom - event.changedTouches[0].clientY}px`;
+                    overlay.style.top = `${event.changedTouches[0].clientY}px`;
+                } else if (isTopLeft) {
+                    const newWidth = rect.right - event.changedTouches[0].clientX;
+                    const newHeight = rect.bottom - event.changedTouches[0].clientY;
+                    overlay.style.width = `${newWidth}px`;
+                    overlay.style.height = `${newHeight}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
+                } else if (isRight) {
+                    overlay.style.width = `${event.changedTouches[0].clientX - rect.left}px`;
+                } else if (isLeft) {
+                    const newWidth = rect.right - event.changedTouches[0].clientX;
+                    overlay.style.width = `${newWidth}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                } else if (isBottom) {
+                    overlay.style.height = `${event.changedTouches[0].clientY - rect.top}px`;
+                } else if (isTop) {
+                    const newHeight = rect.bottom - event.changedTouches[0].clientY;
+                    overlay.style.height = `${newHeight}px`;
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
+                }
 
-        const topBound = document.getElementsByClassName('navbar')[0].offsetHeight;
+                camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
+            }
 
-        // Bound the size to the window
-        let x = e.changedTouches[0].clientX < 0 ? 0 : e.changedTouches[0].clientX
-        let y = e.changedTouches[0].clientY < topBound ? topBound : e.changedTouches[0].clientY
-
-        // Apply minimum constraints to prevent the overlay from disappearing or getting too small
-        const minWidth = 100; // Minimum width
-        const minHeight = 100; // Minimum height
-
-        // if min size already and shrinking
-        if (overlay.offsetWidth == minWidth && x > overlay.offsetLeft) {
-            x = overlay.offsetLeft
-        } 
-        
-        if (overlay.offsetHeight == minHeight && y > overlay.offsetTop) {
-            y = overlay.offsetTop
+            function stopResizeTouch() {
+                window.removeEventListener('touchmove', resizeTouchMove);
+                window.removeEventListener('touchend', stopResizeTouch);
+            }
         }
-
-        const newWidth = overlay.offsetWidth + (overlay.offsetLeft - x);
-        const newHeight = overlay.offsetHeight + (overlay.offsetTop - y);
-
-        overlay.style.width = `${Math.max(newWidth, minWidth)}px`;
-        overlay.style.height = `${Math.max(newHeight, minHeight)}px`;
-
-        // Adjust the overlay's top and left positions to move along with the resize handle
-        if (newWidth > minWidth) {
-            overlay.style.left = `${x}px`;
-        }
-
-        if (newHeight > minHeight) {
-            overlay.style.top = `${y}px`;
-        }
-
-        // Update camera and renderer
-        camera.aspect = newWidth / newHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(newWidth, newHeight);
-    }
-    
-    function resizeTouchEnd(e) {
-
-        resizeHandle.style.backgroundColor = "#ffe432";
-
-        window.removeEventListener('touchmove', resizeTouchMove);
-        window.removeEventListener('touchend', resizeTouchEnd);
-    }
-    // } else {
-    //     // mobile view size
-    //     overlay.style.left = "0%"
-    //     overlay.style.top = "66%"
-    //     overlay.style.width = "100%"
-    //     overlay.style.height = "33%"
-    // }
+    });
 
     const sceneContainer = document.createElement('div');
     sceneContainer.id = 'overlayScene';
@@ -274,20 +300,20 @@ export function createOverlay() {
     sceneContainer.style.height = '100%';
     overlay.appendChild(sceneContainer);
 
-    // Initialize the Three.js scene
-    // const scene = new THREE.Scene();
     const scene = SceneState.value.scene;
+    scene.background = new THREE.Color(0x000000); // Hexadecimal color value
+    // scene.background = new THREE.Color(0x121212); // Hexadecimal color value
+
     const camera = new THREE.PerspectiveCamera(75, sceneContainer.offsetWidth / sceneContainer.offsetHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    
-    // Calculate dimensions based on the viewport size
-    const initialWidth = window.innerWidth * 0.25; // 25% of the viewport width
-    const initialHeight = window.innerHeight * 0.5; // 50% of the viewport height
+
+    const initialWidth = window.innerWidth * 0.25;
+    const initialHeight = window.innerHeight * 0.5;
 
     camera.aspect = initialWidth / initialHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(initialWidth, initialHeight);
-    
+
     renderer.render(scene, camera);
     sceneContainer.appendChild(renderer.domElement);
 
@@ -295,13 +321,10 @@ export function createOverlay() {
     camera.position.y = ButtonState.value.cameraUmapPositionY;
     camera.position.z = ButtonState.value.cameraUmapPositionZ;
 
-    // Add orbit controls to the camera
     const controls = new OrbitControls(camera, renderer.domElement);
 
-    // Disable the rotation of the camera
     controls.enableRotate = false;
 
-    // Set left mouse button for panning instead of rotating
     controls.mouseButtons = {
         LEFT: THREE.MOUSE.PAN,
         MIDDLE: THREE.MOUSE.DOLLY,
@@ -311,30 +334,24 @@ export function createOverlay() {
     controls.touches = {
         ONE: THREE.TOUCH.PAN,
         TWO: THREE.TOUCH.DOLLY_PAN
-    }
+    };
 
-    // Make the camera look at the object
     camera.lookAt(10000, 0, 10);
-
-    // Set the controls target to the position you want the camera to focus on
     controls.target.set(10000, 0, 10);
 
-    // Update the controls to apply the changes
     controls.update();
     renderer.render(scene, camera);
 
     function animate() {
         requestAnimationFrame(animate);
-        // controls.update();
         renderer.render(scene, camera);
     }
 
     animate();
 
-    // if clips out of bounds
     window.addEventListener('resize', () => {
-        keepInBounds()
-    })
+        keepInBounds();
+    });
 
     return overlay;
 }

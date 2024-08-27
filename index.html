@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no" />
-    <title>FISHEYES</title>
+    <title>MERFISHEYES</title>
 
     <link rel="stylesheet" href="src/ui/Overlay/Overlay.css">
     <link rel="stylesheet" href="index.css">
@@ -30,6 +30,9 @@
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
     <script type="module" src="/src/main.js"></script>
+    <link rel="stylesheet" href="/src/ui/SVGs/svgImages.css">
+
+    
 
     <script type="module">
         import { loadPrefixOptions, selectPrefix } from "/src/helpers/Prefix.js";
@@ -69,6 +72,13 @@
             })
         })
 
+        // $(function () {
+        //     $(".svg-images-container").load("/src/ui/SVGs/svgImages.html", () => {
+        //         console.log("SVG Images loaded");
+        //     });
+        // });
+
+
         // sets it to async so it executes last
         setInterval(() => {
             document.querySelectorAll('body *').forEach(function (element) {
@@ -77,20 +87,27 @@
             })
         }, 0)
     </script>
+    
 </head>
 
 <body>
     <!-- navbar container -->
-    <nav class="sidenav navbar navbar-expand-lg navbar-dark bg-dark" data-mdb-sidenav-init data-mdb-right="true"></nav>
+    <nav class="sidenav navbar navbar-expand-lg navbar-dark" data-mdb-sidenav-init data-mdb-right="true"></nav>
     <!-- filter and toggles -->
     <div class="filter"></div>
     <!-- showing container -->
     <div class="showing-container"></div>
+    <!-- SVG images container -->
+    <!-- <div class="svg-images-container"></div> -->
+
 
     <!-- ColorBar -->
     <div class="colorbar-wrapper" id="colorbar-wrapper">
 
     </div>
+
+    <div id="tooltip-hover"></div>
+
     
 
     <footer>

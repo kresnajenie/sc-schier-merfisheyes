@@ -9,7 +9,7 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
         // console.log("ATACATACATACATACATACATACATAC")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
         // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
-        response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
+        response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac_new.csv`);
 
     }   else {
         // console.log("MATRIXMATRIXMATRIXMATRIXMATRIXMATRIX")

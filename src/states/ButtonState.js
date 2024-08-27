@@ -9,6 +9,9 @@ const buttonData = {
     umapOffset: 10000,
     cameraUmapPositionY: 0,
     cameraUmapPositionZ: 400,
+    violinOffset: -10000,
+    cameraViolinPositionY: 0,
+    cameraViolinPositionZ: 400,
 }
 
 export const ButtonState = new BehaviorSubject(buttonData);

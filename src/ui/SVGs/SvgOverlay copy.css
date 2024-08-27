@@ -1,14 +1,12 @@
-.overlay {
+.svg-overlay {
     position: absolute;
-    right: 10px; /* Position it to stick to the left */
-    bottom: 10px;
+    left: 10px; /* Position it to stick to the left */
+    bottom: 10px; /* Stick to the top */
     width: 25%; /* Set width to 25% of the screen width */
     height: 50%; /* Set height to 50% of the screen height */
-    /* background-color: #121212; */
     background-color: black;
     border: 5px solid #90909000;
     z-index: 10;
-    /* box-shadow: 0 4px 8px #ba9ffb, 0 6px 20px #ba9ffb; */
     box-shadow: #8b8b8b 0px 0px 5px 0px;
     border-radius: 20px;
     padding: 5px;
@@ -19,43 +17,39 @@
     box-sizing: border-box;
 }
 
-
-.overlay.resizing {
+.svg-overlay.resizing {
     cursor: nwse-resize;
 }
 
-.overlay:hover {
+.svg-overlay:hover {
     cursor: default;
 }
 
-.overlay:hover::before {
+.svg-overlay:hover::before {
     content: "";
     position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
+
     border-radius: inherit; /* Apply the same border-radius */
     pointer-events: none;
 }
 
-.overlay:hover:before {
+.svg-overlay:hover:before {
     cursor: pointer;
 }
 
-.overlay:hover:before {
+.svg-overlay:hover:before {
     pointer-events: none;
 }
 
-.overlay.resizable-right {
+.svg-overlay.resizable-right {
     cursor: ew-resize;
 }
 
-.overlay.resizable-bottom {
+.svg-overlay.resizable-bottom {
     cursor: ns-resize;
 }
 
-.overlay.resizable-corner {
+.svg-overlay.resizable-corner {
     cursor: nwse-resize;
 }
 
@@ -76,7 +70,6 @@
     width: 150px; /* Expand width when hovered */
     background-color: #5e43f3;
     transform: translateX(-50%) scale(1.2); /* Slightly scale down */
-
 }
 
 .top-controls:active {

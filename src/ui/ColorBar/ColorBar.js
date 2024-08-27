@@ -1,3 +1,6 @@
+import { act } from "@react-three/fiber";
+import { SelectedState } from "../../states/SelectedState";
+
 export function setLabels(min,max) {
     const topLabel = document.getElementById('top-label');
     const bottomLabel = document.getElementById('bottom-label');
@@ -5,17 +8,35 @@ export function setLabels(min,max) {
     // console.log("KONTOTLOBNTONTONTOTONTONTONTONLLLLLLLLL")
     // console.log(topLabel)
     // console.log(bottomLabel)
+    let selectedGene = SelectedState.value.selectedGenes;
+    let isImputed = false;
 
-    let actual_max = max;
-    if (max < 1) {
-        actual_max = max.toExponential(1); // 1 specifies the number of digits after the decimal point
+
+    if (selectedGene != []) {
+        try {
+            isImputed = selectedGene[0].split("_")[1] == "imputed";
+        } catch {
+            isImputed = false;
+        }
+    }
+    const FACTOR = 36.75
+
+    console.log(max)
+    console.log("IMPUTED KAHH:", isImputed)
+
+    
+    let actualMax = isImputed ? max * FACTOR : max;
+    let actualMax2;
+
+    if (actualMax < 1) {
+        actualMax2 = actualMax.toExponential(1); // 1 specifies the number of digits after the decimal point
     } else {
-        actual_max = Math.round(max);
+        actualMax2 = Math.round(actualMax);
     }
     
     // Check if the elements exist before setting the text content
     if (topLabel && bottomLabel) {
-        topLabel.textContent = actual_max;
+        topLabel.textContent = actualMax2;
         bottomLabel.textContent = min;
     } else {
         console.error("Labels not found in the DOM.");

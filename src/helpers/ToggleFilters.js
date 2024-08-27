@@ -23,9 +23,9 @@ export const toggleCellFilter = () => {
         toggleCellCheckbox.style.color = 'black';
 
         // clear other toggle's style
-        toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleGeneRadio.style.backgroundColor = '#282828';
         toggleGeneRadio.style.color = 'white';
-        toggleATACRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleATACRadio.style.backgroundColor = '#282828';
         toggleATACRadio.style.color = 'white';
 
         // check if gene checkbox is visible, if yes disable it
@@ -39,7 +39,8 @@ export const toggleCellFilter = () => {
 
         // reset it if clicked again
         if (cellCheckbox.style.display === 'none') {
-            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            // toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.backgroundColor = '#282828';
             toggleCellCheckbox.style.color = 'white';
         }
     });
@@ -65,9 +66,9 @@ export const toggleGeneFilter = () => {
         toggleGeneRadio.style.color = 'black';
 
         // clear other toggle's style
-        toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleCellCheckbox.style.backgroundColor = '#282828';
         toggleCellCheckbox.style.color = 'white';
-        toggleATACRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleATACRadio.style.backgroundColor = '#282828';
         toggleATACRadio.style.color = 'white';
 
         // check if cell checkbox is visible, if yes disable it
@@ -81,7 +82,7 @@ export const toggleGeneFilter = () => {
 
         // reset it if clicked again
         if (geneRadioContainer.style.display === 'none') {
-            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.backgroundColor = '#282828';
             toggleGeneRadio.style.color = 'white';
         }
     })
@@ -108,9 +109,9 @@ export const toggleAtacFilter = () => {
         toggleATACRadio.style.color = 'black';
 
         // clear other toggle's style
-        toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleCellCheckbox.style.backgroundColor = '#282828';
         toggleCellCheckbox.style.color = 'white';
-        toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+        toggleGeneRadio.style.backgroundColor = '#282828';
         toggleGeneRadio.style.color = 'white';
 
 
@@ -125,7 +126,7 @@ export const toggleAtacFilter = () => {
 
         // reset it if clicked again
         if (atacRadioContainer.style.display === 'none') {
-            toggleATACRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleATACRadio.style.backgroundColor = '#282828';
             toggleATACRadio.style.color = 'white';
         }
     })
@@ -186,12 +187,12 @@ export const toggleButton = () => {
 
         if (cellCheckbox.style.display === 'block') {
             cellCheckbox.style.display = 'none';
-            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.backgroundColor = '#282828';
             toggleCellCheckbox.style.color = 'white';
         }
         if (geneRadioContainer.style.display === 'block') {
             geneRadioContainer.style.display = 'none';
-            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.backgroundColor = '#282828';
             toggleGeneRadio.style.color = 'white';
         }
         if (geneSliderBox.style.display === 'block') {
@@ -236,12 +237,13 @@ export const toggleButton = () => {
 
         if (cellCheckbox.style.display === 'block') {
             cellCheckbox.style.display = 'none';
-            toggleCellCheckbox.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleCellCheckbox.style.backgroundColor = '#282828';
             toggleCellCheckbox.style.color = 'white';
         }
+        ALLOWED_ORIGINS="https://roymaimonel.merfisheyes.com,https://fishies.techkyra.com,https://lji.techkyra.com,http://localhost:5173,https://roy.techkyra.com"
         if (geneRadioContainer.style.display === 'block') {
             geneRadioContainer.style.display = 'none';
-            toggleGeneRadio.style.backgroundColor = 'rgb(97, 97, 97)';
+            toggleGeneRadio.style.backgroundColor = '#282828';
             toggleGeneRadio.style.color = 'white';
         }
         if (pointSizeSliderBox.style.display === 'block') {

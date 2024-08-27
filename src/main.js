@@ -9,9 +9,11 @@ import { createLoadingIndicator } from './ui/Loading/Loading.js';
 import { createOverlay } from './ui/Overlay/Overlay.js';
 import { atacSearch, clearAtacs, enterAtacs, createAtacRadio } from './helpers/Filtering/Atac.js';
 import {addBoxes} from './helpers/ATACPlot/Peaks.js'
+// import { createSvgOverlay } from './ui/SVGs/SvgOverlay.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     createOverlay();
+    // createSvgOverlay();
     const loading = createLoadingIndicator();
 
     document.body.appendChild(loading);
@@ -81,12 +83,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         atacSearch();
 
         const sceneContainer = document.body;
+        
         new SceneInitializer(sceneContainer);
 
     } catch (err) {
         console.error('Failed to load data:', err);
     } finally {
         console.log("GAAA KESINSINI YAA")
-        // updateLoadingState(false); // Loading ends after all async operations
+        updateLoadingState(false); // Loading ends after all async operations
     }
 });

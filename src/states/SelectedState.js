@@ -11,7 +11,23 @@ const selectedData = {
     selectedGenes: [],
     selectedAtacs: [],
     intervalsData: [],
-    showing: "celltype"
+    geneGenomeHover: false,
+    showing: "celltype",
+    selectedGenesPrev: []
+}
+
+export function updateGeneGenomeHover(isHovering) {
+    // Get the current state from the BehaviorSubject
+    const currentState = SelectedState.getValue();
+
+    // Update the geneGenomeHover in the current state
+    const updatedState = {
+        ...currentState,
+        geneGenomeHover: isHovering
+    };
+
+    // Emit the updated state
+    SelectedState.next(updatedState);
 }
 
 export function updateSelectedShowing(newShowing) {
@@ -107,32 +123,42 @@ export function updateSelectedSingleGene(newSingleGene) {
  * updateGenes("gene1");
  */
 export function updateSelectedGene(newGenes) {
+    // Handle undefined in newGenes
+    if (newGenes.includes(undefined)) {
+        newGenes = []; // Convert to an empty list
+    }
+
     // Get the current state from the BehaviorSubject
     const currentState = SelectedState.getValue();
-    const oldGenes = currentState.selectedGenes
+    const oldGenes = currentState.selectedGenes;
+
+    // Uncheck the radio button of the previously selected gene
     if (oldGenes.length > 0) {
         const radioButton = document.getElementById(oldGenes[0]);
-        console.log(radioButton)
         if (radioButton) {
             radioButton.checked = false; // Uncheck the radio button
         }
     }
 
-    // Update the items in the current state
+    // Update the state with new genes and store the old genes in selectedGenesPrev
     const updatedState = {
         ...currentState,
-        selectedGenes: newGenes
+        selectedGenes: newGenes,
+        selectedGenesPrev: oldGenes
     };
 
-    const radioButtonNew = document.getElementById(newGenes[0]);
-    console.log(radioButtonNew)
-    if (radioButtonNew) {
-        radioButtonNew.checked = true; // Uncheck the radio button
+    // Check the radio button of the newly selected gene
+    if (newGenes.length > 0) {
+        const radioButtonNew = document.getElementById(newGenes[0]);
+        if (radioButtonNew) {
+            radioButtonNew.checked = true; // Check the radio button
+        }
     }
 
     // Emit the updated state
     SelectedState.next(updatedState);
 }
+
 
 export function updateSelectedSingleAtac(newSingleAtac) {
     // Get the current state from the BehaviorSubject
@@ -156,6 +182,12 @@ export function updateSelectedSingleAtac(newSingleAtac) {
  */
 export function updateSelectedAtac(newAtacs) {
     // Get the current state from the BehaviorSubject
+    if (newAtacs.includes(undefined)) {
+        newAtacs = []; // Convert to an empty list
+    }
+
+    // Get the current state from the BehaviorSubject
+    console.log(newAtacs);
     const currentState = SelectedState.getValue();
     const oldAtacs = currentState.selectedAtacs
     if (oldAtacs.length > 0) {

@@ -29,9 +29,8 @@
 }
 
 .toggles {
-  background-color: rgb(97, 97, 97);
   color: white;
-
+  background-color: #282828;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,11 +55,10 @@
 .checkbox-container {
   gap: 5px;
 
-  background-color: rgba(0, 0, 0, 0.8);
-
+  background-color: #121212;
   border: rgba(58, 58, 58, 0.5) solid;
   padding: 0px 10px 10px 10px;
-  border-radius: 5px;
+  border-radius: 20px;
   max-height: 40vh; /* Set maximum height relative to viewport */
   width: 350px;
   scrollbar-color: dark;
@@ -83,9 +81,10 @@
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
+  background-color: #121212;
 
   height: fit-content;
-  background-color: black;
+  /* background-color: black; */
 
   display: flex;
   flex-direction: column;
@@ -151,7 +150,7 @@
 }
 
 .iconBtn {
-  background-color: rgb(97, 97, 97);
+  background-color: #282828;
   color: white;
 
   justify-content: center;
@@ -175,7 +174,7 @@
 }
 
 .descBox {
-  background-color: #ffffff28;
+  background-color: #282828;
   border-radius: 10px;
   /* border: 1px solid #ccc; */
   color: rgb(255, 255, 255);
@@ -202,13 +201,10 @@
 
 .slider-container {
   width: 200px;
-  background-color: #f9f9f9;
+  background-color: #282828;
   align-items: center;
   text-align: center;
   gap: 5px;
-
-  background-color: rgba(0, 0, 0, 0.8);
-
   border: rgba(58, 58, 58, 0.5) solid;
   padding: 0px 10px 10px 10px;
   border-radius: 5px;

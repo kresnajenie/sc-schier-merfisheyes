@@ -1,13 +1,14 @@
-// /src/components/SceneInitializer.js
 import * as THREE from 'three';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { LinearFilter, LinearMipMapLinearFilter, TextureLoader, PlaneGeometry, MeshBasicMaterial, Mesh } from 'three';
 import { MatrixState } from '../states/MatrixState.js';
 import { ApiState } from '../states/ApiState.js';
 import { SceneState } from '../states/SceneState.js';
 import { UIState, updateLoadingState } from '../states/UIState.js';
 import { SelectedState, updateSelectedInterval, updateSelectedShowing } from '../states/SelectedState.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { isEqual } from 'lodash';
-import { map, distinctUntilChanged, tap } from 'rxjs/operators';
+import { isEqual, padEnd } from 'lodash';
+import { map, distinctUntilChanged, tap, skip } from 'rxjs/operators';
 import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
 import { showCellFilters } from '../helpers/Filtering/Celltype.js';
@@ -17,19 +18,23 @@ import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers
 import { changeURL } from '../helpers/URL.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { fetchIntervalGene } from '../helpers/APIClient.js';
+// import { fetchIntervalGene } from '../helpers/APIClient.js';
 // import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
 import { updateBadge } from '../ui/Showing/Showing.js';
 import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
+import { getInterval } from '../helpers/ATACPlot/Peaks.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
 
+const mouse = new THREE.Vector2();
 
 
 export class SceneInitializer {
     constructor(container) {
 
+
+        // Raycaster for detecting mouse hover
         this.container = container;
         this.instancedMesh;
         this.instancedMeshUmap;
@@ -77,10 +82,64 @@ export class SceneInitializer {
 
         });
     };
+
+    plotImage(fileUrl, width = 10, height = 10, position = { x: 0, y: 0, z: 0 }) {
+        const loader = new THREE.TextureLoader();
+        
+        loader.load(fileUrl, (texture) => {
+            texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+            texture.minFilter = LinearMipMapLinearFilter;
+            texture.magFilter = LinearFilter;
+            texture.generateMipmaps = true;
+    
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const geometry = new THREE.PlaneGeometry(width, height);
+            const plane = new THREE.Mesh(geometry, material);
+            
+            plane.position.set(position.x, position.y, position.z);
+            
+            this.scene.add(plane);
+        });
+    }
+
+    plotSVG(fileUrl, scale = 1, position = { x: 0, y: 0, z: 0 }) {
+        const loader = new SVGLoader();
+    
+        loader.load(fileUrl, (data) => {
+            const paths = data.paths;
+            const group = new THREE.Group();
+            
+            paths.forEach((path) => {
+                const material = new THREE.MeshBasicMaterial({
+                    color: path.color,
+                    side: THREE.DoubleSide,
+                    depthWrite: false
+                });
+    
+                const shapes = SVGLoader.createShapes(path);
+                shapes.forEach((shape) => {
+                    const geometry = new THREE.ShapeGeometry(shape);
+                    const mesh = new THREE.Mesh(geometry, material);
+                    group.add(mesh);
+                });
+            });
+    
+            group.scale.set(scale, scale, scale);
+            group.position.set(position.x, position.y, position.z);
+    
+            this.scene.add(group);
+        });
+    }
+    
     
 
     initScene() {
         this.scene = SceneState.value.scene;
+
+        // Set the background color to a solid color (e.g., black)
+        this.scene.background = new THREE.Color(0x000000); // Hexadecimal color value
+        // this.plotImage('/src/assets/images/C_6s_ackr3b_measured.png', 1000, 1000/3.2, { x: -10000, y: 0, z: 0 });
+        // this.plotSVG('/src/assets/images/C_6s_ackr3b_measured.svg', 0.1, { x: -10000, y: 0, z: 0 });
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
@@ -99,6 +158,8 @@ export class SceneInitializer {
         }
         this.camera.position.z = ButtonState.value.cameraPositionZ;
 
+
+        // Example usage inside SceneInitializer
 
         
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -119,78 +180,57 @@ export class SceneInitializer {
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
+
     }
 
     subscribeToStateChanges() {
         MatrixState.pipe(
             map(state => state.items),
-            // If you want to deep compare array objects, you might replace the next line with a custom comparison function
-            distinctUntilChanged((prev, curr) => isEqual(prev, curr))
+            distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
+            skip(1)
         ).subscribe(items => {
             console.log('Items have updated:');
-            // console.log(MatrixState.value.items);
-            // Here you can handle the update, e.g., update UI components to reflect the new items array
+            // Handle the update
         });
-
+    
         ApiState.pipe(
             map(state => state.prefix),
-            distinctUntilChanged((prev, curr) => isEqual(prev, curr))
+            distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
         ).subscribe(items => {
             console.log("Prefix changed:", items);
-            // console.log(ApiState.value.prefix);
-
             const prefix = document.getElementById("dropdownMenuButton");
             prefix.innerText = ApiState.value.prefix;
         });
-
+    
         UIState.pipe(
             map(state => state.isLoading),
-            distinctUntilChanged((prev, curr) => isEqual(prev, curr))
+            distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
+            skip(1)
         ).subscribe(items => {
             console.log("Loading changed:", items);
-            // console.log(UIState.value.isLoading);
-
             loading(UIState.value.isLoading);
         });
-
-        // listens for changing celltype
+    
         SelectedState.pipe(
             map(state => state.selectedCelltypes),
-            distinctUntilChanged((prev, curr) => prev.join() === curr.join())
+            distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
+            skip(1)
         ).subscribe(async items => {
             console.log("Selected celltypes changed:", items);
-            // console.log(SelectedState.value.selectedCelltypes);
-
             updateLoadingState(true);
-
-            // if (SelectedState.value.selectedGenes.length == 0 && SelectedState.value.selectedGenes.length == 0) {
-            //     updateBadge("celltype")
-            // }
-
             await this.updateInstancedMesh("selectedCelltype");
-
             updateLoadingState(false);
-
             showCellFilters();
-
+    
             if (SelectedState.value.selectedCelltypes.length > 0) {
                 const newCelltype = encodeURIComponent(JSON.stringify(SelectedState.value.selectedCelltypes));
-                
-                // params not in celltype
-                if (params.has("celltype")) {
-                    params.set("celltype", newCelltype)
-                } else {
-                    params.append("celltype", newCelltype)
-                }
-            
-            // there's no celltypes selected
+                params.set("celltype", newCelltype);
             } else {
                 params.delete("celltype");
             }
-
             changeURL(params);
         });
-
+    
         SelectedState.pipe(
             map(state => state.selectedGenes),
             tap((curr, index) => {
@@ -198,181 +238,98 @@ export class SceneInitializer {
                     console.log("Previous selected genes:", prev);
                     console.log("Current selected genes:", curr);
                 }
-                // prev = curr;
             }),
-            distinctUntilChanged((prev, curr) => prev.join() === curr.join())
+            distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
+            skip(1)
         ).subscribe(async items => {
             console.log("Selected genes changed:", items);
-            // console.log(SelectedState.value.selectedGenes);
-
             if (SelectedState.value.mode === 2) {
                 showSelectedGeneFilters();
             } 
-
             updateLoadingState(true);
-            // console.log("ANJINGNGINGIGNGING")
             clearAtacs();
-
-
-
             showGeneFilters();
-
-            // if (SelectedState.value.selectedGenes.length > 0 && SelectedState.value.selectedGenes.length == 0) {
-            //     updateBadge("gene")
-            // }
-
             if (SelectedState.value.selectedGenes.length > 0) {
-                // hype boy
-                console.log("BANGABNGABNGBANG")
-                console.log(SelectedState.value.selectedGenes)
-
-                // Assuming SelectedState.value.selectedGenes[0] contains the string value
                 let selectedGene = SelectedState.value.selectedGenes[0];
-
-                // Split the string by underscore and get the first element
                 let firstElement = selectedGene.split('_')[0];
-
-                console.log(firstElement);
-
-                if (ApiState.value.prefix == "6s") {
-                    try {
-                        const interval = await fetchIntervalGene(firstElement);
-                        updateSelectedInterval(interval["intervals"])
-                    } catch (error) {
-                        console.error('Error fetching interval gene:', error);
-                    }
+                console.log(SelectedState.value.geneGenomeHover)
+                if (ApiState.value.prefix == "6s" && SelectedState.value.geneGenomeHover == false) {
+                    getInterval(firstElement);
                 }
-
                 const newGenes = encodeURIComponent(JSON.stringify(SelectedState.value.selectedGenes));
-                params.append("gene", newGenes)
-
-                // params not in celltype
-                if (params.has("gene")) {
-                    params.set("gene", newGenes)
-                } else {
-                    params.append("gene", newGenes)
-                }
-
-            
-            // there's no genes selected
+                params.set("gene", newGenes);
             } else {
-                console.log("ASSALAM")
-                
                 params.delete("gene");
             }
-
             await this.updateInstancedMesh("selectedGene");
-
-
-
-
             changeURL(params);
             updateLoadingState(false);
-
         });
-
+    
         SelectedState.pipe(
             map(state => state.selectedAtacs),
-            distinctUntilChanged((prev, curr) => prev.join() === curr.join())
+            distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
+            skip(1)
         ).subscribe(async items => {
             console.log("Selected atacs changed:", items);
-            // console.log(SelectedState.value.selectedGenes);
             clearGenes();
-
             if (SelectedState.value.mode === 2) {
                 showSelectedAtacFilters();
             }
-
             updateLoadingState(true);
-
-
-
             showAtacFilters();
-
             if (SelectedState.value.selectedAtacs.length > 0) {
-                // updateBadge("atac")
-                // hype boy
                 const newAtacs = encodeURIComponent(JSON.stringify(SelectedState.value.selectedAtacs));
-                params.append("atac", newAtacs)
-
-                // params not in celltype
-                if (params.has("atac")) {
-                    params.set("atac", newAtacs)
-                } else {
-                    params.append("atac", newAtacs)
-                }
-            
-            // there's no genes selected
+                params.set("atac", newAtacs);
             } else {
                 params.delete("atac");
             }
-
             await this.updateInstancedMesh("selectedAtac");
-
-
             changeURL(params);
             updateLoadingState(false);
-
         });
-
-        // SelectedState.pipe(
-        //     map(state => state.showing),
-        //     distinctUntilChanged()
-        // ).subscribe(item => {
-        //     console.log("Selected showing changed:", item);
-            // updateBadge(item)
-        // });
-
-        SelectedState.pipe(
-            map(state => state.mode),
-            distinctUntilChanged()
-        ).subscribe(items => {
-            console.log("Selected genes changed:", items);
-
-            if (params.has("mode")) {
-                params.set("mode", items)
-            } else {
-                params.append("mode", items);
-            }
-
-            changeURL(params);
-        });
-
-        // listen for changing dotsize
-
+    
         ButtonState.pipe(
             map(state => state.dotSize),
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            skip(1)
         ).subscribe(async items => {
             console.log("Dot Size Changed:", items);
-            // console.log(ButtonState.value.dotSize);
-
             updateLoadingState(true);
-
             await this.updateInstancedMesh("dotSize");
-
             updateLoadingState(false);
         });
-
+    
         ButtonState.pipe(
             map(state => state.genePercentile),
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            skip(1)
         ).subscribe(async items => {
             console.log("Gene Percentile", items);
-            // console.log(ButtonState.value.genePercentile);
-
             updateLoadingState(true);
-
             await this.updateInstancedMesh("genePercentile");
-
             updateLoadingState(false);
-        })
+        });
+    
+        SelectedState.pipe(
+            map(state => state.mode),
+            distinctUntilChanged(),
+            skip(1)
+        ).subscribe(items => {
+            console.log("Selected genes changed:", items);
+            params.set("mode", items);
+            changeURL(params);
+        });
     }
 
     async updateInstancedMesh(where) {
         console.log("^^^^^^^^^")
         console.log(where)
         console.log("^^^^^^^^^")
+
+        console.log("PALETTTE")
+
+
 
         // Clear existing mesh
         if (this.instancedMesh) {
@@ -389,6 +346,9 @@ export class SceneInitializer {
 
         let pallete = ApiState.value.pallete;
         let jsonData = MatrixState.value.items;
+
+        const keys = Object.keys(pallete);
+
 
         const sphereGeometry = new THREE.SphereGeometry(0.1, 16, 16);
 
@@ -428,6 +388,7 @@ export class SceneInitializer {
         let nmax1 = 1;
 
         if (atacs.length > 0) {
+            console.log("ASSALAM")
             try {
                 let count1 = await getAtac(atacs[0]);
                 if (atacs.length == 2) {
@@ -461,11 +422,11 @@ export class SceneInitializer {
             }
         }
 
-        console.log("KESINI KANNNN")
-        console.log(nmax1);
         setLabels(0, nmax1);
 
-
+        // Create a mesh for each key in the JSON object
+        // console.log(jsonData)
+        
         for (let i = 0; i < count; i++) {
             
             if (atacs.length > 0) {
@@ -557,17 +518,17 @@ export class SceneInitializer {
 
             let offset = ButtonState.value.umapOffset;
 
-            umap.position.set(jsonData[i]["X_umap0_norm"] * 300 + offset - 25, jsonData[i]["X_umap1_norm"] * 300, 10);
+            umap.position.set(jsonData[i]["X_umap0_norm"] * 300 + offset, jsonData[i]["X_umap1_norm"] * 300, 0);
             umap.updateMatrix();
             this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
             this.instancedMeshUmap.setColorAt(i, color);
         }
 
-        console.log(atacs);
+        // console.log(atacs);
 
         if (atacs.length > 0) {
 
-                console.log("EMG KESINI BANG")
+                // console.log("EMG KESINI BANG")
                 updateBadge("atac")
                 showColorbar();
             } else if (genes.length > 0) {
@@ -587,7 +548,6 @@ export class SceneInitializer {
 
         this.scene.add(this.instancedMeshUmap);
     }
-
 
     animate = () => {
         requestAnimationFrame(this.animate);
@@ -611,7 +571,7 @@ export class SceneInitializer {
         // }
         // console.log(this.camera.position)
 
-        this.instancedMesh.instanceMatrix.needsUpdate = true; // Important!
+        // this.instancedMesh.instanceMatrix.needsUpdate = true; // Important!
         this.renderer.render(this.scene, this.camera);
     }
 }

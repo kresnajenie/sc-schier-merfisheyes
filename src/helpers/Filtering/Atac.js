@@ -191,7 +191,7 @@ export const clearAtacs = () => {
         // createGeneRadio(ApiState.value.genes.slice(0,1000))
 
         // geneTextbox.value = ''; // clears search field
-
+        updateSelectedAtac([]);
 
         atacTextbox.value = ''; // clears search field
     });
