@@ -77,6 +77,40 @@
   border-radius: 20px;
 }
 
+.violin-container {
+  display: none;
+  width: 75%;
+  height: 40vh;
+  overflow-y: auto;
+  scrollbar-color: dark;
+  background-color: #121212;
+  border: rgba(58, 58, 58, 0.5) solid;
+  padding: 0px 10px 10px 10px;
+  border-radius: 20px;
+}
+
+.violin-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.violin-container::-webkit-scrollbar-thumb {
+  background-color: rgb(65, 65, 65);
+  border-radius: 20px;
+}
+
+.no-violin-container {
+  display: none;
+  color: white;
+  width: 75%;
+  height: 10vh;
+  overflow-y: auto;
+  scrollbar-color: dark;
+  background-color: #121212;
+  border: rgba(58, 58, 58, 0.5) solid;
+  padding: 0px 10px 10px 10px;
+  border-radius: 20px;
+}
+
 .input-elements {
   position: -webkit-sticky; /* Safari */
   position: sticky;

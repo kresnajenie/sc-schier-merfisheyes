@@ -5,10 +5,15 @@ export const toggleCellFilter = () => {
     const cellCheckbox = document.getElementById("cellCheckbox");
     const geneRadioContainer = document.getElementById('geneRadioContainer');
     const atacRadioContainer = document.getElementById('atacRadioContainer');
+    
+    const violinContainer = document.getElementById('violinContainer');
+    const noViolinContainer = document.getElementById('noViolinContainer');
 
     const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
     const toggleGeneRadio = document.getElementById('toggleGeneRadio');
     const toggleATACRadio = document.getElementById('toggleATACRadio');
+
+    const toggleViolinRadio = document.getElementById('toggleViolinRadio');
 
     toggleCellCheckbox.addEventListener('click', () => {
 
@@ -27,6 +32,10 @@ export const toggleCellFilter = () => {
         toggleGeneRadio.style.color = 'white';
         toggleATACRadio.style.backgroundColor = '#282828';
         toggleATACRadio.style.color = 'white';
+        toggleViolinRadio.style.backgroundColor = '#282828';
+        toggleViolinRadio.style.color='white';
+        toggleViolinRadio.style.backgroundColor = '#282828';
+        toggleViolinRadio.style.color = 'white';
 
         // check if gene checkbox is visible, if yes disable it
         if (geneRadioContainer.style.display === 'block') {
@@ -36,6 +45,12 @@ export const toggleCellFilter = () => {
         if (atacRadioContainer.style.display === 'block') {
             atacRadioContainer.style.display = 'none';
         }
+
+        if (violinContainer.style.display === 'block' || noViolinContainer.style.display === 'block') {
+            violinContainer.style.display = 'none';
+            noViolinContainer.style.display = 'none';
+        }
+
 
         // reset it if clicked again
         if (cellCheckbox.style.display === 'none') {
@@ -53,9 +68,14 @@ export const toggleGeneFilter = () => {
     const geneRadioContainer = document.getElementById('geneRadioContainer');
     const atacRadioContainer = document.getElementById('atacRadioContainer');
 
+    const violinContainer = document.getElementById('violinContainer');
+    const noViolinContainer = document.getElementById('noViolinContainer');
+
     const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
     const toggleGeneRadio = document.getElementById('toggleGeneRadio');
     const toggleATACRadio = document.getElementById('toggleATACRadio');
+    const toggleViolinRadio = document.getElementById('toggleViolinRadio');
+
 
     toggleGeneRadio.addEventListener('click', () => {
         
@@ -70,6 +90,8 @@ export const toggleGeneFilter = () => {
         toggleCellCheckbox.style.color = 'white';
         toggleATACRadio.style.backgroundColor = '#282828';
         toggleATACRadio.style.color = 'white';
+        toggleViolinRadio.style.backgroundColor = '#282828';
+        toggleViolinRadio.style.color = 'white';
 
         // check if cell checkbox is visible, if yes disable it
         if (cellCheckbox.style.display === 'block') {
@@ -78,6 +100,11 @@ export const toggleGeneFilter = () => {
 
         if (atacRadioContainer.style.display === 'block') {
             atacRadioContainer.style.display = 'none';
+        }
+
+        if (violinContainer.style.display === 'block' || noViolinContainer.style.display === 'block') {
+            violinContainer.style.display = 'none';
+            noViolinContainer.style.display = 'none';
         }
 
         // reset it if clicked again
@@ -95,9 +122,13 @@ export const toggleAtacFilter = () => {
     const geneRadioContainer = document.getElementById('geneRadioContainer');
     const atacRadioContainer = document.getElementById('atacRadioContainer');
 
+    const violinContainer = document.getElementById('violinContainer');
+    const noViolinContainer = document.getElementById('noViolinContainer');
+
     const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
     const toggleGeneRadio = document.getElementById('toggleGeneRadio');
     const toggleATACRadio = document.getElementById('toggleATACRadio');
+    const toggleViolinRadio = document.getElementById('toggleViolinRadio');
 
     toggleATACRadio.addEventListener('click', () => {
         // alert("clicked")
@@ -113,7 +144,8 @@ export const toggleAtacFilter = () => {
         toggleCellCheckbox.style.color = 'white';
         toggleGeneRadio.style.backgroundColor = '#282828';
         toggleGeneRadio.style.color = 'white';
-
+        toggleViolinRadio.style.backgroundColor = '#282828';
+        toggleViolinRadio.style.color = 'white';
 
         // check if cell checkbox is visible, if yes disable it
         if (cellCheckbox.style.display === 'block') {
@@ -124,11 +156,89 @@ export const toggleAtacFilter = () => {
             geneRadioContainer.style.display = 'none';
         }
 
+        if (violinContainer.style.display === 'block' || noViolinContainer.style.display === 'block') {
+            violinContainer.style.display = 'none';
+            noViolinContainer.style.display = 'none';
+        }
+
         // reset it if clicked again
         if (atacRadioContainer.style.display === 'none') {
             toggleATACRadio.style.backgroundColor = '#282828';
             toggleATACRadio.style.color = 'white';
         }
+    })
+}
+
+// toggle violin
+export const toggleViolin = () => {
+
+    const toggleViolinRadio = document.getElementById('toggleViolinRadio');
+    const violinContainer = document.getElementById('violinContainer');
+    const noViolinContainer = document.getElementById('noViolinContainer');
+
+    const cellCheckbox = document.getElementById("cellCheckbox");
+    const geneRadioContainer = document.getElementById('geneRadioContainer');
+    const atacRadioContainer = document.getElementById('atacRadioContainer');
+
+    const toggleCellCheckbox = document.getElementById('toggleCellCheckbox');
+    const toggleGeneRadio = document.getElementById('toggleGeneRadio');
+    const toggleATACRadio = document.getElementById('toggleATACRadio');
+
+    
+    const violinImage = document.getElementById("violin-image");
+
+    toggleViolinRadio.addEventListener('click', () => {
+
+        console.log("violin clicked");
+
+        // set to highlight mode
+
+        toggleViolinRadio.style.backgroundColor = toggleViolinRadio.style.backgroundColor === 'white' ? '#282828' : 'white';
+        toggleViolinRadio.style.color = toggleViolinRadio.style.color === 'black' ? 'white' : 'black';
+
+        // toggleViolinRadio.style.backgroundColor = 'white';
+        // toggleViolinRadio.style.color = 'black';
+
+        // violinContainer.style.display = violinContainer.style.display === 'none' ? 'block' : 'none';
+        // noViolinContainer.style.display = violinContainer.style.display === 'block' ? 'none' : 'block';
+
+
+        if (toggleViolinRadio.style.backgroundColor === 'white') {
+            if (violinImage.src === "" || violinImage.getAttribute('src') === "") {
+                console.log("opt 1");
+                noViolinContainer.style.display = 'block';
+            } else {
+                console.log("opt 2");
+                violinContainer.style.display = 'block';
+            }
+        } else {
+            console.log("opt 3");
+            violinContainer.style.display = 'none';
+            noViolinContainer.style.display = 'none';
+        }
+
+        // clear other toggle's style
+        toggleCellCheckbox.style.backgroundColor = '#282828';
+        toggleCellCheckbox.style.color = 'white';
+        toggleGeneRadio.style.backgroundColor = '#282828';
+        toggleGeneRadio.style.color = 'white';
+        toggleATACRadio.style.backgroundColor = '#282828';
+        toggleATACRadio.style.color = 'white';
+
+        // check if cell checkbox is visible, if yes disable it
+        if (cellCheckbox.style.display === 'block') {
+            cellCheckbox.style.display = 'none';
+        }
+
+        if (geneRadioContainer.style.display === 'block') {
+            geneRadioContainer.style.display = 'none';
+        }
+
+        if (atacRadioContainer.style.display === 'block') {
+            atacRadioContainer.style.display = 'none';
+        }
+
+
     })
 }
 

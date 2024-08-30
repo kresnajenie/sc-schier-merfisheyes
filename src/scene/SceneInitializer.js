@@ -15,6 +15,7 @@ import { showCellFilters } from '../helpers/Filtering/Celltype.js';
 import { calculateGenePercentile, coolwarm, getGene, getAtac, normalizeArray } from '../helpers/GeneFunctions.js';
 import { showGeneFilters, showSelectedGeneFilters, clearGenes } from '../helpers/Filtering/Gene.js';
 import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers/Filtering/Atac.js';
+import { violinImageSearch } from '../helpers/Filtering/Violin.js';
 import { changeURL } from '../helpers/URL.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
@@ -242,10 +243,14 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
             skip(1)
         ).subscribe(async items => {
-            console.log("Selected genes changed:", items);
+            console.log("Selected genes changed 1:", items);
+            console.log(items[0]);
             if (SelectedState.value.mode === 2) {
                 showSelectedGeneFilters();
-            } 
+            } else {
+                console.log("running image search")
+                violinImageSearch(items[0]);
+            }
             updateLoadingState(true);
             clearAtacs();
             showGeneFilters();
@@ -316,7 +321,7 @@ export class SceneInitializer {
             distinctUntilChanged(),
             skip(1)
         ).subscribe(items => {
-            console.log("Selected genes changed:", items);
+            console.log("Selected genes changed 2:", items);
             params.set("mode", items);
             changeURL(params);
         });

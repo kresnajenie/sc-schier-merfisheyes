@@ -36,7 +36,7 @@
 
     <script type="module">
         import { loadPrefixOptions, selectPrefix } from "/src/helpers/Prefix.js";
-        import { toggleCellFilter, toggleGeneFilter, toggleAtacFilter,toggleButton } from "/src/helpers/ToggleFilters.js"
+        import { toggleCellFilter, toggleGeneFilter, toggleAtacFilter, toggleViolin, toggleButton } from "/src/helpers/ToggleFilters.js"
         import { toggleMode } from "/src/helpers/Filtering/Gene.js"
 
         $(function () {
@@ -67,6 +67,7 @@
                 toggleCellFilter();
                 toggleGeneFilter();
                 toggleAtacFilter();
+                toggleViolin();
                 toggleButton();
                 toggleMode();
             })

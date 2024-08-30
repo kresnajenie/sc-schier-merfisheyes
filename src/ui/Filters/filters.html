@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="/src/ui/Filters/Filters.css">
+<div class="all-buttons">
 <div class="desc-container"><button type="button" data-target="cell-desc" class="toggles btn"
         id="toggleCellCheckbox">Celltype</button>
-    <div class="descBox" id="cell-desc">Click to filter by celltypes</div>
+    <div class="descBox" id="cell-desc">Click to filter by celltypes.</div>
 </div>
 <div class="checkbox-container" id="cellCheckbox" style="display: none">
     <div class="input-elements"><input type="text" class="textInput" id="cellTextbox"
@@ -36,7 +37,7 @@
 
 <div class="desc-container">
     <button type="button" data-target="atac-desc" class="toggles btn" id="toggleATACRadio">ATAC</button>
-    <div class="descBox" id="atac-desc">Click to filter ATAC</div>
+    <div class="descBox" id="atac-desc">Click to filter ATAC.</div>
 </div>
 <div class="checkbox-container" id="atacRadioContainer" style="display: none">
     <div class="input-elements">
@@ -54,6 +55,15 @@
         <div class="notfound alert alert-danger alert-dismissible fade show" id="atacNotFound">No ATAC peaks of that position found.
     </div>
 </div>
+
+
+<div class="desc-container">
+    <button type="button" data-target="violin-desc" class="toggles btn" id="toggleViolinRadio">Violin</button>
+    <div class="descBox" id="violin-desc">Click to show violin plot.</div>
+</div>
+
+
+
 
 <div class="icon">
     <div class="slider-input">
@@ -99,4 +109,14 @@
             <div class="slider-min-max" id="geneMaxId">Max: 99.99</div>
         </div>
     </div>
+</div>
+
+</div>
+
+
+<div class="violin-container" id="violinContainer">
+    <img id="violin-image" src="" alt="Image will be displayed here" style="width: 100%;">
+</div>
+<div class="no-violin-container" id="noViolinContainer">
+    No violin plot for selected gene.
 </div>

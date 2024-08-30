@@ -1,4 +1,3 @@
-import { act } from "@react-three/fiber";
 import { SelectedState } from "../../states/SelectedState";
 
 export function setLabels(min,max) {
