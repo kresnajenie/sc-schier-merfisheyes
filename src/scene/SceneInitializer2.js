@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { LinearFilter, LinearMipMapLinearFilter, TextureLoader, PlaneGeometry, MeshBasicMaterial, Mesh } from 'three';
 import { MatrixState } from '../states/MatrixState.js';
 import { ApiState } from '../states/ApiState.js';
 import { SceneState } from '../states/SceneState.js';
@@ -16,29 +18,34 @@ import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers
 import { changeURL } from '../helpers/URL.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { fetchIntervalGene } from '../helpers/APIClient.js';
+// import { fetchIntervalGene } from '../helpers/APIClient.js';
 // import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
 import { updateBadge } from '../ui/Showing/Showing.js';
 import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
+import { getInterval } from '../helpers/ATACPlot/Peaks.js';
+import { plotInitialData, updateCircleColors } from '../ui/Overlay/Overlay.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
 
-// Raycaster for detecting mouse hover
-const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+let initialStart = 0
+
 
 export class SceneInitializer {
     constructor(container) {
+
+
+        // Raycaster for detecting mouse hover
         this.container = container;
-        this.meshDataArray = []; // To store mesh data for hover interaction
-        this.isCommandOrCtrlPressed = false;
-        this.isFilteringActive = false; // To track if filtering is active
+        this.instancedMesh;
+        this.instancedMeshUmap;
+
+
         this.initScene();
-        // this.addGreyMesh();
+
         this.subscribeToStateChanges();
     }
-
 
     addText() {
         const loader = new FontLoader();
@@ -73,11 +80,68 @@ export class SceneInitializer {
             const ventral = new THREE.Mesh(textGeometryVentral, textMaterial);
             ventral.position.set(-30, -190, 0); // Set the position as needed
             this.scene.add(ventral);
+
+
         });
     };
 
+    plotImage(fileUrl, width = 10, height = 10, position = { x: 0, y: 0, z: 0 }) {
+        const loader = new THREE.TextureLoader();
+        
+        loader.load(fileUrl, (texture) => {
+            texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+            texture.minFilter = LinearMipMapLinearFilter;
+            texture.magFilter = LinearFilter;
+            texture.generateMipmaps = true;
+    
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const geometry = new THREE.PlaneGeometry(width, height);
+            const plane = new THREE.Mesh(geometry, material);
+            
+            plane.position.set(position.x, position.y, position.z);
+            
+            this.scene.add(plane);
+        });
+    }
+
+    plotSVG(fileUrl, scale = 1, position = { x: 0, y: 0, z: 0 }) {
+        const loader = new SVGLoader();
+    
+        loader.load(fileUrl, (data) => {
+            const paths = data.paths;
+            const group = new THREE.Group();
+            
+            paths.forEach((path) => {
+                const material = new THREE.MeshBasicMaterial({
+                    color: path.color,
+                    side: THREE.DoubleSide,
+                    depthWrite: false
+                });
+    
+                const shapes = SVGLoader.createShapes(path);
+                shapes.forEach((shape) => {
+                    const geometry = new THREE.ShapeGeometry(shape);
+                    const mesh = new THREE.Mesh(geometry, material);
+                    group.add(mesh);
+                });
+            });
+    
+            group.scale.set(scale, scale, scale);
+            group.position.set(position.x, position.y, position.z);
+    
+            this.scene.add(group);
+        });
+    }
+    
+    
+
     initScene() {
         this.scene = SceneState.value.scene;
+
+        // Set the background color to a solid color (e.g., black)
+        this.scene.background = new THREE.Color(0x000000); // Hexadecimal color value
+        // this.plotImage('/src/assets/images/C_6s_ackr3b_measured.png', 1000, 1000/3.2, { x: -10000, y: 0, z: 0 });
+        // this.plotSVG('/src/assets/images/C_6s_ackr3b_measured.svg', 0.1, { x: -10000, y: 0, z: 0 });
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer();
@@ -96,49 +160,31 @@ export class SceneInitializer {
         }
         this.camera.position.z = ButtonState.value.cameraPositionZ;
 
+
+        // Example usage inside SceneInitializer
+
+        
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+
+
+
+        // controls.target.copy(sharedTarget); // Initially set target for cameraOne
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.25;
         this.controls.update();
-
         this.updateInstancedMesh("initScene");
 
+        this.animate();
 
-        // Event listener for keydown to detect Command (metaKey) on macOS or Ctrl (ctrlKey) on Windows
-        window.addEventListener('keydown', (event) => {
-            if (event.metaKey || event.ctrlKey) {
-                this.isCommandOrCtrlPressed = true;
-                // Make all meshes visible when the key is pressed
-                this.meshDataArray.forEach(({ group }) => {
-                    group.visible = true;
-                    group.children.forEach(child => {
-                        child.scale.set(1, 1, 1); // Reset scale to original size
-                    });
-                });
-            }
-        });
-
-        // Event listener for keyup to detect when Command or Ctrl key is released
-        window.addEventListener('keyup', (event) => {
-            if (event.key === 'Meta' || event.key === 'Control') {
-                this.isCommandOrCtrlPressed = false;
-                this.onMouseMove()
-            }
-        });
-
-
-        // Event listener for mouse click (toggle visibility)
-        window.addEventListener('click', this.onMouseMove.bind(this), false);
-
-        // window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
         window.addEventListener('resize', () => {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
-        this.animate();
-    }
 
+
+    }
 
     subscribeToStateChanges() {
         MatrixState.pipe(
@@ -153,7 +199,6 @@ export class SceneInitializer {
         ApiState.pipe(
             map(state => state.prefix),
             distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
-            skip(1)
         ).subscribe(items => {
             console.log("Prefix changed:", items);
             const prefix = document.getElementById("dropdownMenuButton");
@@ -176,24 +221,19 @@ export class SceneInitializer {
         ).subscribe(async items => {
             console.log("Selected celltypes changed:", items);
             updateLoadingState(true);
-
-            if (items.length > 0) {
-                this.isFilteringActive = true;
-                this.filterCellTypes(items); // Call the filtering function
-            } else {
-                this.isFilteringActive = false;
-                this.resetMeshVisibility(); // Reset visibility when no cell types are selected
-            }
-
+            await this.updateInstancedMesh("selectedCelltype");
             updateLoadingState(false);
-            if (items.length > 0) {
-                const newCelltype = encodeURIComponent(JSON.stringify(items));
+            showCellFilters();
+    
+            if (SelectedState.value.selectedCelltypes.length > 0) {
+                const newCelltype = encodeURIComponent(JSON.stringify(SelectedState.value.selectedCelltypes));
                 params.set("celltype", newCelltype);
             } else {
                 params.delete("celltype");
             }
             changeURL(params);
         });
+    
         SelectedState.pipe(
             map(state => state.selectedGenes),
             tap((curr, index) => {
@@ -215,13 +255,9 @@ export class SceneInitializer {
             if (SelectedState.value.selectedGenes.length > 0) {
                 let selectedGene = SelectedState.value.selectedGenes[0];
                 let firstElement = selectedGene.split('_')[0];
-                if (ApiState.value.prefix == "6s") {
-                    try {
-                        const interval = await fetchIntervalGene(firstElement);
-                        updateSelectedInterval(interval["intervals"]);
-                    } catch (error) {
-                        console.error('Error fetching interval gene:', error);
-                    }
+                console.log(SelectedState.value.geneGenomeHover)
+                if (ApiState.value.prefix == "6s" && SelectedState.value.geneGenomeHover == false) {
+                    getInterval(firstElement);
                 }
                 const newGenes = encodeURIComponent(JSON.stringify(SelectedState.value.selectedGenes));
                 params.set("gene", newGenes);
@@ -290,220 +326,269 @@ export class SceneInitializer {
     }
 
     async updateInstancedMesh(where) {
-        console.log("^^^^^^^^^");
-        console.log(where);
-        console.log("^^^^^^^^^");
+        console.log("^^^^^^^^^")
+        console.log(where)
+        console.log("^^^^^^^^^")
 
-        console.log("PALETTTE");
+        console.log("PALETTTE")
 
-        // Remove each group from the scene and dispose of associated resources
-        this.meshDataArray.forEach(({ group }) => {
-            // Remove the group from the scene
-            this.scene.remove(group);
+        let colors = [];
 
-            // Dispose of each mesh's geometry and material within the group
-            group.children.forEach(mesh => {
-                if (mesh.geometry) mesh.geometry.dispose();
-                if (mesh.material) mesh.material.dispose();
-            });
-        });
 
-        this.meshDataArray = []; // To store mesh data for hover interaction
 
+        // Clear existing mesh
+        if (this.instancedMesh) {
+            this.instancedMesh.geometry.dispose();
+            this.instancedMesh.material.dispose();
+            this.scene.remove(this.instancedMesh);
+        }
+
+        if (this.instancedMeshUmap) {
+            this.instancedMeshUmap.geometry.dispose();
+            this.instancedMeshUmap.material.dispose();
+            this.scene.remove(this.instancedMeshUmap);
+        }
 
         let pallete = ApiState.value.pallete;
         let jsonData = MatrixState.value.items;
 
+        console.log(jsonData)
+
         const keys = Object.keys(pallete);
+
+
+        const sphereGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+
+        const circleGeometry = new THREE.CircleGeometry(0.1, 32, 32);
+
         const material = new THREE.MeshBasicMaterial();
+        const count = jsonData.length;
+        console.log("Count", count)
+
+        this.instancedMesh = new THREE.InstancedMesh(sphereGeometry, material, count);
+        this.instancedMeshUmap = new THREE.InstancedMesh(circleGeometry, material, count);
+
         const proj = new THREE.Object3D();
+        const umap = new THREE.Object3D();
+
+        let color;
+
+        // when plotting gene
+        let ctsClipped1;
+        let ctsClipped2;
+
+        let mod = 200;
+        let umapmod = 2;
+
+        let celltypes = SelectedState.value.selectedCelltypes;
+        let genes = SelectedState.value.selectedGenes;
+        let atacs = SelectedState.value.selectedAtacs;
+
         let dotSize = ButtonState.value.dotSize;
-        const sphereGeometry = new THREE.SphereGeometry(0.1*dotSize, 16, 16);
+        let smallDotSize = Math.floor(dotSize / 2);
 
+        // this.camera.position.z = ButtonState.value.cameraPositionZ;
+        let genePercentile = ButtonState.value.genePercentile;
+        let atacPercentile = ButtonState.value.genePercentile;
 
-        // Clear previous mesh data
-        this.meshDataArray = [];
-
-        keys.forEach((key) => {
-            const colorHex = pallete[key]; // Get the color associated with the key
-            let filteredItems = jsonData.filter(item => item.clusters === key);
-            const count = filteredItems.length;
         
-            if (count > 0) {
-                const keyMaterial = new THREE.MeshBasicMaterial();
-                const keyMesh = new THREE.InstancedMesh(sphereGeometry, keyMaterial, count*2);
-                const meshGroup = new THREE.Group();
-        
-                filteredItems.forEach((item, i) => {
-                    const xSpatial = item.X_spatial0_norm;
-                    const ySpatial = item.X_spatial1_norm * -1;
-                    const zSpatial = item.X_spatial2_norm;
-        
-                    // Set position for the original sphere based on X_spatial0, X_spatial1, X_spatial2
-                    proj.position.set(xSpatial * 200, ySpatial * 200, zSpatial * 200);
-                    proj.updateMatrix();
-                    keyMesh.setMatrixAt(i, proj.matrix);
+        let nmax1 = 1;
 
-                    // Now, plot an additional sphere based on X_umap0 and X_umap1 with an x-axis offset of 10000
-                    const xUmap = item.X_umap0_norm;
-                    const yUmap = item.X_umap1_norm;
-                    const zUmap = 0; // You can adjust this as needed
-
-                    proj.position.set(xUmap * 200 + 10000, yUmap * 200, zUmap * 200);
-                    proj.updateMatrix();
-                    keyMesh.setMatrixAt(i+count, proj.matrix);
-        
-                    // Set the original color for this instance
-                    const color = new THREE.Color(colorHex);
-                    keyMesh.setColorAt(i, color);
-                    keyMesh.setColorAt(i+count, color);
-                });
-        
-                keyMesh.instanceMatrix.needsUpdate = true;
-                keyMesh.instanceColor.needsUpdate = true; // Ensure the colors are updated
-        
-                meshGroup.add(keyMesh);
-                this.scene.add(meshGroup);
-        
-                this.meshDataArray.push({ group: meshGroup, keyMesh, name: key });
-            }
-        });
-        
-
-        // this.scene.add(this.instancedMesh);
-        // this.scene.add(this.instancedMeshUmap);
-    }
-
-    filterCellTypes(cellTypesToShow) {
-        this.meshDataArray.forEach(({ group, name }) => {
-            group.visible = cellTypesToShow.includes(name);
-        });
-    }
-
-    resetMeshVisibility() {
-        this.meshDataArray.forEach(({ group }) => {
-            group.visible = true;
-        });
-    }
-
-    addGreyMesh() {
-        let jsonData = MatrixState.value.items;
-        const greyColor = new THREE.Color(0x808080); // Grey color
-    
-        const smallDotSize = ButtonState.value.dotSize * 0.5; // Smaller dot size
-        const sphereGeometry = new THREE.SphereGeometry(0.1 * smallDotSize, 16, 16);
-        const greyMaterial = new THREE.MeshBasicMaterial({ color: greyColor });
-        let count = jsonData.length
-        const greyMesh = new THREE.InstancedMesh(sphereGeometry, greyMaterial, count*2);
-    
-        const proj = new THREE.Object3D();
-    
-        jsonData.forEach((item, i) => {
-            const x = item.X_spatial0_norm;
-            const y = item.X_spatial1_norm * -1;
-            const z = item.X_spatial2_norm;
-    
-            proj.position.set(x * 200, y * 200, z * 200);
-            proj.updateMatrix();
-    
-            greyMesh.setMatrixAt(i, proj.matrix);
-
-            const xUmap = item.X_umap0_norm;
-            const yUmap = item.X_umap1_norm;
-    
-            proj.position.set(xUmap * 200 + 10000, yUmap * 200, 0);
-            proj.updateMatrix();
-    
-            greyMesh.setMatrixAt(i+count, proj.matrix);
-        });
-    
-        greyMesh.instanceMatrix.needsUpdate = true;
-        this.scene.add(greyMesh);
-    }
-
-    onMouseMove(event) {
-        if (this.isFilteringActive) {
-            this.renderer.domElement.style.cursor = 'default';
-            return;
-        }
-
-        // Update mouse position
-        const rect = this.renderer.domElement.getBoundingClientRect();
-        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-        // Use raycaster to detect intersected objects
-        raycaster.setFromCamera(mouse, this.camera);
-        const intersects = raycaster.intersectObjects(this.scene.children, true); // Set recursive to true to detect child meshes
-
-        const tooltip = document.getElementById('tooltip-hover');
-
-        if (intersects.length > 0) {
-            const intersectedObject = intersects[0].object;
-            const meshData = this.meshDataArray.find(m => m.group.children.includes(intersectedObject));
-
-            if (meshData) {
-                if (!this.isCommandOrCtrlPressed) {
-                    // Show only the hovered mesh, hide others and scale the hovered one
-                    this.meshDataArray.forEach(({ group }) => {
-                        if (group === meshData.group) {
-                            group.visible = true;
-                        } else {
-                            group.visible = false;
-                        }
-                    });
+        if (atacs.length > 0) {
+            console.log("ASSALAM")
+            try {
+                let count1 = await getAtac(atacs[0]);
+                if (atacs.length == 2) {
+                    let count2 = await getAtac(atacs[1]);
+                    let nmax2 = calculateGenePercentile(count2, atacPercentile);
+                    ctsClipped2 = normalizeArray(count2, nmax2);
                 }
-
-                // Show tooltip with mesh name
-                tooltip.style.display = 'block';
-                tooltip.style.left = event.clientX + 5 + 'px';
-                tooltip.style.top = event.clientY + 'px';
-                tooltip.textContent = meshData.name;
-
-                // Change cursor to pointer
-                this.renderer.domElement.style.cursor = 'pointer';
+                // You can use cts here
+                nmax1 = calculateGenePercentile(count1, atacPercentile);
+                // console.log(cts);
+                ctsClipped1 = normalizeArray(count1, nmax1);
+            } catch (error) {
+                // Handle errors if the promise is rejected
+                console.error('Error fetching data:', error);
             }
-        } else {
-            this.resetMeshVisibility();
-            tooltip.style.display = 'none';
+        } else if (genes.length > 0) {
+            try {
+                let count1 = await getGene(genes[0]);
+                if (genes.length == 2) {
+                    let count2 = await getGene(genes[1]);
+                    let nmax2 = calculateGenePercentile(count2, genePercentile);
+                    ctsClipped2 = normalizeArray(count2, nmax2);
+                }
+                // You can use cts here
+                nmax1 = calculateGenePercentile(count1, genePercentile);
+                // console.log(cts);
+                ctsClipped1 = normalizeArray(count1, nmax1);
+            } catch (error) {
+                // Handle errors if the promise is rejected
+                console.error('Error fetching data:', error);
+            }
         }
+
+        setLabels(0, nmax1);
+
+        // Create a mesh for each key in the JSON object
+        // console.log(jsonData)
+        
+        for (let i = 0; i < count; i++) {
+            let colorrgb;
+            let scale;
+            if (atacs.length > 0) {
+                // updateSelectedShowing("atac")
+                // updateBadge("atac")
+                // no celltypes or matches celltype
+                if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
+
+  
+
+                    // if there's a second gene
+                    if (ctsClipped2) {
+                        colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 1.5;
+                    } else {
+                        colorrgb = coolwarm(ctsClipped1[i]);
+                        scale = ctsClipped1[i] * dotSize + dotSize / 1.5;
+                    }
+
+                    // console.log(colorrgb);
+                    color = new THREE.Color(colorrgb);
+
+                    proj.scale.set(scale, scale, scale);
+                    umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
+                } else { // don't color if not
+                    color = new THREE.Color('#5e5e5e');
+                    proj.scale.set(1, 1, 1);
+                    umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
+                }
+                // has celltype filters
+            } else if (genes.length > 0) {
+                // updateSelectedShowing("gene")
+                // updateBadge("gene")
+
+                // no celltypes or matches celltype
+                if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
+
+                    // if there's a second gene
+                    if (ctsClipped2) {
+                        colorrgb = coolwarm(ctsClipped1[i], ctsClipped2[i]);
+                        scale = (ctsClipped1[i] + ctsClipped2[i]) / 2 * dotSize + dotSize / 1.5;
+                    } else {
+                        colorrgb = coolwarm(ctsClipped1[i]);
+                        scale = ctsClipped1[i] * dotSize + dotSize / 1.5;
+                    }
+
+                    // console.log(colorrgb);
+                    color = new THREE.Color(colorrgb);
+
+                    proj.scale.set(scale, scale, scale);
+                    umap.scale.set(scale * umapmod, scale * umapmod, scale * umapmod);
+                } else { // don't color if not
+                    color = new THREE.Color('#5e5e5e');
+                    proj.scale.set(1, 1, 1);
+                    umap.scale.set(1 * umapmod, 1 * umapmod, 1 * umapmod);
+                }
+                // has celltype filters
+            }  else {
+                // updateSelectedShowing("celltype")
+                // updateBadge("celltype")
+                if (celltypes.includes(jsonData[i]["clusters"]) || celltypes.length == 0) {
+                    // color = new THREE.Color(jsonData[i]["clusters_colors"]);
+                    color = new THREE.Color(pallete[jsonData[i]["clusters"]]);
+                    proj.scale.set(dotSize, dotSize, dotSize);
+                    umap.scale.set(dotSize * umapmod, dotSize * umapmod, dotSize * umapmod);
+                } else {
+                    color = new THREE.Color('#5e5e5e');
+                    proj.scale.set(smallDotSize, smallDotSize, smallDotSize);
+                    umap.scale.set(smallDotSize * umapmod, smallDotSize * umapmod, smallDotSize * umapmod);
+                }
+            }
+
+            //plot projection
+            let ymod = 1;
+            if (ApiState.value.prefix == "6s") {
+                ymod = -1;
+            }
+
+            proj.position.set(jsonData[i]["X_spatial0_norm"] * mod, jsonData[i]["X_spatial1_norm"] *ymod*mod, jsonData[i]["X_spatial2_norm"] * mod);
+            proj.updateMatrix();
+            this.instancedMesh.setMatrixAt(i, proj.matrix);
+            this.instancedMesh.setColorAt(i, color);
+
+            colors.push(color);
+
+            //plot umap
+
+            // let offset = ButtonState.value.umapOffset;
+
+            // umap.position.set(jsonData[i]["X_umap0_norm"] * 300 + offset, jsonData[i]["X_umap1_norm"] * 300, 0);
+            // umap.updateMatrix();
+            // this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
+            // this.instancedMeshUmap.setColorAt(i, color);
+        }
+
+        console.log(colors.length)
+
+        if (initialStart == 0) {
+            initialStart+= 1;
+            // console.log("KOLOR GEDE")
+            plotInitialData(jsonData, colors)
+        } else {
+            // console.log("CD")
+            updateCircleColors(colors);
+        }
+
+        // console.log(atacs);
+
+        if (atacs.length > 0) {
+
+                // console.log("EMG KESINI BANG")
+                updateBadge("atac")
+                showColorbar();
+            } else if (genes.length > 0) {
+                updateBadge("gene")
+                showColorbar();
+
+            }  else {
+                updateBadge("celltype")
+                hideColorbar();
+        }
+
+        console.log(atacs);
+
+        this.scene.add(this.instancedMesh);
+        console.log(this.instancedMesh);
+        console.log(this.scene);
+
+        this.scene.add(this.instancedMeshUmap);
     }
-    
-    
-    
-    // onMouseClick(event) {
-    //     // Update mouse position
-    //     const rect = this.renderer.domElement.getBoundingClientRect();
-    //     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    //     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-    
-    //     // Use raycaster to detect intersected objects
-    //     raycaster.setFromCamera(mouse, this.camera);
-    //     const intersects = raycaster.intersectObjects(this.scene.children, true); // Set recursive to true to detect child meshes
-    
-    //     if (intersects.length > 0) {
-    //         const intersectedObject = intersects[0].object;
-    
-    //         // Get the index of the clicked instance within the InstancedMesh
-    //         const instanceId = intersects[0].instanceId;
-    
-    //         if (instanceId !== undefined) {  // Ensure this is an InstancedMesh
-    //             const greyColor = new THREE.Color(0x808080); // Grey color
-    
-    //             // Set the specific instance's color to grey
-    //             intersectedObject.setColorAt(instanceId, greyColor);
-    //             intersectedObject.instanceColor.needsUpdate = true; // Ensure the color is updated
-    //         }
-    //     }
-    // }
-    
-    
-    
-    
 
     animate = () => {
         requestAnimationFrame(this.animate);
         this.controls.update(); // Only needed if controls.enableDamping is true
+        // Assume your instanced mesh is global or accessible within this scope
+        // const cameraQuaternion = this.camera.quaternion;
+        // let jsonData = MatrixState.value.items;
+
+        // for (let i = 0; i < jsonData.length * 2; i++) {
+        //     const matrix = new THREE.Matrix4();
+        //     const position = new THREE.Vector3();
+        //     const scale = new THREE.Vector3();
+
+        //     // Extract position and scale from the current instance matrix
+        //     this.instancedMesh.getMatrixAt(i, matrix);
+        //     matrix.decompose(position, new THREE.Quaternion(), scale);
+
+        //     // Rebuild the matrix using the camera's quaternion for rotation
+        //     matrix.compose(position, cameraQuaternion, scale);
+        //     this.instancedMesh.setMatrixAt(i, matrix);
+        // }
+        // console.log(this.camera.position)
+
+        // this.instancedMesh.instanceMatrix.needsUpdate = true; // Important!
         this.renderer.render(this.scene, this.camera);
     }
 }

@@ -1,14 +1,8 @@
 import './Overlay.css';
-
-// Sample data
-const data = [
-    { X_umap0_norm: 0.5, X_umap1_norm: -0.3, clusters: 'Epidermis' },
-    { X_umap0_norm: -0.7, X_umap1_norm: 0.4, clusters: 'Epidermis' },
-    { X_umap0_norm: 0.1, X_umap1_norm: 0.9, clusters: 'Dermis' },
-    // More data points...
-];
-
-const colors = ["white", "white", "blue"]
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { SceneState } from '../../states/SceneState';
+import { ButtonState } from '../../states/ButtonState';
 
 export function createOverlay() {
     const overlay = document.createElement('div');
@@ -60,11 +54,19 @@ export function createOverlay() {
         if (overlay.offsetTop <= topBound && overlay.offsetTop + overlay.offsetHeight >= window.innerHeight) {
             overlay.style.top = `${topBound / window.innerHeight * 100}%`;
             overlay.style.height = `${window.innerHeight - topBound}px`;
+
+            camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
         }
 
         if (overlay.offsetLeft <= 0 && overlay.offsetLeft + overlay.offsetWidth >= window.innerWidth) {
             overlay.style.left = `${0}%`;
             overlay.style.width = `${window.innerWidth}px`;
+
+            camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
         }
     };
 
@@ -101,27 +103,35 @@ export function createOverlay() {
 
         if (isTopLeft) {
             overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
             overlay.style.cursor = 'nwse-resize';
         } else if (isTopRight) {
             overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
             overlay.style.cursor = 'nesw-resize';
         } else if (isBottomLeft) {
             overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
             overlay.style.cursor = 'nesw-resize';
         } else if (isBottomRight) {
             overlay.classList.add('resizable-corner');
+            overlay.classList.remove('resizable-right', 'resizable-bottom', 'resizable-top', 'resizable-left');
             overlay.style.cursor = 'nwse-resize';
         } else if (isRight) {
             overlay.classList.add('resizable-right');
+            overlay.classList.remove('resizable-corner', 'resizable-bottom', 'resizable-top', 'resizable-left');
             overlay.style.cursor = 'ew-resize';
         } else if (isLeft) {
             overlay.classList.add('resizable-left');
+            overlay.classList.remove('resizable-corner', 'resizable-right', 'resizable-bottom', 'resizable-top');
             overlay.style.cursor = 'ew-resize';
         } else if (isBottom) {
             overlay.classList.add('resizable-bottom');
+            overlay.classList.remove('resizable-corner', 'resizable-right', 'resizable-top', 'resizable-left');
             overlay.style.cursor = 'ns-resize';
         } else if (isTop) {
             overlay.classList.add('resizable-top');
+            overlay.classList.remove('resizable-corner', 'resizable-right', 'resizable-bottom', 'resizable-left');
             overlay.style.cursor = 'ns-resize';
         } else {
             overlay.style.cursor = 'default';
@@ -153,7 +163,7 @@ export function createOverlay() {
                     const newWidth = rect.right - event.clientX;
                     overlay.style.width = `${newWidth}px`;
                     overlay.style.height = `${event.clientY - rect.top}px`;
-                    overlay.style.left = `${rect.right - newWidth}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
                 } else if (isTopRight) {
                     overlay.style.width = `${event.clientX - rect.left}px`;
                     overlay.style.height = `${rect.bottom - event.clientY}px`;
@@ -163,21 +173,25 @@ export function createOverlay() {
                     const newHeight = rect.bottom - event.clientY;
                     overlay.style.width = `${newWidth}px`;
                     overlay.style.height = `${newHeight}px`;
-                    overlay.style.left = `${rect.right - newWidth}px`;
-                    overlay.style.top = `${rect.bottom - newHeight}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
                 } else if (isRight) {
                     overlay.style.width = `${event.clientX - rect.left}px`;
                 } else if (isLeft) {
                     const newWidth = rect.right - event.clientX;
                     overlay.style.width = `${newWidth}px`;
-                    overlay.style.left = `${rect.right - newWidth}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
                 } else if (isBottom) {
                     overlay.style.height = `${event.clientY - rect.top}px`;
                 } else if (isTop) {
                     const newHeight = rect.bottom - event.clientY;
                     overlay.style.height = `${newHeight}px`;
-                    overlay.style.top = `${rect.bottom - newHeight}px`;
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
                 }
+
+                camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
             }
 
             function stopResize() {
@@ -242,7 +256,7 @@ export function createOverlay() {
                     const newWidth = rect.right - event.changedTouches[0].clientX;
                     overlay.style.width = `${newWidth}px`;
                     overlay.style.height = `${event.changedTouches[0].clientY - rect.top}px`;
-                    overlay.style.left = `${rect.right - newWidth}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
                 } else if (isTopRight) {
                     overlay.style.width = `${event.changedTouches[0].clientX - rect.left}px`;
                     overlay.style.height = `${rect.bottom - event.changedTouches[0].clientY}px`;
@@ -252,21 +266,25 @@ export function createOverlay() {
                     const newHeight = rect.bottom - event.changedTouches[0].clientY;
                     overlay.style.width = `${newWidth}px`;
                     overlay.style.height = `${newHeight}px`;
-                    overlay.style.left = `${rect.right - newWidth}px`;
-                    overlay.style.top = `${rect.bottom - newHeight}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
                 } else if (isRight) {
                     overlay.style.width = `${event.changedTouches[0].clientX - rect.left}px`;
                 } else if (isLeft) {
                     const newWidth = rect.right - event.changedTouches[0].clientX;
                     overlay.style.width = `${newWidth}px`;
-                    overlay.style.left = `${rect.right - newWidth}px`;
+                    overlay.style.left = `${rect.right - newWidth}px`; // Adjust the left position
                 } else if (isBottom) {
                     overlay.style.height = `${event.changedTouches[0].clientY - rect.top}px`;
                 } else if (isTop) {
                     const newHeight = rect.bottom - event.changedTouches[0].clientY;
                     overlay.style.height = `${newHeight}px`;
-                    overlay.style.top = `${rect.bottom - newHeight}px`;
+                    overlay.style.top = `${rect.bottom - newHeight}px`; // Adjust the top position
                 }
+
+                camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
             }
 
             function stopResizeTouch() {
@@ -276,8 +294,60 @@ export function createOverlay() {
         }
     });
 
-    // Plot the data on the overlay
-    // plotInitialData(data, colors, overlay);
+    const sceneContainer = document.createElement('div');
+    sceneContainer.id = 'overlayScene';
+    sceneContainer.style.width = '100%';
+    sceneContainer.style.height = '100%';
+    overlay.appendChild(sceneContainer);
+
+    const scene = SceneState.value.scene;
+    scene.background = new THREE.Color(0x000000); // Hexadecimal color value
+    // scene.background = new THREE.Color(0x121212); // Hexadecimal color value
+
+    const camera = new THREE.PerspectiveCamera(75, sceneContainer.offsetWidth / sceneContainer.offsetHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+
+    const initialWidth = window.innerWidth * 0.25;
+    const initialHeight = window.innerHeight * 0.5;
+
+    camera.aspect = initialWidth / initialHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(initialWidth, initialHeight);
+
+    renderer.render(scene, camera);
+    sceneContainer.appendChild(renderer.domElement);
+
+    camera.position.x = ButtonState.value.umapOffset;
+    camera.position.y = ButtonState.value.cameraUmapPositionY;
+    camera.position.z = ButtonState.value.cameraUmapPositionZ;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    controls.enableRotate = false;
+
+    controls.mouseButtons = {
+        LEFT: THREE.MOUSE.PAN,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.ROTATE
+    };
+
+    controls.touches = {
+        ONE: THREE.TOUCH.PAN,
+        TWO: THREE.TOUCH.DOLLY_PAN
+    };
+
+    camera.lookAt(10000, 0, 10);
+    controls.target.set(10000, 0, 10);
+
+    controls.update();
+    renderer.render(scene, camera);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+
+    animate();
 
     window.addEventListener('resize', () => {
         keepInBounds();
@@ -285,84 +355,5 @@ export function createOverlay() {
 
     return overlay;
 }
-
-// Function to update circle colors based on a provided color list
-export function updateCircleColors(colors) {
-    const circles = document.querySelectorAll('.circle');
-
-    // Update each circle's color based on the provided colors list
-    circles.forEach((circle) => {
-        const index = parseInt(circle.dataset.index, 10); // Retrieve index stored earlier
-
-        const color = colors[index];
-        if (color) {
-            // Check if color is a string or an object
-            if (typeof color === 'string') {
-                // If it's a string, use it directly
-                circle.style.backgroundColor = color;
-            } else if (typeof color === 'object' && color.r !== undefined && color.g !== undefined && color.b !== undefined) {
-                // If it's an object, assume {r, g, b} format and convert to rgba
-                circle.style.backgroundColor = `rgba(${color.r * 255}, ${color.g * 255}, ${color.b * 255}, 0.5)`;
-            }
-        }
-    });
-}
-
-
-// Function to plot the initial data with interactions and initial colors
-export function plotInitialData(data, colors) {
-    // Get the overlay component by its ID
-    const overlay = document.getElementById('overlay');
-
-    // Check if the overlay exists
-    if (!overlay) {
-        console.error('Overlay element not found. Make sure the overlay is present in the DOM.');
-        return;
-    }
-
-    // Create circles for each data point
-    data.forEach((item, index) => {
-        const circle = document.createElement('div');
-        circle.className = 'circle';
-        
-        // Set position based on normalized coordinates (-1 to 1)
-        const x = ((item.X_umap0_norm + 1) / 2) * 100; // Normalize to percentage
-        const y = ((1 - item.X_umap1_norm) / 2) * 100; // Inverted to match CSS positioning
-        
-        circle.style.left = `${x}%`;
-        circle.style.top = `${y}%`;
-        circle.dataset.cluster = item.clusters;
-        circle.dataset.index = index; // Store the index to match colors later
-
-        // Set initial color if available
-        const color = colors[index];
-        if (color) {
-            circle.style.backgroundColor = `rgb(${color.r*255}, ${color.g*255}, ${color.b*255}, 0.5)`;
-        }
-
-        // Adjust the size of the circle
-        circle.style.width = '2.5px'; // Set your desired width
-        circle.style.height = '2.5px'; // Set your desired height
-
-        // Add hover event listeners
-        circle.addEventListener('mouseenter', () => {
-            const sameClusterCircles = document.querySelectorAll(
-                `.circle[data-cluster="${item.clusters}"]`
-            );
-            sameClusterCircles.forEach((c) => c.classList.add('hovered'));
-        });
-
-        circle.addEventListener('mouseleave', () => {
-            const sameClusterCircles = document.querySelectorAll(
-                `.circle[data-cluster="${item.clusters}"]`
-            );
-            sameClusterCircles.forEach((c) => c.classList.remove('hovered'));
-        });
-
-        overlay.appendChild(circle);
-    });
-}
-
-
 
 document.body.appendChild(createOverlay());

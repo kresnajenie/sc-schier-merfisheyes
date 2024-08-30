@@ -24,11 +24,13 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { updateBadge } from '../ui/Showing/Showing.js';
 import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
 import { getInterval } from '../helpers/ATACPlot/Peaks.js';
+import { plotInitialData, updateCircleColors } from '../ui/Overlay/Overlay.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
 
-const mouse = new THREE.Vector2();
+// const mouse = new THREE.Vector2();
+let initialStart = 0
 
 
 export class SceneInitializer {
@@ -334,6 +336,7 @@ export class SceneInitializer {
 
         console.log("PALETTTE")
 
+        let colors = [];
 
 
         // Clear existing mesh
@@ -518,18 +521,29 @@ export class SceneInitializer {
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);
+            colors.push(color);
 
+            
             //plot umap
 
-            let offset = ButtonState.value.umapOffset;
+            // let offset = ButtonState.value.umapOffset;
 
-            umap.position.set(jsonData[i]["X_umap0_norm"] * 300 + offset, jsonData[i]["X_umap1_norm"] * 300, 0);
-            umap.updateMatrix();
-            this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
-            this.instancedMeshUmap.setColorAt(i, color);
+            // umap.position.set(jsonData[i]["X_umap0_norm"] * 300 + offset, jsonData[i]["X_umap1_norm"] * 300, 0);
+            // umap.updateMatrix();
+            // this.instancedMeshUmap.setMatrixAt(i, umap.matrix);
+            // this.instancedMeshUmap.setColorAt(i, color);
         }
 
         // console.log(atacs);
+
+        if (initialStart == 0) {
+            initialStart+= 1;
+            // console.log("KOLOR GEDE")
+            plotInitialData(jsonData, colors)
+        } else {
+            // console.log("CD")
+            updateCircleColors(colors);
+        }
 
         if (atacs.length > 0) {
 

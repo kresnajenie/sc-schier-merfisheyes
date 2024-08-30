@@ -19,6 +19,20 @@
     box-sizing: border-box;
 }
 
+.circle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ff5722;
+    border-radius: 50%;
+    /* transition: transform 0.2s, z-index 0.2s; */
+}
+
+.circle.hovered {
+    transform: scale(2);
+    z-index: 10;
+    background-color: rgba(var(--r), var(--g), var(--b), 1);
+}
 
 .overlay.resizing {
     cursor: nwse-resize;
