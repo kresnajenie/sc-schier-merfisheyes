@@ -1,21 +1,19 @@
 .overlay {
     position: absolute;
-    right: 10px; /* Position it to stick to the left */
+    right: 10px;
     bottom: 10px;
-    width: 25%; /* Set width to 25% of the screen width */
-    height: 50%; /* Set height to 50% of the screen height */
-    /* background-color: #121212; */
+    width: 25%;
+    height: 50%;
     background-color: black;
     border: 5px solid #90909000;
     z-index: 10;
-    /* box-shadow: 0 4px 8px #ba9ffb, 0 6px 20px #ba9ffb; */
     box-shadow: #8b8b8b 0px 0px 5px 0px;
     border-radius: 20px;
     padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    overflow: hidden; /* Ensure content respects the border-radius */
+    overflow: hidden;
     box-sizing: border-box;
 }
 
@@ -25,74 +23,32 @@
     height: 10px;
     background-color: #ff5722;
     border-radius: 50%;
-    /* transition: transform 0.2s, z-index 0.2s; */
 }
 
 .circle.hovered {
     transform: scale(2);
     z-index: 10;
     background-color: rgba(var(--r), var(--g), var(--b), 1);
-}
-
-.overlay.resizing {
-    cursor: nwse-resize;
-}
-
-.overlay:hover {
-    cursor: default;
-}
-
-.overlay:hover::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    border-radius: inherit; /* Apply the same border-radius */
-    pointer-events: none;
-}
-
-.overlay:hover:before {
-    cursor: pointer;
-}
-
-.overlay:hover:before {
-    pointer-events: none;
-}
-
-.overlay.resizable-right {
-    cursor: ew-resize;
-}
-
-.overlay.resizable-bottom {
-    cursor: ns-resize;
-}
-
-.overlay.resizable-corner {
-    cursor: nwse-resize;
+    cursor: pointer; /* Change mouse pointer to hand icon on hover */
 }
 
 .top-controls {
-    height: 20px;
-    width: 50px; /* Start with a small width */
-    border-radius: 25px;
-    background-color: #8b8b8b;
-    cursor: grabbing;
     position: absolute;
     top: 10px; /* Adjust top position as needed */
     left: 50%;
     transform: translateX(-50%);
-    transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out, transform 0.1s ease-in-out; /* Smooth transition for expanding, background color, and shrinking */
+    z-index: 11;
 }
 
-.top-controls:hover {
-    width: 150px; /* Expand width when hovered */
-    background-color: #5e43f3;
-    transform: translateX(-50%) scale(1.2); /* Slightly scale down */
-
-}
-
-.top-controls:active {
-    transform: translateX(-50%) scale(0.8); /* Slightly scale down */
+.cluster-text {
+    border-radius: 25px;
+    color: black;
+    font-size: 14px;
+    text-align: center;
+    padding-inline: 10px;
+    z-index: 11;
+    white-space: nowrap; /* Prevents text from wrapping to the next line */
+    max-width: 100%; /* Ensures the text element does not exceed the container width */
+    overflow: hidden; /* Hides any overflowing text */
+    text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
 }
