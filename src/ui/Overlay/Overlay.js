@@ -16,10 +16,53 @@ export function createOverlay() {
     const overlay = document.createElement('div');
     overlay.id = 'overlay';
     overlay.className = 'overlay';
+    overlay.setAttribute('display_type', 'maximize')
 
     // Create a container for top controls
     const topControls = document.createElement('div');
     topControls.className = 'top-controls';
+    
+    // Creates minimize maximize button
+    const minimizeButton = document.createElement('img');
+    minimizeButton.className = 'min_max_button';
+    minimizeButton.id = 'maximize' // determines the state of the overlay
+    minimizeButton.src = 'src/assets/images/overlay_controls/minimize.png'
+
+    // Toggle overlay minimize maximize state
+    minimizeButton.onclick = (event) => {
+        // Update button state
+        const button = event.target;
+        const overlay_state = button.id;
+        let new_state = "";
+        if (overlay_state === 'maximize') {
+            new_state = 'minimize';
+        } else {
+            new_state = 'maximize';
+        }
+        button.id = new_state;
+        // Use the old state to make the icon the opposite of the state
+        button.src = `src/assets/images/overlay_controls/${overlay_state}.png`;
+        
+        // Hide circles
+        const circles = document.querySelectorAll('.circle');
+        circles.forEach((circle) => {
+            if (new_state == 'minimize') {
+                circle.style.display = 'none';
+            } else {
+                circle.style.display = 'block';
+            }
+        })
+        
+        // Update overlay state
+        if (overlay_state === 'maximize') {
+            overlay.style.transform = 'translateX(90%)';
+        } else {
+            overlay.style.transform = 'translateX(0%)';
+        }
+        overlay.setAttribute('display_type', new_state)
+    }
+
+    topControls.appendChild(minimizeButton);
 
     // Append the top controls container to the overlay
     overlay.appendChild(topControls);
