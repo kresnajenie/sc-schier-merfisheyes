@@ -21,7 +21,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 // import { fetchIntervalGene } from '../helpers/APIClient.js';
 // import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
-import { updateBadge, updateCelltypeBadge } from '../ui/Showing/Showing.js';
+import { updateBadge, updateCelltypeBadge, updateCelltypeCheckboxes } from '../ui/Showing/Showing.js';
 import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
 import { getInterval } from '../helpers/ATACPlot/Peaks.js';
 import { plotInitialData, updateCircleColors } from '../ui/Overlay/Overlay.js';
@@ -225,6 +225,7 @@ export class SceneInitializer {
             updateLoadingState(false);
             showCellFilters();
             updateCelltypeBadge();
+            updateCelltypeCheckboxes();
     
             if (SelectedState.value.selectedCelltypes.length > 0) {
                 const newCelltype = encodeURIComponent(JSON.stringify(SelectedState.value.selectedCelltypes));
@@ -561,6 +562,7 @@ export class SceneInitializer {
         }
 
         updateCelltypeBadge();
+        updateCelltypeCheckboxes();
 
         console.log(atacs);
 

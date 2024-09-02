@@ -36,12 +36,13 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
+    padding-right: 5px;
 
     justify-content: flex-end;
     align-items: flex-start;
 
     width: 500px;
-    height: 150px;
+    max-height: 250px;
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -51,7 +52,6 @@ body {
 .celltype-badges::-webkit-scrollbar {
     width: 5px;
 }
-  
 .celltype-badges::-webkit-scrollbar-thumb {
     background-color: rgb(65, 65, 65);
     border-radius: 20px;
@@ -75,14 +75,13 @@ body {
     overflow-y: auto;
 
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     justify-content: flex-start;
 }
 
 .celltype-label::-webkit-scrollbar {
     width: 5px;
 }
-
 .celltype-label::-webkit-scrollbar-thumb {
     background-color: rgb(65, 65, 65);
     border-radius: 20px;
@@ -93,8 +92,12 @@ body {
 }
 
 .celltype-text {
+    word-break: break-all;
     text-align: left;
     margin: 0;
+
+    flex-basis: 0.7
+    
 }
 
 .celltype-delete {

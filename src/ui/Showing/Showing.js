@@ -51,14 +51,13 @@ export function updateCelltypeBadge() {
         badge.title = celltype
         badge.style.color = ApiState.value.pallete[celltype]
 
-        // attach delete button
-        badge.appendChild(createCellBadgeDelete(celltype, badge));
-
         const badge_text = document.createElement("p");
         badge_text.className = 'celltype-text'
         badge_text.innerText = celltype
-
         badge.appendChild(badge_text);
+
+        // attach delete button
+        badge.appendChild(createCellBadgeDelete(celltype, badge));
         return badge
     }
 
@@ -66,9 +65,7 @@ export function updateCelltypeBadge() {
     const celltypes = SelectedState.value.selectedCelltypes;
 
     const created_badges = document.querySelectorAll('.celltype-label')
-    const created_celltypes = Array.prototype.map.call(created_badges, (created_badge) => created_badge.title);
-    console.log(created_celltypes);
-
+    const created_celltypes = [].map.call(created_badges, (created_badge) => created_badge.title);
 
     celltypes.forEach(celltype => {
         // Hasn't been created before
@@ -84,6 +81,28 @@ export function updateCelltypeBadge() {
     children.forEach(child => {
         if (!celltypes.includes(child.title)) {
             child.remove();
+        }
+    })
+}
+
+export function updateCelltypeCheckboxes() {
+    const celltypes = SelectedState.value.selectedCelltypes;
+    const checkboxContainer = document.getElementById('cellCheckboxes');
+    let checkboxes = [];
+    for (const index in checkboxContainer.children) {
+        const child = checkboxContainer.children[index]        
+        
+        if (child.nodeName === "LABEL") {
+            checkboxes.push(child.children[0]);
+        }
+    }
+
+    checkboxes.forEach(checkbox => {
+         
+        if (celltypes.includes(checkbox.value)) {            
+            if (!checkbox.checked) {
+                checkbox.checked = true;
+            }
         }
     })
 }
