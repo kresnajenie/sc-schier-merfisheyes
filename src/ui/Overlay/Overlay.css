@@ -47,6 +47,12 @@
     filter: brightness(0) invert(1);
     width: 20px;
     cursor: pointer;
+
+    transition: 0.25s ease-out;
+}
+
+.min_max_button:hover {
+    scale: 1.25;
 }
 
 .cluster-text {
