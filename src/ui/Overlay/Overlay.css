@@ -46,6 +46,7 @@
 .min_max_button {
     filter: brightness(0) invert(1);
     width: 20px;
+    cursor: pointer;
 }
 
 .cluster-text {

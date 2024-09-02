@@ -1,3 +1,6 @@
+import { SelectedState, toggleSelectedCelltype } from "../../states/SelectedState";
+import { ApiState } from "../../states/ApiState";
+
 export function updateBadge(label) {
     const badge = document.querySelector('.showing-badge');
 
@@ -17,4 +20,70 @@ export function updateBadge(label) {
     } else {
         console.warn(`Unknown label: ${label}`);
     }
+}
+
+export function updateCelltypeBadge() {
+
+    function createCellBadgeDelete(celltype, badge) {
+        const delete_button = document.createElement("p");
+        delete_button.innerText = "x";
+        delete_button.className = 'celltype-delete';
+        delete_button.setAttribute('celltype', celltype);
+        delete_button.onclick = () => {
+            console.log(SelectedState.value.selectedCelltypes);
+            console.log(celltype);
+            
+            toggleSelectedCelltype(celltype);
+
+            console.log(SelectedState.value.selectedCelltypes);
+
+            // remove element
+            badge.remove();
+
+        }
+        return delete_button;
+    }
+
+    function createBadge(celltype) {
+
+        const badge = document.createElement('span');
+        badge.className = 'celltype-label'
+        badge.title = celltype
+        badge.style.color = ApiState.value.pallete[celltype]
+
+        // attach delete button
+        badge.appendChild(createCellBadgeDelete(celltype, badge));
+
+        const badge_text = document.createElement("p");
+        badge_text.className = 'celltype-text'
+        badge_text.innerText = celltype
+
+        badge.appendChild(badge_text);
+        return badge
+    }
+
+    const celltype_badges = document.querySelector(".celltype-badges");
+    const celltypes = SelectedState.value.selectedCelltypes;
+
+    const created_badges = document.querySelectorAll('.celltype-label')
+    const created_celltypes = Array.prototype.map.call(created_badges, (created_badge) => created_badge.title);
+    console.log(created_celltypes);
+
+
+    celltypes.forEach(celltype => {
+        // Hasn't been created before
+        if (!created_celltypes.includes(celltype)) {
+            const badge = createBadge(celltype);
+            celltype_badges.appendChild(badge);
+        }
+    })
+
+    const children = celltype_badges.childNodes;
+
+    // For all badges that aren't in celltype, delete them
+    children.forEach(child => {
+        if (!celltypes.includes(child.title)) {
+            child.remove();
+        }
+    })
 }
