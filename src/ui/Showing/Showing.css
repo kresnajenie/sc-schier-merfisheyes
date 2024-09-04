@@ -41,7 +41,7 @@ body {
     justify-content: flex-end;
     align-items: flex-start;
 
-    width: 500px;
+    width: 30vw;
     max-height: 250px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -76,7 +76,7 @@ body {
 
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .celltype-label::-webkit-scrollbar {
@@ -92,7 +92,7 @@ body {
 }
 
 .celltype-text {
-    word-break: break-all;
+    text-wrap: pretty;
     text-align: left;
     margin: 0;
 

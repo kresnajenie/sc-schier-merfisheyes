@@ -11,7 +11,7 @@ import { isEqual, padEnd } from 'lodash';
 import { map, distinctUntilChanged, tap, skip } from 'rxjs/operators';
 import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
-import { showCellFilters } from '../helpers/Filtering/Celltype.js';
+import { showCellFilters, updateCelltypeCheckboxes } from '../helpers/Filtering/Celltype.js';
 import { calculateGenePercentile, coolwarm, getGene, getAtac, normalizeArray } from '../helpers/GeneFunctions.js';
 import { showGeneFilters, showSelectedGeneFilters, clearGenes } from '../helpers/Filtering/Gene.js';
 import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers/Filtering/Atac.js';
@@ -21,7 +21,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 // import { fetchIntervalGene } from '../helpers/APIClient.js';
 // import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
-import { updateBadge, updateCelltypeBadge, updateCelltypeCheckboxes } from '../ui/Showing/Showing.js';
+import { updateBadge, updateCelltypeBadge, updateCelltypeBadgeApperance } from '../ui/Showing/Showing.js';
 import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
 import { getInterval } from '../helpers/ATACPlot/Peaks.js';
 import { plotInitialData, updateCircleColors } from '../ui/Overlay/Overlay.js';
@@ -273,6 +273,8 @@ export class SceneInitializer {
             await this.updateInstancedMesh("selectedGene");
             changeURL(params);
             updateLoadingState(false);
+
+            updateCelltypeBadgeApperance();
         });
     
         SelectedState.pipe(
@@ -296,6 +298,8 @@ export class SceneInitializer {
             await this.updateInstancedMesh("selectedAtac");
             changeURL(params);
             updateLoadingState(false);
+
+            updateCelltypeBadgeApperance()
         });
     
         ButtonState.pipe(
@@ -563,6 +567,7 @@ export class SceneInitializer {
 
         updateCelltypeBadge();
         updateCelltypeCheckboxes();
+        updateCelltypeBadgeApperance();
 
         console.log(atacs);
 

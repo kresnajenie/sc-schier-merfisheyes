@@ -296,3 +296,25 @@ export const showCellFilters = () => {
         cellFilters.innerHTML = "No celltype filters selected";
     }
 }
+
+export function updateCelltypeCheckboxes() {
+    const celltypes = SelectedState.value.selectedCelltypes;
+    const checkboxContainer = document.getElementById('cellCheckboxes');
+    let checkboxes = [];
+    for (const index in checkboxContainer.children) {
+        const child = checkboxContainer.children[index]        
+        
+        if (child.nodeName === "LABEL") {
+            checkboxes.push(child.children[0]);
+        }
+    }
+
+    checkboxes.forEach(checkbox => {
+         
+        if (celltypes.includes(checkbox.value)) {            
+            if (!checkbox.checked) {
+                checkbox.checked = true;
+            }
+        }
+    })
+}

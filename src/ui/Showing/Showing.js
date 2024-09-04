@@ -85,24 +85,33 @@ export function updateCelltypeBadge() {
     })
 }
 
-export function updateCelltypeCheckboxes() {
-    const celltypes = SelectedState.value.selectedCelltypes;
-    const checkboxContainer = document.getElementById('cellCheckboxes');
-    let checkboxes = [];
-    for (const index in checkboxContainer.children) {
-        const child = checkboxContainer.children[index]        
-        
-        if (child.nodeName === "LABEL") {
-            checkboxes.push(child.children[0]);
-        }
+
+export function updateCelltypeBadgeApperance() {
+    const celltypeBadges = document.querySelector(".celltype-badges")
+    
+    const genes = SelectedState.value.selectedGenes
+    const atac = SelectedState.value.selectedAtacs
+
+    function moveBadges(boolMove) {
+        const colobar = document.getElementById("colorbar-wrapper");
+        const positionInfo = colobar.getBoundingClientRect();
+        const colobarWidth = positionInfo.width
+
+        const distance = boolMove ? colobarWidth + 5: 0
+        const width = boolMove ? 25 : 30
+        celltypeBadges.style.transform = `translateX(-${distance}px)`;
+        celltypeBadges.style.width = `${width}vw`;
     }
 
-    checkboxes.forEach(checkbox => {
-         
-        if (celltypes.includes(checkbox.value)) {            
-            if (!checkbox.checked) {
-                checkbox.checked = true;
-            }
-        }
-    })
+    function hideBadges(boolHide) {
+        celltypeBadges.style.display = boolHide ? 'none' : 'flex';
+    }
+
+    const selectingGenes = genes.length > 0
+    const selectingAtac = atac.length > 0
+
+    console.log(selectingGenes, selectingAtac)
+
+    moveBadges(selectingGenes)
+    hideBadges(selectingAtac)    
 }
