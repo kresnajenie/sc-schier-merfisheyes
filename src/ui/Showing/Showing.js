@@ -75,7 +75,8 @@ export function updateCelltypeBadge() {
         }
     })
 
-    const children = celltype_badges.childNodes;
+    // Create static array for children
+    const children = Array.from(celltype_badges.childNodes);
 
     // For all badges that aren't in celltype, delete them
     children.forEach(child => {
