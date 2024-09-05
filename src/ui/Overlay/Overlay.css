@@ -12,10 +12,10 @@
     padding: 5px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; /* Center elements horizontally */
+    justify-content: center; /* Center elements vertically */
     overflow: hidden;
     box-sizing: border-box;
-    
     transition: 0.1s ease-in-out;
 }
 
@@ -25,20 +25,20 @@
     height: 10px;
     background-color: #ff5722;
     border-radius: 50%;
-
     display: block;
+    transform: translate(-50%, -50%); /* Centers the circle by its middle */
 }
 
 .circle.hovered {
-    transform: scale(2);
+    transform: translate(-50%, -50%) scale(2); /* Ensures scaling doesn't offset the circle */
     z-index: 10;
     background-color: rgba(var(--r), var(--g), var(--b), 1);
-    cursor: pointer; /* Change mouse pointer to hand icon on hover */
+    cursor: pointer;
 }
 
 .top-controls {
     position: absolute;
-    top: 10px; /* Adjust top position as needed */
+    top: 10px;
     left: 10px;
     z-index: 11;
 }
@@ -47,7 +47,6 @@
     filter: brightness(0) invert(1);
     width: 20px;
     cursor: pointer;
-
     transition: 0.25s ease-out;
 }
 
@@ -62,8 +61,8 @@
     text-align: center;
     padding-inline: 10px;
     z-index: 11;
-    white-space: nowrap; /* Prevents text from wrapping to the next line */
-    max-width: 100%; /* Ensures the text element does not exceed the container width */
-    overflow: hidden; /* Hides any overflowing text */
-    text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

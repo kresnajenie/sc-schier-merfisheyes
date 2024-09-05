@@ -126,8 +126,8 @@ export function plotInitialData(data, colors) {
         circle.className = 'circle';
         
         // Set position based on normalized coordinates (-1 to 1)
-        const x = ((item.X_umap0_norm + 1) / 2) * 100; // Normalize to percentage
-        const y = ((1 - item.X_umap1_norm) / 2) * 100; // Inverted to match CSS positioning
+        const x = ((item.X_umap0_norm+1.2) / 2) * 80; // Normalize to percentage
+        const y = ((1.2-item.X_umap1_norm) / 2) * 80+10; // Inverted to match CSS positioning
         
         circle.style.left = `${x}%`;
         circle.style.top = `${y}%`;
