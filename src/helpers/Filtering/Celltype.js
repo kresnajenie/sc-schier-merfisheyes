@@ -310,10 +310,13 @@ export function updateCelltypeCheckboxes() {
     }
 
     checkboxes.forEach(checkbox => {
-         
         if (celltypes.includes(checkbox.value)) {            
             if (!checkbox.checked) {
                 checkbox.checked = true;
+            }
+        } else {
+            if (checkbox.checked) {
+                checkbox.checked = false;
             }
         }
     })

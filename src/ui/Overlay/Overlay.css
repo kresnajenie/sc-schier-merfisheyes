@@ -41,6 +41,8 @@
     top: 10px;
     left: 10px;
     z-index: 11;
+
+    width: 100%;
 }
 
 .min_max_button {
@@ -52,6 +54,12 @@
 
 .min_max_button:hover {
     scale: 1.25;
+}
+
+.overlayClearButton {
+    position: absolute;
+    right: 10px;
+    top: 0px;
 }
 
 .cluster-text {

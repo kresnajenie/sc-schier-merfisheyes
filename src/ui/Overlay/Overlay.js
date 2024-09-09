@@ -1,3 +1,4 @@
+import { createCellCheckboxes } from '../../helpers/Filtering/Celltype';
 import { ApiState } from '../../states/ApiState';
 import { toggleSelectedCelltype, updateSelectedCelltype } from '../../states/SelectedState';
 import './Overlay.css';
@@ -22,6 +23,7 @@ export function createOverlay() {
     const topControls = document.createElement('div');
     topControls.className = 'top-controls';
     
+    // TODO: Can be abstracted out into a separate function
     // Creates minimize maximize button
     const minimizeButton = document.createElement('img');
     minimizeButton.className = 'min_max_button';
@@ -63,6 +65,15 @@ export function createOverlay() {
     }
 
     topControls.appendChild(minimizeButton);
+
+    const clearButton = document.createElement('button');
+    clearButton.className = 'overlayClearButton btn btn-danger';
+    clearButton.id = 'clearButton';
+    clearButton.textContent = 'Clear';
+    clearButton.onclick = () => {
+        updateSelectedCelltype([]);
+    };
+    topControls.appendChild(clearButton);
 
     // Append the top controls container to the overlay
     overlay.appendChild(topControls);
