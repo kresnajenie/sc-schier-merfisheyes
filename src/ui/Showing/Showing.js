@@ -1,7 +1,40 @@
-import { SelectedState, toggleSelectedCelltype } from "../../states/SelectedState";
+import { SelectedState, toggleSelectedCelltype, updateSelectedAtac, updateSelectedGene, updateSelectedSingleGene } from "../../states/SelectedState";
 import { ApiState } from "../../states/ApiState";
 
-export function updateBadge(label) {
+function createBadgeDelete(value_type, value, badge) {
+    const delete_button = document.createElement("p");
+    delete_button.innerText = "x";
+    delete_button.className = 'delete';
+    delete_button.setAttribute('data-badge_value', value);
+    delete_button.onclick = () => {      
+        if (value_type === 'celltype') {  
+            toggleSelectedCelltype(value);
+        } else if (value_type === 'gene') {
+            const genes = [...SelectedState.value.selectedGenes]
+            genes.splice(genes.indexOf(value), 1)
+            updateSelectedGene(genes)
+        } else if(value_type === 'atac') {
+            const atacs = [...SelectedState.value.selectedAtacs]
+            atacs.splice(atacs.indexOf(value), 1)
+            updateSelectedAtac(atacs)
+        }
+
+        // remove element
+        badge.remove();
+    }
+
+    badge.onmouseover = () => {
+        delete_button.style.display = 'block';
+    }
+    badge.onmouseleave =() => {
+        delete_button.style.display = 'none';
+
+    }
+
+    return delete_button;
+}
+
+export function updateBadge(label, gene_atac_value="") {
     const badge = document.querySelector('.showing-badge');
 
     if (!badge) {
@@ -17,32 +50,28 @@ export function updateBadge(label) {
     const span = badge.querySelector(`.showing-${label}`);
     if (span) {
         span.style.display = 'inline-block';
+
+        // Show gene atac select badge if in gene atac mode
+        if (label == 'gene' || label == 'atac') {
+            gene_atac_value.forEach(select_value => {
+                const gene_atac_badge = document.createElement('span');
+                gene_atac_badge.className = 'showing-label gene-atac-badge';
+                gene_atac_badge.innerText = select_value;
+                gene_atac_badge.title = select_value;
+
+                const delete_button = createBadgeDelete(label, select_value, gene_atac_badge)
+                gene_atac_badge.appendChild(delete_button);
+
+
+                badge.appendChild(gene_atac_badge);
+            })
+        }
     } else {
         console.warn(`Unknown label: ${label}`);
     }
 }
 
 export function updateCelltypeBadge() {
-
-    function createCellBadgeDelete(celltype, badge) {
-        const delete_button = document.createElement("p");
-        delete_button.innerText = "x";
-        delete_button.className = 'celltype-delete';
-        delete_button.setAttribute('celltype', celltype);
-        delete_button.onclick = () => {
-            console.log(SelectedState.value.selectedCelltypes);
-            console.log(celltype);
-            
-            toggleSelectedCelltype(celltype);
-
-            console.log(SelectedState.value.selectedCelltypes);
-
-            // remove element
-            badge.remove();
-
-        }
-        return delete_button;
-    }
 
     function createBadge(celltype) {
 
@@ -57,7 +86,7 @@ export function updateCelltypeBadge() {
         badge.appendChild(badge_text);
 
         // attach delete button
-        badge.appendChild(createCellBadgeDelete(celltype, badge));
+        badge.appendChild(createBadgeDelete("celltype", celltype, badge));
         return badge
     }
 

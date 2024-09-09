@@ -552,18 +552,16 @@ export class SceneInitializer {
         }
 
         if (atacs.length > 0) {
-
-                // console.log("EMG KESINI BANG")
-                updateBadge("atac")
-                showColorbar();
-            } else if (genes.length > 0) {
-                updateBadge("gene")
-                showColorbar();
-
-            }  else {
-                updateBadge("celltype")
-                hideColorbar();
-        }
+            // console.log("EMG KESINI BANG")
+            updateBadge("atac", atacs)
+            showColorbar();
+        } else if (genes.length > 0) {
+            updateBadge("gene", genes)
+            showColorbar();
+        }  else {
+            updateBadge("celltype")
+            hideColorbar();
+    }
 
         updateCelltypeBadge();
         updateCelltypeCheckboxes();
