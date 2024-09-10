@@ -127,12 +127,26 @@ export function updateCelltypeBadgeApperance() {
     const atac = SelectedState.value.selectedAtacs
 
     function moveBadges(boolMove) {
-        const colobar = document.getElementById("colorbar-wrapper");
-        const positionInfo = colobar.getBoundingClientRect();
-        const colobarWidth = positionInfo.width
-
-        const distance = boolMove ? colobarWidth + 5: 0
-        const width = boolMove ? 25 : 30
+        const colorbarWrappers = ["colorbar-wrapper", "colorbar-wrapper2", "colorbar-wrapper3"];
+        let maxWidth = 0;
+    
+        // Loop through each colorbar wrapper
+        colorbarWrappers.forEach((wrapperId) => {
+            const colobar = document.getElementById(wrapperId);
+            if (colobar) {
+                const positionInfo = colobar.getBoundingClientRect();
+                const colobarWidth = positionInfo.width;
+                
+                // Calculate the maximum width among all colorbars
+                maxWidth = Math.max(maxWidth, colobarWidth);
+            }
+        });
+    
+        // Calculate distance and width based on the maximum width
+        const distance = boolMove ? maxWidth + 5 : 0;
+        const width = boolMove ? 25 : 30;
+    
+        // Apply transformations to celltypeBadges
         celltypeBadges.style.transform = `translateX(-${distance}px)`;
         celltypeBadges.style.width = `${width}vw`;
     }
