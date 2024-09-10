@@ -52,20 +52,23 @@ export function updateBadge(label, gene_atac_value="") {
         span.style.display = 'inline-block';
 
         // Show gene atac select badge if in gene atac mode
-        if (label == 'gene' || label == 'atac') {
-            gene_atac_value.forEach(select_value => {
+        if (label === 'gene' || label === 'atac') {
+            gene_atac_value.forEach((select_value, index) => {
                 const gene_atac_badge = document.createElement('span');
                 gene_atac_badge.className = 'showing-label gene-atac-badge';
                 gene_atac_badge.innerText = select_value;
                 gene_atac_badge.title = select_value;
 
-                const delete_button = createBadgeDelete(label, select_value, gene_atac_badge)
+                // Set background color based on index
+                gene_atac_badge.style.backgroundColor = index % 2 === 0 ? 'rgb(0, 200, 0)' : 'rgb(255, 0, 255)';
+
+                const delete_button = createBadgeDelete(label, select_value, gene_atac_badge);
                 gene_atac_badge.appendChild(delete_button);
 
-
                 badge.appendChild(gene_atac_badge);
-            })
+            });
         }
+
     } else {
         console.warn(`Unknown label: ${label}`);
     }
@@ -78,7 +81,8 @@ export function updateCelltypeBadge() {
         const badge = document.createElement('span');
         badge.className = 'celltype-label'
         badge.title = celltype
-        badge.style.color = ApiState.value.pallete[celltype]
+        // badge.style.color = ApiState.value.pallete[celltype]
+        badge.style.backgroundColor = ApiState.value.pallete[celltype]
 
         const badge_text = document.createElement("p");
         badge_text.className = 'celltype-text'

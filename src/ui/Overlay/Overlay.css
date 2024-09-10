@@ -71,6 +71,7 @@
     z-index: 11;
     white-space: nowrap;
     max-width: 100%;
+    width: max-content;
     overflow: hidden;
     text-overflow: ellipsis;
 }

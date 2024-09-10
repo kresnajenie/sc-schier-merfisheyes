@@ -67,7 +67,7 @@ export function createOverlay() {
     topControls.appendChild(minimizeButton);
 
     const clearButton = document.createElement('button');
-    clearButton.className = 'overlayClearButton btn btn-danger';
+    clearButton.className = 'overlayClearButton btn btn-outline-danger m-1';
     clearButton.id = 'clearButton';
     clearButton.textContent = 'Clear';
     clearButton.onclick = () => {

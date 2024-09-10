@@ -53,6 +53,20 @@
             })
         });
 
+        $(function () {
+            $(".colorbar-wrapper2").load("/src/ui/ColorBar/colorBarGreen.html", () => {
+                // console.log("showing")
+            })
+        });
+
+
+
+        $(function () {
+            $(".colorbar-wrapper3").load("/src/ui/ColorBar/colorBarMagenta.html", () => {
+                // console.log("showing")
+            })
+        });
+
 
         $(function () {
             $(".showing-container").load("/src/ui/Showing/showing.html", () => {
@@ -103,9 +117,10 @@
 
 
     <!-- ColorBar -->
-    <div class="colorbar-wrapper" id="colorbar-wrapper">
+    <div class="colorbar-wrapper" id="colorbar-wrapper"></div> 
+    <div class="colorbar-wrapper2" id="colorbar-wrapper2"></div>
+    <div class="colorbar-wrapper3" id="colorbar-wrapper3"></div>
 
-    </div>
 
     <div id="tooltip-hover"></div>
 

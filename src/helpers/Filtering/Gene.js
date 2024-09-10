@@ -179,6 +179,7 @@ export const clearGenes = () => {
     const geneClearButton = document.getElementById('geneClearButton');
 
     geneClearButton.addEventListener('click', () => {
+        console.log("HALOOOO")
         updateSelectedGene([]);
         updateSelectedInterval([]);
         const radioButtons = document.querySelectorAll('input[type="radio"]');
@@ -187,6 +188,7 @@ export const clearGenes = () => {
         });
         // createGeneRadio(ApiState.value.genes.slice(0,1000))
         updateSelectedAtac([]);
+
 
 
         geneTextbox.value = ''; // clears search field

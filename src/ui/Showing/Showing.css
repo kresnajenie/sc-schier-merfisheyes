@@ -34,10 +34,11 @@ body {
 
 .gene-atac-badge {
     background-color: #6c757d;
-    width: 125px;
+    max-width: 100%;
+    width: max-content; /* Adjusts the width based on the content */
     height: 35px;
     text-overflow: clip;
-    overflow-x: auto;
+    overflow: hidden; /* Hides the scrollbar */
 
     display: flex;
     flex-direction: row;
@@ -55,7 +56,7 @@ body {
     align-items: flex-start;
 
     width: 30vw;
-    max-height: 250px;
+    /* max-height: 250px; */
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -68,12 +69,19 @@ body {
     padding: 5px 10px;
     margin: 0;
     border-radius: 10px;
+    font-size: small;
 
     font-weight: bold;
-    background-color: #6c757d;
+    /* background-color: #6c757d; */
+    color: black;
 
-    width: 150px;
-    height: 50px;
+    max-width: 100%;
+    width: max-content; /* Adjusts the width based on the content */
+    height: max-content;
+    text-overflow: clip;
+
+    /* width: 150px; */
+    /* height: 50px; */
 
     overflow-x: hidden;
     overflow-y: auto;

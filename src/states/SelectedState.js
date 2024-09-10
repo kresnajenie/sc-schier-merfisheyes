@@ -169,7 +169,11 @@ export function updateSelectedGene(newGenes) {
 
     // Uncheck the radio button of the previously selected gene
     if (oldGenes.length > 0) {
-        const radioButton = document.getElementById(oldGenes[0]);
+        let radioButton = document.getElementById(oldGenes[0]);
+        if (radioButton) {
+            radioButton.checked = false; // Uncheck the radio button
+        }
+        radioButton = document.getElementById(oldGenes[1]);
         if (radioButton) {
             radioButton.checked = false; // Uncheck the radio button
         }
