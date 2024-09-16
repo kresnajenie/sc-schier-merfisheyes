@@ -6,6 +6,7 @@ body {
 
 .showing-badge {
     display: flex;
+    flex-direction: row-reverse;
     gap: 10px;
     padding: 5px;
     border-radius: 5px;
@@ -29,4 +30,116 @@ body {
 
 .showing-atac {
     background-color: #dc3545; /* Red color (Danger) */
+}
+
+.gene-atac-badge {
+    background-color: #6c757d;
+    max-width: 100%;
+    width: max-content; /* Adjusts the width based on the content */
+    height: 35px;
+    text-overflow: clip;
+    overflow: hidden; /* Hides the scrollbar */
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.celltype-badges {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-right: 5px;
+
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    width: 30vw;
+    /* max-height: 250px; */
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-color: dark;
+}
+
+.celltype-label {
+    position:relative;
+
+    padding: 5px 10px;
+    margin: 0;
+    border-radius: 10px;
+    font-size: small;
+
+    font-weight: bold;
+    /* background-color: #6c757d; */
+    color: black;
+
+    max-width: 100%;
+    width: max-content; /* Adjusts the width based on the content */
+    height: max-content;
+    text-overflow: clip;
+
+    /* width: 150px; */
+    /* height: 50px; */
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.celltype-text {
+    text-wrap: pretty;
+    text-align: left;
+    margin: 0;
+
+    flex-basis: 0.7
+    
+}
+
+.delete {
+    display: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    line-height: 75%;
+    text-align: center;
+
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    top: 0;
+
+    margin: 0;
+    border-radius: 50%;
+
+    color: black;
+    background-color: white;
+
+    width: 15px;
+    height: 15px;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+.delete:hover {
+    color: red;
+}
+
+.gene-atac-badge::-webkit-scrollbar, .celltype-label::-webkit-scrollbar {
+    width: 5px;
+}
+
+.gene-atac-badge::-webkit-scrollbar {
+    height: 5px;
+}
+
+.gene-atac-badge::-webkit-scrollbar-thumb, .celltype-label::-webkit-scrollbar-thumb {
+    background-color: rgb(65, 65, 65);
+    border-radius: 20px;
 }

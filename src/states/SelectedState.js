@@ -69,6 +69,41 @@ export function updateSelectedCelltype(newCelltypes) {
 }
 
 /**
+ * Toggles a celltype within the selectedCelltypes list.
+ * @param {string} celltype - The celltype to add or remove from the selectedCelltypes list.
+ * Example Usage:
+ * toggleSelectedCelltype("cell1");
+ */
+export function toggleSelectedCelltype(celltype) {
+    // Get the current state from the BehaviorSubject
+    const currentState = SelectedState.getValue();
+
+    // Copy the existing selectedCelltypes array
+    const selectedCelltypes = [...currentState.selectedCelltypes];
+
+    // Check if the celltype is already in the list
+    const celltypeIndex = selectedCelltypes.indexOf(celltype);
+
+    if (celltypeIndex > -1) {
+        // If it exists, remove it from the list
+        selectedCelltypes.splice(celltypeIndex, 1);
+    } else {
+        // If it does not exist, add it to the list
+        selectedCelltypes.push(celltype);
+    }
+
+    // Create the updated state
+    const updatedState = {
+        ...currentState,
+        selectedCelltypes: selectedCelltypes
+    };
+
+    // Emit the updated state
+    SelectedState.next(updatedState);
+}
+
+
+/**
  * Updates the selected celltypes within the application's constant data state.
  * @param {Array} newCelltypes - The new selected celltypes array to set in the state.
  * Example Usage:
@@ -134,7 +169,11 @@ export function updateSelectedGene(newGenes) {
 
     // Uncheck the radio button of the previously selected gene
     if (oldGenes.length > 0) {
-        const radioButton = document.getElementById(oldGenes[0]);
+        let radioButton = document.getElementById(oldGenes[0]);
+        if (radioButton) {
+            radioButton.checked = false; // Uncheck the radio button
+        }
+        radioButton = document.getElementById(oldGenes[1]);
         if (radioButton) {
             radioButton.checked = false; // Uncheck the radio button
         }

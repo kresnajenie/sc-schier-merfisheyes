@@ -11,24 +11,25 @@ import { isEqual, padEnd } from 'lodash';
 import { map, distinctUntilChanged, tap, skip } from 'rxjs/operators';
 import { ButtonState } from '../states/ButtonState.js';
 import { loading } from '../helpers/Loading.js';
-import { showCellFilters } from '../helpers/Filtering/Celltype.js';
+import { showCellFilters, updateCelltypeCheckboxes } from '../helpers/Filtering/Celltype.js';
 import { calculateGenePercentile, coolwarm, getGene, getAtac, normalizeArray } from '../helpers/GeneFunctions.js';
 import { showGeneFilters, showSelectedGeneFilters, clearGenes } from '../helpers/Filtering/Gene.js';
 import { showAtacFilters, showSelectedAtacFilters, clearAtacs } from '../helpers/Filtering/Atac.js';
+import { violinImageSearch } from '../helpers/Filtering/Violin.js';
 import { changeURL } from '../helpers/URL.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 // import { fetchIntervalGene } from '../helpers/APIClient.js';
 // import { addBoxes } from '../helpers/ATACPlot/Peaks.js';
-import { updateBadge } from '../ui/Showing/Showing.js';
-import { hideColorbar, setLabels, showColorbar } from '../ui/ColorBar/ColorBar.js';
+import { updateBadge, updateCelltypeBadge, updateCelltypeBadgeApperance } from '../ui/Showing/Showing.js';
+import { hideColorbar, hideColorbarGreen, hideColorbarMagenta, setLabels, showColorbar, showColorbarGreen, showColorbarMagenta } from '../ui/ColorBar/ColorBar.js';
 import { getInterval } from '../helpers/ATACPlot/Peaks.js';
 import { plotInitialData, updateCircleColors } from '../ui/Overlay/Overlay.js';
 
 const url = new URL(window.location);
 const params = new URLSearchParams(url.search);
 
-const mouse = new THREE.Vector2();
+// const mouse = new THREE.Vector2();
 let initialStart = 0
 
 
@@ -183,7 +184,6 @@ export class SceneInitializer {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
 
-
     }
 
     subscribeToStateChanges() {
@@ -224,6 +224,8 @@ export class SceneInitializer {
             await this.updateInstancedMesh("selectedCelltype");
             updateLoadingState(false);
             showCellFilters();
+            updateCelltypeBadge();
+            updateCelltypeCheckboxes();
     
             if (SelectedState.value.selectedCelltypes.length > 0) {
                 const newCelltype = encodeURIComponent(JSON.stringify(SelectedState.value.selectedCelltypes));
@@ -245,10 +247,14 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
             skip(1)
         ).subscribe(async items => {
-            console.log("Selected genes changed:", items);
+            console.log("Selected genes changed 1:", items);
+            console.log(items[0]);
             if (SelectedState.value.mode === 2) {
                 showSelectedGeneFilters();
-            } 
+            } else {
+                console.log("running image search")
+                violinImageSearch(items[0]);
+            }
             updateLoadingState(true);
             clearAtacs();
             showGeneFilters();
@@ -267,6 +273,8 @@ export class SceneInitializer {
             await this.updateInstancedMesh("selectedGene");
             changeURL(params);
             updateLoadingState(false);
+
+            updateCelltypeBadgeApperance();
         });
     
         SelectedState.pipe(
@@ -290,6 +298,8 @@ export class SceneInitializer {
             await this.updateInstancedMesh("selectedAtac");
             changeURL(params);
             updateLoadingState(false);
+
+            updateCelltypeBadgeApperance()
         });
     
         ButtonState.pipe(
@@ -319,7 +329,7 @@ export class SceneInitializer {
             distinctUntilChanged(),
             skip(1)
         ).subscribe(items => {
-            console.log("Selected genes changed:", items);
+            console.log("Selected genes changed 2:", items);
             params.set("mode", items);
             changeURL(params);
         });
@@ -333,7 +343,6 @@ export class SceneInitializer {
         console.log("PALETTTE")
 
         let colors = [];
-
 
 
         // Clear existing mesh
@@ -351,8 +360,6 @@ export class SceneInitializer {
 
         let pallete = ApiState.value.pallete;
         let jsonData = MatrixState.value.items;
-
-        console.log(jsonData)
 
         const keys = Object.keys(pallete);
 
@@ -393,6 +400,7 @@ export class SceneInitializer {
 
         
         let nmax1 = 1;
+        let nmax2 = 1;
 
         if (atacs.length > 0) {
             console.log("ASSALAM")
@@ -400,7 +408,7 @@ export class SceneInitializer {
                 let count1 = await getAtac(atacs[0]);
                 if (atacs.length == 2) {
                     let count2 = await getAtac(atacs[1]);
-                    let nmax2 = calculateGenePercentile(count2, atacPercentile);
+                    nmax2 = calculateGenePercentile(count2, atacPercentile);
                     ctsClipped2 = normalizeArray(count2, nmax2);
                 }
                 // You can use cts here
@@ -416,7 +424,7 @@ export class SceneInitializer {
                 let count1 = await getGene(genes[0]);
                 if (genes.length == 2) {
                     let count2 = await getGene(genes[1]);
-                    let nmax2 = calculateGenePercentile(count2, genePercentile);
+                    nmax2 = calculateGenePercentile(count2, genePercentile);
                     ctsClipped2 = normalizeArray(count2, nmax2);
                 }
                 // You can use cts here
@@ -435,15 +443,15 @@ export class SceneInitializer {
         // console.log(jsonData)
         
         for (let i = 0; i < count; i++) {
-            let colorrgb;
-            let scale;
+            
             if (atacs.length > 0) {
                 // updateSelectedShowing("atac")
                 // updateBadge("atac")
                 // no celltypes or matches celltype
                 if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
 
-  
+                    let colorrgb;
+                    let scale;
 
                     // if there's a second gene
                     if (ctsClipped2) {
@@ -471,6 +479,9 @@ export class SceneInitializer {
 
                 // no celltypes or matches celltype
                 if (celltypes.length === 0 || celltypes.includes(jsonData[i]["clusters"])) {
+
+                    let colorrgb;
+                    let scale;
 
                     // if there's a second gene
                     if (ctsClipped2) {
@@ -517,9 +528,9 @@ export class SceneInitializer {
             proj.updateMatrix();
             this.instancedMesh.setMatrixAt(i, proj.matrix);
             this.instancedMesh.setColorAt(i, color);
-
             colors.push(color);
 
+            
             //plot umap
 
             // let offset = ButtonState.value.umapOffset;
@@ -530,7 +541,7 @@ export class SceneInitializer {
             // this.instancedMeshUmap.setColorAt(i, color);
         }
 
-        console.log(colors.length)
+        // console.log(atacs);
 
         if (initialStart == 0) {
             initialStart+= 1;
@@ -541,21 +552,40 @@ export class SceneInitializer {
             updateCircleColors(colors);
         }
 
-        // console.log(atacs);
-
         if (atacs.length > 0) {
-
-                // console.log("EMG KESINI BANG")
-                updateBadge("atac")
-                showColorbar();
-            } else if (genes.length > 0) {
-                updateBadge("gene")
-                showColorbar();
-
-            }  else {
-                updateBadge("celltype")
+            // console.log("EMG KESINI BANG")
+            updateBadge("atac")
+            if (atacs.length > 1) {
+                hideColorbarGreen();
+                hideColorbarMagenta();
                 hideColorbar();
+            } else {
+                showColorbar();
+                hideColorbarGreen();
+                hideColorbarMagenta();
+            }
+        } else if (genes.length > 0) {
+            updateBadge("gene")
+            if (genes.length > 1) {
+                showColorbarGreen();
+                showColorbarMagenta();
+                hideColorbar();
+            } else {
+                showColorbar();
+                hideColorbarGreen();
+                hideColorbarMagenta();
+            }
+
+        }  else {
+            updateBadge("celltype")
+            hideColorbar();
+            hideColorbarGreen();
+
         }
+        
+        updateCelltypeBadge();
+        updateCelltypeCheckboxes();
+        updateCelltypeBadgeApperance();
 
         console.log(atacs);
 

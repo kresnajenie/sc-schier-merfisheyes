@@ -46,7 +46,15 @@ a:hover, a:focus, a:active {
     position: fixed;
     top: 70px;
     right: 10px;
+
+    width: 300px;
     /* z-index: 1000; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 10px;
 }
 
 .colorbar-wrapper {
@@ -71,6 +79,57 @@ a:hover, a:focus, a:active {
     font-size: 14px;
     margin: 5px 0;
 }
+
+.colorbar-wrapper2 {
+    display: none;
+    position: fixed;
+    top: 275px;
+    right: 10px;
+    width: 50px;
+    text-align: center;
+}
+
+.colorbar-wrapper3 {
+    display: none;
+    position: fixed;
+    top: 120px;
+    right: 10px;
+    width: 50px;
+    text-align: center;
+}
+
+
+
+.colorbar-green {
+    width: 30px;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(0,255,0), rgb(61, 61, 61)); /* Gradient for coolwarm color map */
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.colorbar-label-green {
+    color: white;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.colorbar-magenta {
+    width: 30px;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(255,0,255), rgb(61, 61, 61)); /* Gradient for coolwarm color map */
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.colorbar-label-magenta{
+    color: white;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+
+
 
 #tooltip-hover {
     position: absolute;
