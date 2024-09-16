@@ -169,6 +169,23 @@ export const toggleAtacFilter = () => {
     })
 }
 
+function isCanvasEmpty(canvas) {
+    const ctx = canvas.getContext('2d');
+    
+    // Get pixel data for the entire canvas
+    const canvasData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    
+    // Check if all pixels are transparent (RGBA all 0)
+    for (let i = 0; i < canvasData.data.length; i += 4) {
+        // Check if any pixel is not fully transparent (non-zero)
+        if (canvasData.data[i + 3] !== 0) {  // Alpha channel check
+            return false;  // Canvas is not empty
+        }
+    }
+    
+    return true;  // Canvas is empty
+}
+
 // toggle violin
 export const toggleViolin = () => {
 
@@ -202,20 +219,37 @@ export const toggleViolin = () => {
         // violinContainer.style.display = violinContainer.style.display === 'none' ? 'block' : 'none';
         // noViolinContainer.style.display = violinContainer.style.display === 'block' ? 'none' : 'block';
 
+        const canvas = document.getElementById('violin-canvas');
 
-        if (toggleViolinRadio.style.backgroundColor === 'white') {
-            if (violinImage.src === "" || violinImage.getAttribute('src') === "") {
-                console.log("opt 1");
+        // violinContainer.style.display = 'block';
+
+        if (toggleViolinRadio.style.backgroundColor == 'white') {
+            if (isCanvasEmpty(canvas)) {
+                console.log("RETURNED TREU");
                 noViolinContainer.style.display = 'block';
             } else {
-                console.log("opt 2");
+                console.log("RETURNED FALSE CANVAS NOT EMPTY");
                 violinContainer.style.display = 'block';
             }
         } else {
-            console.log("opt 3");
+            console.log("TURN OFF");
             violinContainer.style.display = 'none';
             noViolinContainer.style.display = 'none';
         }
+
+        // if (toggleViolinRadio.style.backgroundColor === 'white') {
+        //     if (violinImage.src === "" || violinImage.getAttribute('src') === "") {
+        //         console.log("opt 1");
+        //         noViolinContainer.style.display = 'block';
+        //     } else {
+        //         console.log("opt 2");
+        //         violinContainer.style.display = 'block';
+        //     }
+        // } else {
+        //     console.log("opt 3");
+        //     violinContainer.style.display = 'none';
+        //     noViolinContainer.style.display = 'none';
+        // }
 
         // clear other toggle's style
         toggleCellCheckbox.style.backgroundColor = '#282828';
