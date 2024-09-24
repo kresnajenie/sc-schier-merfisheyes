@@ -20,28 +20,7 @@ export function violinImageSearch(geneName) {
     
     const violinContainer = document.getElementById('violinContainer');
 
-<<<<<<< HEAD
     // const toggleViolinRadio = document.getElementById('toggleViolinRadio');
-=======
-    const toggleViolinRadio = document.getElementById('toggleViolinRadio');
-
-    const violinImage = document.getElementById("violin-image");
-
-    const noViolinContainer = document.getElementById('noViolinContainer');
-
-    const violinPlots = {
-        "ackr3b_measured": "src/assets/images/A_50p_ackr3b_measured.jpeg",
-        "ctslb_imputed": "src/assets/images/B_75p_ctslb_imputed.jpeg",
-        "egr2b_imputed": "src/assets/images/C_6s_egr2b_imputed.png",
-        "epha4a_imputed": "src/assets/images/C_6s_epha4a_imputed.png",
-        "musk_imputed": "src/assets/images/C_6s_musk_imputed.png",
-        "myod1_measured": "src/assets/images/C_6s_myod1_measured.png",
-        "noto_measured": "src/assets/images/C_6s_noto_measured.png",
-        "slit3_imputed": "src/assets/images/C_6s_slit3_imputed.png",
-        "sox3_measured": "src/assets/images/C_6s_sox3_measured",
-        "tbxta_measured": "src/assets/images/C_6s_tbxta_measured.png"
-    };
->>>>>>> 8fa20966322dc3688d8f7f96fd3114e5285f3305
     
     // const violinImage = document.getElementById("violin-image");
     

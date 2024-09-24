@@ -15,7 +15,7 @@ export const UIState = new BehaviorSubject(uiData);
  * updateLoadingState(false); // To indicate loading has finished
  */
 export function updateLoadingState(isLoading, where="") {
-    console.log(where)
+    // console.log(where)
     // Get the current state from the BehaviorSubject
     const currentState = UIState.getValue();
 

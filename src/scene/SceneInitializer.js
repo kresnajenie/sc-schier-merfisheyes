@@ -192,7 +192,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
             skip(1)
         ).subscribe(items => {
-            console.log('Items have updated:');
+            // console.log('Items have updated:');
             // Handle the update
         });
     
@@ -200,7 +200,7 @@ export class SceneInitializer {
             map(state => state.prefix),
             distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
         ).subscribe(items => {
-            console.log("Prefix changed:", items);
+            // console.log("Prefix changed:", items);
             const prefix = document.getElementById("dropdownMenuButton");
             prefix.innerText = ApiState.value.prefix;
         });
@@ -210,7 +210,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
             skip(1)
         ).subscribe(items => {
-            console.log("Loading changed:", items);
+            // console.log("Loading changed:", items);
             loading(UIState.value.isLoading);
         });
     
@@ -219,7 +219,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
             skip(1)
         ).subscribe(async items => {
-            console.log("Selected celltypes changed:", items);
+            // console.log("Selected celltypes changed:", items);
             updateLoadingState(true);
             await this.updateInstancedMesh("selectedCelltype");
             updateLoadingState(false);
@@ -240,19 +240,19 @@ export class SceneInitializer {
             map(state => state.selectedGenes),
             tap((curr, index) => {
                 if (index > 0) {
-                    console.log("Previous selected genes:", prev);
-                    console.log("Current selected genes:", curr);
+                    // console.log("Previous selected genes:", prev);
+                    // console.log("Current selected genes:", curr);
                 }
             }),
             distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
             skip(1)
         ).subscribe(async items => {
-            console.log("Selected genes changed 1:", items);
+            // console.log("Selected genes changed 1:", items);
             // console.log(items[0]);
             if (SelectedState.value.mode === 2) {
                 showSelectedGeneFilters();
             } else {
-                console.log("running image search")
+                // console.log("running image search")
                 violinImageSearch(items[0]);
             }
             updateLoadingState(true);
@@ -261,7 +261,7 @@ export class SceneInitializer {
             if (SelectedState.value.selectedGenes.length > 0) {
                 let selectedGene = SelectedState.value.selectedGenes[0];
                 let firstElement = selectedGene.split('_')[0];
-                console.log(SelectedState.value.geneGenomeHover)
+                // console.log(SelectedState.value.geneGenomeHover)
                 if (ApiState.value.prefix == "6s" && SelectedState.value.geneGenomeHover == false) {
                     getInterval(firstElement);
                 }
@@ -282,7 +282,7 @@ export class SceneInitializer {
             distinctUntilChanged((prev, curr) => prev.join() === curr.join()),
             skip(1)
         ).subscribe(async items => {
-            console.log("Selected atacs changed:", items);
+            // console.log("Selected atacs changed:", items);
             clearGenes();
             if (SelectedState.value.mode === 2) {
                 showSelectedAtacFilters();
@@ -307,7 +307,7 @@ export class SceneInitializer {
             distinctUntilChanged(),
             skip(1)
         ).subscribe(async items => {
-            console.log("Dot Size Changed:", items);
+            // console.log("Dot Size Changed:", items);
             updateLoadingState(true);
             await this.updateInstancedMesh("dotSize");
             updateLoadingState(false);
@@ -318,7 +318,7 @@ export class SceneInitializer {
             distinctUntilChanged(),
             skip(1)
         ).subscribe(async items => {
-            console.log("Gene Percentile", items);
+            // console.log("Gene Percentile", items);
             updateLoadingState(true);
             await this.updateInstancedMesh("genePercentile");
             updateLoadingState(false);
@@ -329,18 +329,18 @@ export class SceneInitializer {
             distinctUntilChanged(),
             skip(1)
         ).subscribe(items => {
-            console.log("Selected genes changed 2:", items);
+            // console.log("Selected genes changed 2:", items);
             params.set("mode", items);
             changeURL(params);
         });
     }
 
     async updateInstancedMesh(where) {
-        console.log("^^^^^^^^^")
-        console.log(where)
-        console.log("^^^^^^^^^")
+        // console.log("^^^^^^^^^")
+        // console.log(where)
+        // console.log("^^^^^^^^^")
 
-        console.log("PALETTTE")
+        // console.log("PALETTTE")
 
         let colors = [];
 
@@ -370,7 +370,7 @@ export class SceneInitializer {
 
         const material = new THREE.MeshBasicMaterial();
         const count = jsonData.length;
-        console.log("Count", count)
+        // console.log("Count", count)
 
         this.instancedMesh = new THREE.InstancedMesh(sphereGeometry, material, count);
         this.instancedMeshUmap = new THREE.InstancedMesh(circleGeometry, material, count);
@@ -402,7 +402,7 @@ export class SceneInitializer {
         let nmax1 = 1;
 
         if (atacs.length > 0) {
-            console.log("ASSALAM")
+            // console.log("ASSALAM")
             try {
                 let count1 = await getAtac(atacs[0]);
                 if (atacs.length == 2) {
@@ -602,11 +602,11 @@ export class SceneInitializer {
         updateCelltypeCheckboxes();
         updateCelltypeBadgeApperance();
 
-        console.log(atacs);
+        // console.log(atacs);
 
         this.scene.add(this.instancedMesh);
-        console.log(this.instancedMesh);
-        console.log(this.scene);
+        // console.log(this.instancedMesh);
+        // console.log(this.scene);
 
         this.scene.add(this.instancedMeshUmap);
     }

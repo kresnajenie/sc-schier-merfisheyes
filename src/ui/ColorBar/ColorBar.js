@@ -20,8 +20,8 @@ export function setLabels(min,max) {
         }
     }
 
-    console.log(max)
-    console.log("IMPUTED KAHH:", isImputed)
+    // console.log(max)
+    // console.log("IMPUTED KAHH:", isImputed)
 
     
     let actualMax = isImputed ? max * FACTOR : max;
@@ -62,8 +62,8 @@ export function setLabelsGreen(min,max) {
     }
     const FACTOR = 36.75
 
-    console.log(max)
-    console.log("IMPUTED KAHH:", isImputed)
+    // console.log(max)
+    // console.log("IMPUTED KAHH:", isImputed)
 
     
     let actualMax = isImputed ? max * FACTOR : max;
@@ -104,8 +104,8 @@ export function setLabelsMagenta(min,max) {
     }
     const FACTOR = 36.75
 
-    console.log(max)
-    console.log("IMPUTED KAHH:", isImputed)
+    // console.log(max)
+    // console.log("IMPUTED KAHH:", isImputed)
 
     
     let actualMax = isImputed ? max * FACTOR : max;

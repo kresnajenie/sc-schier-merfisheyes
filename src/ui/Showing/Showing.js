@@ -158,7 +158,7 @@ export function updateCelltypeBadgeApperance() {
     const selectingGenes = genes.length > 0
     const selectingAtac = atac.length > 0
 
-    console.log(selectingGenes, selectingAtac)
+    // console.log(selectingGenes, selectingAtac)
 
     moveBadges(selectingGenes)
     hideBadges(selectingAtac)    

@@ -28,7 +28,7 @@ export function createOverlay() {
     const minimizeButton = document.createElement('img');
     minimizeButton.className = 'min_max_button';
     minimizeButton.id = 'maximize' // determines the state of the overlay
-    minimizeButton.src = 'src/assets/images/overlay_controls/minimize.png'
+    minimizeButton.src = '/images/overlay_controls/minimize.png'
 
     // Toggle overlay minimize maximize state
     minimizeButton.onclick = (event) => {
@@ -43,7 +43,7 @@ export function createOverlay() {
         }
         button.id = new_state;
         // Use the old state to make the icon the opposite of the state
-        button.src = `src/assets/images/overlay_controls/${overlay_state}.png`;
+        button.src = `/images/overlay_controls/${overlay_state}.png`;
         
         // Hide circles
         const circles = document.querySelectorAll('.circle');
@@ -181,7 +181,7 @@ export function plotInitialData(data, colors) {
         // Inside the forEach loop, after setting the hover event listeners
         circle.addEventListener('click', () => {
             // Your click handler logic here
-            console.log(`Circle with cluster ${item.clusters} clicked!`);
+            // console.log(`Circle with cluster ${item.clusters} clicked!`);
             toggleSelectedCelltype(item.clusters);
 
             // Update textContainer with the click information
