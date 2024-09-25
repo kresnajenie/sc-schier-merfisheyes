@@ -384,7 +384,7 @@ export const toggleButton = () => {
             toggleCellCheckbox.style.backgroundColor = '#282828';
             toggleCellCheckbox.style.color = 'white';
         }
-        ALLOWED_ORIGINS="https://roymaimonel.merfisheyes.com,https://fishies.techkyra.com,https://lji.techkyra.com,http://localhost:5173,https://roy.techkyra.com"
+        // ALLOWED_ORIGINS="https://roymaimonel.merfisheyes.com,https://fishies.techkyra.com,https://lji.techkyra.com,http://localhost:5173,https://roy.techkyra.com"
         if (geneRadioContainer.style.display === 'block') {
             geneRadioContainer.style.display = 'none';
             toggleGeneRadio.style.backgroundColor = '#282828';
@@ -393,7 +393,7 @@ export const toggleButton = () => {
         if (pointSizeSliderBox.style.display === 'block') {
             pointSizeSliderBox.style.display = 'none';
         }
-
+        // console.log("gene clicked");
         geneSliderBox.style.display = geneSliderBox.style.display === 'none' ? 'block' : 'none';
     })
 
