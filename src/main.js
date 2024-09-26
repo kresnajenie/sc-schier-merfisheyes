@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) {
         console.error('Failed to load data:', err);
     } finally {
-        console.log("GAAA KESINSINI YAA")
         updateLoadingState(false); // Loading ends after all async operations
     }
 });

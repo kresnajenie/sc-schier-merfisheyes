@@ -30,22 +30,6 @@ export function updateGeneGenomeHover(isHovering) {
     SelectedState.next(updatedState);
 }
 
-export function updateSelectedShowing(newShowing) {
-    // Get the current state from the BehaviorSubject
-    const currentState = SelectedState.getValue();
-
-    // Update the items in the current state
-    const updatedState = {
-        ...currentState,
-        showing: newShowing
-    };
-
-    // console.log(newShowing)
-
-    // Emit the updated state
-    SelectedState.next(updatedState);
-}
-
 export const SelectedState = new BehaviorSubject(selectedData);
 
 /**
