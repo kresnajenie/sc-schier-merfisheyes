@@ -32,8 +32,6 @@ export function filterGeneSearchQuery(searchQuery) {
             return gene.toLowerCase().startsWith(searchQuery); // checks if has substring
         })
 
-        // console.log(filteredGene);
-
         createGeneRadio(filteredGene);
 
         // show the alert if no filtered cell type
@@ -177,9 +175,9 @@ function updateRadioItem(gene, isChecked) {
 export const clearGenes = () => {
 
     const geneClearButton = document.getElementById('geneClearButton');
+    const geneTextbox = document.getElementById('geneTextbox');
 
     geneClearButton.addEventListener('click', () => {
-        console.log("HALOOOO")
         updateSelectedGene([]);
         updateSelectedInterval([]);
         const radioButtons = document.querySelectorAll('input[type="radio"]');
@@ -188,10 +186,8 @@ export const clearGenes = () => {
         });
         // createGeneRadio(ApiState.value.genes.slice(0,1000))
         updateSelectedAtac([]);
-
-
-
         geneTextbox.value = ''; // clears search field
+        filterGeneSearchQuery(geneTextbox.value);   
     });
 }
 
