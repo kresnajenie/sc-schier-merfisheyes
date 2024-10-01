@@ -89,9 +89,9 @@ export function createOverlay() {
     // Plot the data on the overlay
     // plotInitialData(data, colors, textContainer);
 
-    window.addEventListener('resize', () => {
-        keepInBounds();
-    });
+    // window.addEventListener('resize', () => {
+    //     keepInBounds();
+    // });
 
     return overlay;
 }

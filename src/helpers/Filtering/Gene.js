@@ -186,6 +186,7 @@ export const clearGenes = () => {
         });
         // createGeneRadio(ApiState.value.genes.slice(0,1000))
         updateSelectedAtac([]);
+        
         geneTextbox.value = ''; // clears search field
         filterGeneSearchQuery(geneTextbox.value);   
     });
