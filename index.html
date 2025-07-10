@@ -130,7 +130,7 @@
         <p>
             Data by <a href="https://doi.org/10.1101/2024.08.27.609868" target="_blank">Wan et al. </a> from 
             <a href="https://schierlab.biozentrum.unibas.ch/" target="_blank">Schier Lab</a>.<br>
-            &copy; 2023-2024, 
+            &copy; 2023-<span id="current-year"></span>
             <a href="https://www.linkedin.com/in/ignatius-jenie-1023521b3/" target="_blank">Ignatius Jenie</a>,             
             <a href="https://www.linkedin.com/in/edward-lin-s/" target="_blank">Edward Lin</a>, 
             <a href="https://www.linkedin.com/in/serena-chuang-137942271/" target="_blank">Serena Chuang</a>, 
@@ -138,6 +138,11 @@
 
         </p>
     </footer>
+    
+    <script>
+        // Auto-update copyright year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>

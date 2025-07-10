@@ -9,13 +9,14 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
         // console.log("ATACATACATACATACATACATACATAC")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
         // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac.csv`);
-        response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac_new.csv`);
+        // response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac_new.csv`);
+        response = await fetch(`https://sc-schier-backend.merfisheyes.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_atac_new.csv`);
 
     }   else {
         // console.log("MATRIXMATRIXMATRIXMATRIXMATRIXMATRIX")
         // response = await fetch(`http://localhost:8000/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
         // response = await fetch(`https://fisheyes.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
-        response = await fetch(`https://backendbasel.techkyra.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
+        response = await fetch(`https://sc-schier-backend.merfisheyes.com/get-gene-values?gene=${columnName}&dbname=genedb&dbcollection=${prefix}&username=zebra&csv_filename=${prefix}_matrix.csv`);
     }
     // https://fisheyes.techkyra.com/get-gene-values?gene=tbxta&dbname=genedb&dbcollection=6s&username=zebra&csv_filename=6somite_matrix.csv
     if (!response.ok) {
@@ -60,7 +61,8 @@ export async function fetchDataFromAPI(columnName, prefix, atac=false) {
 
 export async function fetchIntervalGene(gene, range=100000) {
     let response = ""
-    response = await fetch(`https://backendbasel.techkyra.com/get-intervals?gene=${gene}&range=${range}`);
+    // response = await fetch(`https://backendbasel.techkyra.com/get-intervals?gene=${gene}&range=${range}`);
+    response = await fetch(`https://sc-schier-backend.merfisheyes.com/get-intervals?gene=${gene}&range=${range}`);
 
 
     if (!response.ok) {

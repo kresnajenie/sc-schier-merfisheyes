@@ -14,7 +14,7 @@ export function loadPrefixOptions() {
 
     for (let i = 0; i < prefixOptions.length; i++) {
         const prefixItem = document.createElement('p');
-        prefixItem.innerHTML = `<a class="dropdown-item">${prefixOptions[i]}</a>`
+        prefixItem.innerHTML = `<a class="dropdown-item">${prefixOptions[i]}</a>`;
 
         prefixDropdown.appendChild(prefixItem);
     }
@@ -31,14 +31,20 @@ export function selectPrefix() {
         
         prefixItems.item(i).addEventListener("click", () => {
 
-            const params = new URLSearchParams(""); // clears out the params
+            if (i > 2) {
+                // For sm- prefixes, open in new tab
+                const basePrefix = prefixItems[i].innerText.substring(3); // Remove 'sm-'
+                window.open(`https://sm-schier.merfisheyes.com/?data=${basePrefix}`, '_blank');
+            } else {
+                // For regular prefixes, update current URL
+                const params = new URLSearchParams(""); // clears out the params
+                params.append('prefix', prefixItems.item(i).innerText);
+                changeURL(params);
 
-            params.append('prefix', prefixItems.item(i).innerText);
-            changeURL(params);
-
-            if (prefixItems.item(i).innerText !== ApiState.value.prefix) {
-                dropdownMenuButton.innerHTML = ApiState.value.prefix;
-                window.location.reload();
+                if (prefixItems.item(i).innerText !== ApiState.value.prefix) {
+                    dropdownMenuButton.innerHTML = ApiState.value.prefix;
+                    window.location.reload();
+                }
             }
         })
     }

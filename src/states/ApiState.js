@@ -13,7 +13,8 @@ const apiData = {
         'clusters',
     ],
 
-    prefixOptions: ["50pe", "75pe", "6s"],
+    prefixOptions: ["50pe", "75pe", "6s", "sm-50pe", "sm-75pe", "sm-6s"],
+    prefixDescription: {"50pe": "Single Cell 50% Epiboly", "75pe": "Single Cell 75% Epiboly", "6s": "Single Cell 6 Somite", "sm-50pe": "Single Molecule 50% Epiboly", "sm-75pe": "Single Molecule 75% Epiboly", "sm-6s": "Single Molecule 6 Somite"},
     prefix: params.has("prefix") ? params.get("prefix") : "6s",
     pallete: {},
     listPalette: [], // list version of palette

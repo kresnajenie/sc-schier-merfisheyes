@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { LinearFilter, LinearMipMapLinearFilter } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
+
 // Global states
 import { MatrixState } from '../states/MatrixState.js';
 import { ApiState } from '../states/ApiState.js';
@@ -117,11 +119,23 @@ export class SceneInitializer {
         this.camera.position.z = ButtonState.value.cameraPositionZ;
 
         // Example usage inside SceneInitializer
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-        this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.25;
-        this.controls.update();
+        // this.controls.enableDamping = true;
+        // this.controls.dampingFactor = 0.25;
+        // this.controls.update();
+        this.controls = new TrackballControls(this.camera, this.renderer.domElement);
+
+        // Configure TrackballControls
+        this.controls.rotateSpeed = 2.0; // Speed of rotation
+        this.controls.zoomSpeed = 1.2; // Speed of zooming
+        this.controls.panSpeed = 0.8; // Speed of panning
+        this.controls.noZoom = false; // Allow zooming
+        this.controls.noPan = false; // Allow panning
+        this.controls.staticMoving = false; // Smooth movement
+        this.controls.dynamicDampingFactor = 0.2; // Damping factor for smoothness
+
+
         this.updateInstancedMesh("initScene");
 
         this.animate();
