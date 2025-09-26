@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this repository in your research, please cite it as below."
+authors:
+  - family-names: "Jenie"
+    given-names: "Ignatius Kresnathan Sjahnir"
+title: "MERFISHEYES Single-Cell Visualizer"
+version: "1.0.0"
+doi: "10.1101/2024.08.27.609868"
+date-released: 2025-09-26
+repository-code: "https://github.com/kresnajenie/sc-schier-merfisheyes"
+url: "https://github.com/kresnajenie/sc-schier-merfisheyes"
+license: "MIT"

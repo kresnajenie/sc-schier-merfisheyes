@@ -7,6 +7,10 @@
   height: 50px; /* Set a fixed height for the navbar */
 }
 
+.navbar-brand {
+  font-size: 32px;
+}
+
 #title {
   display: flex;
   flex-direction: column;
@@ -21,7 +25,7 @@
   height: 100%; /* Make the height 100% of the navbar */
   align-items: center; /* Center the content vertically */
   /* background-color: transparent;  */
-  background-color: #121212; 
+  background-color: #121212;
   transition: transform 0.3s, background-color 0.3s, height 0.3s; /* Smooth transition */
   border-radius: 10px; /* Rounded corners */
   padding-left: 10px;
@@ -61,7 +65,8 @@
   z-index: 1000;
 }
 
-.atac-peaks, .atac-peaks-enriched {
+.atac-peaks,
+.atac-peaks-enriched {
   position: absolute;
   bottom: 0px;
   min-width: 1px;
@@ -80,56 +85,92 @@
   background-color: rgb(255, 0, 0);
 }
 
-.atac-peaks:hover, .atac-peaks-enriched:hover {
+.atac-peaks:hover,
+.atac-peaks-enriched:hover {
   background: rgb(4, 255, 100); /* Change color on hover */
 }
 
 .atac-peaks.clicked {
-  background: rgb(4, 255, 100); /* Maintain the hover background color when clicked */
+  background: rgb(
+    4,
+    255,
+    100
+  ); /* Maintain the hover background color when clicked */
 }
 
 .atac-peaks-enriched.clicked {
-  background: rgb(4, 255, 100); /* Maintain the hover background color when clicked */
+  background: rgb(
+    4,
+    255,
+    100
+  ); /* Maintain the hover background color when clicked */
 }
 
-.gene, .gene-left, .gene-border, .gene-left-border {
+.gene,
+.gene-left,
+.gene-border,
+.gene-left-border {
   position: absolute;
-  bottom: 25%; 
-  height: 50%; 
+  bottom: 25%;
+  height: 50%;
   width: 80%; /* Adjust width as necessary */
   background-color: transparent;
   cursor: pointer;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
   z-index: 199;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
-.gene::before, .gene-left::before, .gene-border::before, .gene-left-border::before {
-  content: '';
+.gene::before,
+.gene-left::before,
+.gene-border::before,
+.gene-left-border::before {
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   width: 100%;
-  pointer-events: auto; 
+  pointer-events: auto;
 }
 
-.gene::before, .gene-left::before {
+.gene::before,
+.gene-left::before {
   background-color: rgb(27, 236, 255);
 }
 
 /* Specific styles for .gene */
-.gene::before, .gene-border::before {
-  clip-path: polygon(0% 25%, 85% 25%, 85% 0, 100% 50%, 85% 100%, 85% 75%, 0% 75%, 0 50%);
+.gene::before,
+.gene-border::before {
+  clip-path: polygon(
+    0% 25%,
+    85% 25%,
+    85% 0,
+    100% 50%,
+    85% 100%,
+    85% 75%,
+    0% 75%,
+    0 50%
+  );
 }
 
 /* Specific styles for .gene-left (left-pointing arrow) */
-.gene-left::before, .gene-left-border::before {
-  clip-path: polygon(100% 25%, 15% 25%, 15% 0, 0% 50%, 15% 100%, 15% 75%, 100% 75%, 100% 50%);
+.gene-left::before,
+.gene-left-border::before {
+  clip-path: polygon(
+    100% 25%,
+    15% 25%,
+    15% 0,
+    0% 50%,
+    15% 100%,
+    15% 75%,
+    100% 75%,
+    100% 50%
+  );
 }
 
-
-.gene-border::before, .gene-left-border::before {
+.gene-border::before,
+.gene-left-border::before {
   /* From https://css.glass */
   background: rgba(255, 255, 255, 0.15);
   border-radius: 16px;
@@ -145,8 +186,10 @@
   );  */
 }
 
-
-.gene .tooltip, .gene-left .tooltip, .gene-border .tooltip, .gene-left-border .tooltip {
+.gene .tooltip,
+.gene-left .tooltip,
+.gene-border .tooltip,
+.gene-left-border .tooltip {
   position: absolute;
   transform: translateX(-50%) translateY(300%);
   pointer-events: none; /* Disable pointer events for the tooltip */
@@ -160,15 +203,19 @@
   transition: opacity 0.3s;
 }
 
-.gene:hover .tooltip, .gene-left:hover .tooltip, .gene-border:hover .tooltip, .gene-left-border:hover .tooltip {
+.gene:hover .tooltip,
+.gene-left:hover .tooltip,
+.gene-border:hover .tooltip,
+.gene-left-border:hover .tooltip {
   opacity: 1;
 }
 
-
-.gene:hover::before, .gene-left:hover::before, .gene-border:hover::before, .gene-left-border:hover::before {
+.gene:hover::before,
+.gene-left:hover::before,
+.gene-border:hover::before,
+.gene-left-border:hover::before {
   background: rgb(4, 255, 100); /* Change color on hover */
 }
-
 
 .tooltip {
   position: absolute;
@@ -185,20 +232,18 @@
   z-index: 200; /* Default z-index for tooltips */
 }
 
-.atac-peaks:hover .tooltip, .atac-peaks-enriched:hover .tooltip {
+.atac-peaks:hover .tooltip,
+.atac-peaks-enriched:hover .tooltip {
   opacity: 1;
   z-index: 9999; /* High z-index for tooltips when parent is hovered */
 }
 
-
-
-#prefix-dropdown-container, 
+#prefix-dropdown-container,
 #filter-container {
   display: flex;
   align-items: center;
   z-index: 1000;
 }
-
 
 #filter-container {
   justify-content: flex-end;
@@ -208,7 +253,6 @@
   justify-content: flex-end;
 }
 
-
 #dropdownMenuButton {
   width: 80px;
 }
@@ -217,7 +261,8 @@
   min-width: 80px;
   max-width: 80px;
   background-color: rgb(60, 60, 60);
-  box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 8px 0px, rgba(255, 255, 255, 0.19) 0px 6px 20px 0px;
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 8px 0px,
+    rgba(255, 255, 255, 0.19) 0px 6px 20px 0px;
 }
 
 .dropdown-item {

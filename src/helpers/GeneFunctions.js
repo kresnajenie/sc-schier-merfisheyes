@@ -2,68 +2,94 @@ import { ApiState } from "../states/ApiState";
 import { fetchDataFromAPI } from "./APIClient";
 import { convertToNumberFormat } from "./Filtering/Atac";
 export function getGene(gene) {
-    return fetchDataFromAPI(gene, ApiState.value.prefix);
+  return fetchDataFromAPI(gene, ApiState.value.prefix);
 }
 export function getAtac(atac) {
-
-    return fetchDataFromAPI(convertToNumberFormat(atac), ApiState.value.prefix, true);
+  return fetchDataFromAPI(
+    convertToNumberFormat(atac),
+    ApiState.value.prefix,
+    true
+  );
 }
 // for two genes
 function interpolatePercentages(percent1, percent2) {
+  // Define colors
+  const white = { r: 255, g: 255, b: 255 };
+  const green = { r: 0, g: 255, b: 0 };
+  const magenta = { r: 255, g: 0, b: 255 };
 
-    // Define colors
-    const white = { r: 255, g: 255, b: 255 };
-    const green = { r: 0, g: 255, b: 0 };
-    const magenta = { r: 255, g: 0, b: 255 };
+  // Interpolate between green and white based on the second percentage
+  const interpolatedRed = {
+    r: Math.round(green.r + (white.r - green.r) * percent2),
+    g: Math.round(green.g + (white.g - green.g) * percent2),
+    b: Math.round(green.b + (white.b - green.b) * percent2),
+  };
 
-    // Interpolate between red and white based on the first percentage
-    const interpolatedRed = {
-        r: Math.round(green.r + (white.r - green.r) * percent2),
-        g: Math.round(green.g + (white.g - green.g) * percent2),
-        b: Math.round(green.b + (white.b - green.b) * percent2)
-    };
+  // Interpolate between magenta and white based on the first percentage
+  const interpolatedCyan = {
+    r: Math.round(magenta.r + (white.r - magenta.r) * percent1),
+    g: Math.round(magenta.g + (white.g - magenta.g) * percent1),
+    b: Math.round(magenta.b + (white.b - magenta.b) * percent1),
+  };
 
-    // Interpolate between cyan and white based on the second percentage
-    const interpolatedCyan = {
-        r: Math.round(magenta.r + (white.r - magenta.r) * percent1),
-        g: Math.round(magenta.g + (white.g - magenta.g) * percent1),
-        b: Math.round(magenta.b + (white.b - magenta.b) * percent1)
-    };
+  // Calculate the average of the interpolated colors
+  const averageColor = {
+    r: (interpolatedRed.r + interpolatedCyan.r) / 2,
+    g: (interpolatedRed.g + interpolatedCyan.g) / 2,
+    b: (interpolatedRed.b + interpolatedCyan.b) / 2,
+  };
 
-    // Calculate the average of the interpolated colors
-    const averageColor = {
-        r: (interpolatedRed.r + interpolatedCyan.r) / 2,
-        g: (interpolatedRed.g + interpolatedCyan.g) / 2,
-        b: (interpolatedRed.b + interpolatedCyan.b) / 2
-    };
-
-    // Return CSS color string
-    return `rgb(${Math.round(averageColor.r)}, ${Math.round(averageColor.g)}, ${Math.round(averageColor.b)})`;
+  // Return RGB tuple
+  return [
+    Math.round(averageColor.r),
+    Math.round(averageColor.g),
+    Math.round(averageColor.b),
+  ];
 }
 
-/**
- * Generates a color value in the coolwarm colormap based on the input value.
- * @param {number} value - The value for which to generate the color (between 0 and 1).
- * @returns {string} - The color string in RGB format.
- */
 export function coolwarm(value1, value2) {
-    // Define start and end colors (cool: blue, warm: red)
-    const startColor = { r: 0, g: 0, b: 255 }; // Blue
-    const middleColor = { r: 255, g: 255, b: 255 }; // White
-    const endColor = { r: 255, g: 0, b: 0 }; // Red
+  // Convert to number if it's a string
+  const numValue = Number(value1);
 
-    // no second gene
-    if (value2 == null) {
-        if (value1 < 0.5) { // blue to white
-            return `rgb(${Math.floor(middleColor.r * value1 * 2)}, ${Math.floor(middleColor.g * value1 * 2)}, ${startColor.b})`;
-        } else if (value1 === 0.5) { // white
-            return `rgb(${middleColor.r}, ${middleColor.g}, ${middleColor.b})`;
-        } else { // white to red
-            return `rgb(${endColor.r}, ${Math.floor(middleColor.g - (middleColor.g * (value1 - 0.5) * 2))}, ${Math.floor(middleColor.b - (middleColor.b * (value1 - 0.5) * 2))})`;
-        }
+  // Define start and end colors (cool: blue, warm: red)
+  const startColor = { r: 60, g: 78, b: 194 }; // Blue
+  const middleColor = { r: 235, g: 235, b: 235 }; // White
+  const endColor = { r: 220, g: 50, b: 47 }; // Red
+
+  // no second gene
+  if (value2 == null) {
+    if (numValue < 0.5) {
+      // blue to white
+      const r = Math.floor(middleColor.r * numValue * 2);
+      const g = Math.floor(middleColor.g * numValue * 2);
+      const b = startColor.b;
+      return [r / 255, g / 255, b / 255];
+    } else if (numValue === 0.5) {
+      // white
+      return [middleColor.r / 255, middleColor.g / 255, middleColor.b / 255];
     } else {
-        return interpolatePercentages(value1, value2);
+      // white to red
+      const r = endColor.r;
+      const g = Math.floor(
+        middleColor.g - middleColor.g * (numValue - 0.5) * 2
+      );
+      const b = Math.floor(
+        middleColor.b - middleColor.b * (numValue - 0.5) * 2
+      );
+      return [r / 255, g / 255, b / 255];
     }
+  } else {
+    return interpolatePercentages(value1, value2);
+  }
+}
+
+// Test function to verify the output
+export function testCoolwarmTuple() {
+  console.log("Test 0:", coolwarm(0)); // Should be [0, 0, 255] (blue)
+  console.log("Test 0.25:", coolwarm(0.25)); // Should be [127, 127, 255] (light blue)
+  console.log("Test 0.5:", coolwarm(0.5)); // Should be [255, 255, 255] (white)
+  console.log("Test 0.75:", coolwarm(0.75)); // Should be [255, 127, 127] (light red)
+  console.log("Test 1:", coolwarm(1)); // Should be [255, 0, 0] (red)
 }
 
 /**
@@ -72,14 +98,14 @@ export function coolwarm(value1, value2) {
  * @returns {number} - The value at the 99th percentile.
  */
 export function calculateGenePercentile(arr, percentile) {
-    // Create a copy of the array and sort the copy
-    const sortedArr = arr.slice().sort((a, b) => a - b);
+  // Create a copy of the array and sort the copy
+  const sortedArr = arr.slice().sort((a, b) => a - b);
 
-    // Calculate the index for the xth percentile
-    const index = Math.floor(sortedArr.length * percentile) - 1;
+  // Calculate the index for the xth percentile
+  const index = Math.floor(sortedArr.length * percentile) - 1;
 
-    // Return the value at the 99th percentile
-    return sortedArr[index];
+  // Return the value at the 99th percentile
+  return sortedArr[index];
 }
 
 /**
@@ -89,5 +115,5 @@ export function calculateGenePercentile(arr, percentile) {
  * @returns {Array<number>} - The array with normalized values.
  */
 export function normalizeArray(arr, nmax) {
-    return arr.map(value => Math.min(value / nmax, 1));
+  return arr.map((value) => Math.min(value / nmax, 1));
 }
