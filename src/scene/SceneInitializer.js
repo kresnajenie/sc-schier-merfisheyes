@@ -1404,9 +1404,9 @@ export class SceneInitializer {
   animate = () => {
     requestAnimationFrame(this.animate);
     this.controls.update(); // Only needed if controls.enableDamping is true
-    if (this.mouse.x !== 0 || this.mouse.y !== 0) {
-      this.checkIntersections();
-    }
+    // if (this.mouse.x !== 0 || this.mouse.y !== 0) {
+    //   this.checkIntersections();
+    // }
 
     this.renderer.render(this.scene, this.camera);
   };
