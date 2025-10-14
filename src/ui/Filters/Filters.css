@@ -249,6 +249,15 @@
   gap: 5px;
 }
 
+.slider-input:hover .descBox {
+  display: block;
+}
+
+#warningBox {
+  text-align: left;
+  width: 300px;
+}
+
 .slider-container {
   width: 200px;
   background-color: #282828;
