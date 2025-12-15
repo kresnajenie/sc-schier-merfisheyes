@@ -12,39 +12,23 @@ export function getAtac(atac) {
   );
 }
 // for two genes
-function interpolatePercentages(percent1, percent2) {
-  // Define colors
-  const white = { r: 255, g: 255, b: 255 };
-  const green = { r: 0, g: 255, b: 0 };
-  const magenta = { r: 255, g: 0, b: 255 };
+// gene1 (value1): high expression = magenta (255, 0, 255)
+// gene2 (value2): high expression = green (0, 255, 0)
+// both high = white, both low = greyish (visible on black background)
+function interpolatePercentages(value1, value2) {
+  // value1 and value2 are normalized values between 0 and 1
+  // gene1 contributes magenta: R and B channels
+  // gene2 contributes green: G channel
 
-  // Interpolate between green and white based on the second percentage
-  const interpolatedRed = {
-    r: Math.round(green.r + (white.r - green.r) * percent2),
-    g: Math.round(green.g + (white.g - green.g) * percent2),
-    b: Math.round(green.b + (white.b - green.b) * percent2),
-  };
+  // Add a base grey level so low expression is visible on black backgrounds
+  const baseGrey = 0.15; // Minimum grey level for visibility
 
-  // Interpolate between magenta and white based on the first percentage
-  const interpolatedCyan = {
-    r: Math.round(magenta.r + (white.r - magenta.r) * percent1),
-    g: Math.round(magenta.g + (white.g - magenta.g) * percent1),
-    b: Math.round(magenta.b + (white.b - magenta.b) * percent1),
-  };
+  const r = baseGrey + value1 * (1 - baseGrey); // gene1 expression controls red channel
+  const g = baseGrey + value2 * (1 - baseGrey); // gene2 expression controls green channel
+  const b = baseGrey + value1 * (1 - baseGrey); // gene1 expression controls blue channel
 
-  // Calculate the average of the interpolated colors
-  const averageColor = {
-    r: (interpolatedRed.r + interpolatedCyan.r) / 2,
-    g: (interpolatedRed.g + interpolatedCyan.g) / 2,
-    b: (interpolatedRed.b + interpolatedCyan.b) / 2,
-  };
-
-  // Return RGB tuple
-  return [
-    Math.round(averageColor.r),
-    Math.round(averageColor.g),
-    Math.round(averageColor.b),
-  ];
+  // Return RGB tuple normalized to 0-1 range (for WebGL/Three.js)
+  return [r, g, b];
 }
 
 export function coolwarm(value1, value2) {

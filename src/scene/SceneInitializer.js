@@ -759,7 +759,7 @@ export class SceneInitializer {
 
       const sizes = this.jsonData.map((point) => {
         if (ApiState.value.prefix == "6s") {
-          return celltypes.includes(point["clusters"]) ? 1.25 : 0.75;
+          return celltypes.includes(point["clusters"]) ? 2.0 : 0.25;
         } else {
           return celltypes.includes(point["clusters"]) ? 3 : 2;
         }

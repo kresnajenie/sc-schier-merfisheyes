@@ -1,8 +1,27 @@
+# Dependencies
 node_modules/
-*.code-workspace
+
+# Build output
 dist/
+
+# macOS
 .DS_Store
-.code-workspace
+**/.DS_Store
+
+# Editor
+*.code-workspace
+.vscode/
+.idea/
+
+# Local development
 .serena/
 .claude/
 .mcp/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
