@@ -8,13 +8,13 @@ This tool lets you:
 - Toggle between RNA expression and chromatin accessibility
 - Explore developmental trajectories interactively
 
-## 📄 Related Paper
+## Related Paper
 
-This visualization accompanies the study:  
-**Whole-embryo Spatial Transcriptomics at Subcellular Resolution from Gastrulation to Organogenesis**  
-[https://doi.org/10.1101/2024.08.27.609868](https://doi.org/10.1101/2024.08.27.609868)
+This visualization accompanies the study:
+**Whole-embryo Spatial Transcriptomics at Subcellular Resolution from Gastrulation to Organogenesis**
+[https://doi.org/10.1126/science.adt3439](https://doi.org/10.1126/science.adt3439)
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Clone and enter the repo
@@ -30,20 +30,20 @@ npx vite
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## 📜 Citation
+## Citation
 
 If you use this tool, please cite:
 
 ```bibtex
-@software{sc-schier-merfisheyes,
-  author = {Ignatius Kresnathan Sjahnir Jenie},
-  title = {MERFISHEYES Single-Cell Visualizer},
-  year = {2025},
-  url = {https://github.com/kresnajenie/single-cell-visualizer},
-  doi = {10.1101/2024.08.27.609868}
+@article{sc-schier-merfisheyes,
+  author = {Wan, Yinan and others},
+  title = {Whole-embryo Spatial Transcriptomics at Subcellular Resolution from Gastrulation to Organogenesis},
+  journal = {Science},
+  year = {2026},
+  doi = {10.1126/science.adt3439}
 }
 ```
 
-## 📄 License
+## License
 
 Distributed under the [MIT License](./LICENSE).
