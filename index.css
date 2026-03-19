@@ -9,10 +9,6 @@ canvas {
   display: block;
 }
 
-/* hides everything to prevent flickering */
-body * {
-  visibility: hidden;
-}
 
 footer {
   position: absolute;
