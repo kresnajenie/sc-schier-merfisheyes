@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
   "dependencies": {
     "bootstrap": "^5.3.3",
     "bootstrap-switch-button": "^1.1.0",
