@@ -1,4 +1,9 @@
+import { inject } from "@vercel/analytics";
+import { injectSpeedInsights } from "@vercel/speed-insights";
 import { SceneInitializer } from "./scene/SceneInitializer.js";
+
+inject();
+injectSpeedInsights();
 import {
   cellSearch,
   clearCells,
