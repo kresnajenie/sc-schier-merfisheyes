@@ -351,6 +351,9 @@ export function createOverlay() {
 
     window.addEventListener('resize', () => {
         keepInBounds();
+        camera.aspect = overlay.offsetWidth / overlay.offsetHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(overlay.offsetWidth, overlay.offsetHeight);
     });
 
     return overlay;
