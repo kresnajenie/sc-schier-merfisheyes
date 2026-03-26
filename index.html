@@ -126,15 +126,18 @@
       }
     </script>
 
-    <link rel="stylesheet" href="src/ui/Overlay/Overlay.css" />
-    <link rel="stylesheet" href="index.css" />
-
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="src/ui/Overlay/Overlay.css" />
+    <link rel="stylesheet" href="src/ui/Navbar/Navbar.css" />
+    <link rel="stylesheet" href="src/ui/Navbar/FilterIndicator.css" />
+    <link rel="stylesheet" href="src/ui/Showing/Showing.css" />
+    <link rel="stylesheet" href="src/ui/Filters/Filters.css" />
+    <link rel="stylesheet" href="index.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -143,7 +146,6 @@
       rel="stylesheet"
     />
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -162,7 +164,6 @@
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
     <script type="module" src="/src/main.js"></script>
 
-
     <script type="module">
       import { loadPrefixOptions, selectPrefix } from "/src/helpers/Prefix.js";
       import {
@@ -174,82 +175,207 @@
       } from "/src/helpers/ToggleFilters.js";
       import { toggleMode } from "/src/helpers/Filtering/Gene.js";
 
-      $(function () {
-        $(".navbar").load("/src/ui/Navbar/navbar.html", () => {
-          // console.log("AKU DISINI")
-          loadPrefixOptions();
-          selectPrefix();
-        });
+      document.addEventListener("DOMContentLoaded", () => {
+        loadPrefixOptions();
+        selectPrefix();
+        toggleCellFilter();
+        toggleGeneFilter();
+        toggleAtacFilter();
+        toggleViolin();
+        toggleButton();
+        toggleMode();
       });
-
-      $(function () {
-        $(".colorbar-wrapper").load("/src/ui/ColorBar/colorBar.html", () => {
-          // console.log("showing")
-        });
-      });
-
-      $(function () {
-        $(".colorbar-wrapper2").load(
-          "/src/ui/ColorBar/colorBarGreen.html",
-          () => {
-            // console.log("showing")
-          },
-        );
-      });
-
-      $(function () {
-        $(".colorbar-wrapper3").load(
-          "/src/ui/ColorBar/colorBarMagenta.html",
-          () => {
-            // console.log("showing")
-          },
-        );
-      });
-
-      $(function () {
-        $(".showing-container").load("/src/ui/Showing/showing.html", () => {
-          // console.log("showing")
-        });
-      });
-
-      $(function () {
-        $(".filter").load("/src/ui/Filters/filters.html", () => {
-          toggleCellFilter();
-          toggleGeneFilter();
-          toggleAtacFilter();
-          toggleViolin();
-          toggleButton();
-          toggleMode();
-        });
-      });
-
-      // $(function () {
-      //     $(".svg-images-container").load("/src/ui/SVGs/svgImages.html", () => {
-      //         console.log("SVG Images loaded");
-      //     });
-      // });
-
     </script>
   </head>
 
   <body>
-    <!-- navbar container -->
+    <!-- navbar -->
     <nav
       class="sidenav navbar navbar-expand-lg navbar-dark"
       data-mdb-sidenav-init
       data-mdb-right="true"
-    ></nav>
+    >
+      <div class="container-fluid nav-container">
+        <div id="title">
+          <b class="navbar-brand">MERFISHEYES</b>
+        </div>
+        <div id="middle-space">
+          <div class="left-text"></div>
+          <div id="line-container" class="line-container"></div>
+        </div>
+        <div class="dropdown dropdown-center" id="filter-container">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="View all selected filters."
+          >
+            Show Selected Filters
+          </button>
+          <ul class="dropdown-menu list">
+            <div>
+              <b>Celltype Filters: </b>
+              <div class="listFilters" id="cellFilters">
+                No celltype filters selected
+              </div>
+            </div>
+            <hr />
+            <div>
+              <b>Gene Filter: </b>
+              <p class="listFilters" id="geneFilters">No gene filters selected</p>
+            </div>
+            <hr />
+            <div>
+              <b>Atac Filter: </b>
+              <p class="listFilters" id="atacFilters">No ATAC filters selected</p>
+            </div>
+          </ul>
+        </div>
+        <div id="prefix-dropdown-container">
+          <div class="dropdown dropdown-center">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              title="Set the prefix."
+            ></button>
+            <ul class="dropdown-menu"></ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <!-- filter and toggles -->
-    <div class="filter"></div>
+    <div class="filter">
+      <div class="all-buttons">
+        <div class="desc-container">
+          <button type="button" data-target="cell-desc" class="toggles btn" id="toggleCellCheckbox">Celltype</button>
+          <div class="descBox" id="cell-desc">Click to filter by celltypes.</div>
+        </div>
+        <div class="checkbox-container" id="cellCheckbox" style="display: none">
+          <div class="input-elements">
+            <input type="text" class="textInput" id="cellTextbox" placeholder="Search celltype" />
+            <button type="button" class="clearButton btn btn-danger" id="cellClearButton" title="Clear all celltype filters.">Clear</button>
+          </div>
+          <div class="checkboxes" id="cellCheckboxes"></div>
+          <div class="notfound alert alert-danger alert-dismissible fade show" id="cellNotFound">No cell types of that name found.</div>
+        </div>
+        <div class="desc-container">
+          <button type="button" data-target="gene-desc" class="toggles btn" id="toggleGeneRadio">Gene</button>
+          <div class="descBox" id="gene-desc">Click to filter by genes</div>
+        </div>
+        <div class="checkbox-container" id="geneRadioContainer" style="display: none">
+          <div class="input-elements">
+            <input type="text" class="textInput" id="geneTextbox" placeholder="Search genes" />
+            <button type="button" class="clearButton btn btn-danger" id="geneClearButton" title="Clear all gene filters.">Clear</button>
+            <button type="button" class="modeButton btn btn-info" id="modeButton" value="1" title="Change between only being able to select 1 gene or 2 genes.">Single Gene Mode</button>
+          </div>
+          <div id="geneRadio">
+            <div id="selectedContainer"></div>
+            <div class="checkboxes" id="geneContainer"></div>
+          </div>
+          <div class="notfound alert alert-danger alert-dismissible fade show" id="geneNotFound">No genes of that name found.</div>
+        </div>
+        <div class="desc-container">
+          <button type="button" data-target="atac-desc" class="toggles btn" id="toggleATACRadio">ATAC</button>
+          <div class="descBox" id="atac-desc">Click to filter ATAC.</div>
+        </div>
+        <div class="checkbox-container" id="atacRadioContainer" style="display: none">
+          <div class="input-elements">
+            <input type="text" class="textInput" id="atacTextbox" placeholder="Search atac peaks" />
+            <button type="button" class="EnterButton btn btn-danger" id="atacEnterButton" title="Enter all atac filters.">Enter</button>
+            <button type="button" class="clearButton btn btn-danger" id="atacClearButton" title="Clear all atac filters.">Clear</button>
+          </div>
+          <div id="atacRadio">
+            <div class="checkboxes" id="atacContainer"></div>
+          </div>
+          <div class="notfound alert alert-danger alert-dismissible fade show" id="atacNotFound">No ATAC peaks of that position found.</div>
+        </div>
+        <div class="desc-container">
+          <button type="button" data-target="violin-desc" class="toggles btn" id="toggleViolinRadio">Violin</button>
+          <div class="descBox" id="violin-desc">Click to show violin plot.</div>
+        </div>
+        <div class="icon">
+          <div class="slider-input">
+            <button type="button" data-target="pointSizeBox" class="iconBtn btn" id="togglePointSize">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12ZM12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z" fill="currentColor"></path>
+              </svg>
+            </button>
+            <div class="descBox" id="pointSizeBox">Click to change dot size.</div>
+          </div>
+          <div id="pointSizeSliderBox" class="slider-container" style="display: none">
+            <input type="range" min="0.1" max="15" value="5" step="0.01" class="slider" id="pointSizeSlider" />
+            <div id="pointSizeSliderNumContainer" class="slider-container-inner">
+              <div class="slider-min-max" id="pointSizeMinId">Min: 0.10</div>
+              <input class="slider-value" id="pointSizeSliderValue" step="0.01" type="text" min="0.1" max="15" value="6" />
+              <div class="slider-min-max" id="pointSizeMaxId">Max: 15.00</div>
+            </div>
+          </div>
+          <div class="slider-input">
+            <button type="button" data-target="genePercentileBox" class="iconBtn btn" id="toggleGenePercentile">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7 3C8.86384 3 10.4299 4.27477 10.874 6H19V8H10.874C10.4299 9.72523 8.86384 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3ZM7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M17 20C15.1362 20 13.5701 18.7252 13.126 17H5V15H13.126C13.5701 13.2748 15.1362 12 17 12C19.2091 12 21 13.7909 21 16C21 18.2091 19.2091 20 17 20ZM17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z" fill="currentColor"></path>
+              </svg>
+            </button>
+            <div class="descBox" id="genePercentileBox">Click to change the maximum gene percentile.</div>
+          </div>
+          <div id="geneSliderBox" class="slider-container" style="display: none">
+            <input type="range" min="80" max="99.99" value="99" step="0.01" class="slider" id="geneSlider" />
+            <div id="geneSliderNumContainer" class="slider-container-inner">
+              <div class="slider-min-max" id="geneMinId">Min: 80.00</div>
+              <input class="slider-value" id="geneSliderValue" step="0.01" type="text" min="80" max="99.99" value="99" />
+              <div class="slider-min-max" id="geneMaxId">Max: 99.99</div>
+            </div>
+          </div>
+          <div class="slider-input">
+            <button type="button" class="iconBtn btn" id="warningInfo" style="pointer-events: none; cursor: default;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM11 7C11 6.44772 11.4477 6 12 6C12.5523 6 13 6.44772 13 7V13C13 13.5523 12.5523 14 12 14C11.4477 14 11 13.5523 11 13V7ZM12 18C12.5523 18 13 17.5523 13 17C13 16.4477 12.5523 16 12 16C11.4477 16 11 16.4477 11 17C11 17.5523 11.4477 18 12 18Z" fill="currentColor"></path>
+              </svg>
+            </button>
+            <div class="descBox" id="warningBox"><strong style="font-size: 14px;">Note on Imputed Data</strong><br>
+The displayed expression and chromatin accessibility patterns include computationally imputed predictions derived from integration of single-cell multiome and weMERFISH data. These represent estimated rather than directly measured signals. Users are advised to interpret imputed results with caution, especially for genes with low expression or variability, and to validate findings using measured or independent datasets when possible.</div>
+          </div>
+        </div>
+      </div>
+      <div class="violin-container" id="violinContainer">
+        <canvas id="violin-canvas" width="500" height="500"></canvas>
+      </div>
+      <div class="no-violin-container" id="noViolinContainer">No violin plot for selected gene.</div>
+    </div>
+
     <!-- showing container -->
-    <div class="showing-container"></div>
-    <!-- SVG images container -->
-    <!-- <div class="svg-images-container"></div> -->
+    <div class="showing-container">
+      <div class="showing-badge">
+        <span class="showing-label showing-celltype">Celltype</span>
+        <span class="showing-label showing-gene">Gene</span>
+        <span class="showing-label showing-atac">ATAC</span>
+      </div>
+      <div class="celltype-badges"></div>
+    </div>
 
     <!-- ColorBar -->
-    <div class="colorbar-wrapper" id="colorbar-wrapper"></div>
-    <div class="colorbar-wrapper2" id="colorbar-wrapper2"></div>
-    <div class="colorbar-wrapper3" id="colorbar-wrapper3"></div>
+    <div class="colorbar-wrapper" id="colorbar-wrapper">
+      <div class="colorbar-label" id="top-label">max</div>
+      <div class="colorbar"></div>
+      <div class="colorbar-label" id="bottom-label">min</div>
+    </div>
+    <div class="colorbar-wrapper2" id="colorbar-wrapper2">
+      <div class="colorbar-label-green" id="top-label-green">max</div>
+      <div class="colorbar-green"></div>
+      <div class="colorbar-label-green" id="bottom-label-green">min</div>
+    </div>
+    <div class="colorbar-wrapper3" id="colorbar-wrapper3">
+      <div class="colorbar-label-magenta" id="top-label-magenta">max</div>
+      <div class="colorbar-magenta"></div>
+      <div class="colorbar-label-magenta" id="bottom-label-magenta">min</div>
+    </div>
 
     <div id="tooltip-hover"></div>
 
