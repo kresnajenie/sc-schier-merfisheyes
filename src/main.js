@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(url.search);
 
     if (params.has("celltype")) {
-      const cells = JSON.parse(decodeURIComponent(params.get("celltype")));
+      const cells = JSON.parse(params.get("celltype"));
 
       // remove invalid celltypes
       const filteredCells = cells.filter((cell) =>
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (params.has("gene")) {
-      const genes = JSON.parse(decodeURIComponent(params.get("gene")));
+      const genes = JSON.parse(params.get("gene"));
 
       // remove invalid genes
       const filteredGenes = genes.filter((gene) =>

@@ -304,10 +304,7 @@ export class SceneInitializer {
 
       // Update URL params
       if (SelectedState.value.selectedCelltypes.length > 0) {
-        const newCelltype = encodeURIComponent(
-          JSON.stringify(SelectedState.value.selectedCelltypes)
-        );
-        params.set("celltype", newCelltype);
+        params.set("celltype", JSON.stringify(SelectedState.value.selectedCelltypes));
       } else {
         params.delete("celltype");
       }
@@ -338,10 +335,7 @@ export class SceneInitializer {
         ) {
           getInterval(firstElement);
         }
-        const newGenes = encodeURIComponent(
-          JSON.stringify(SelectedState.value.selectedGenes)
-        );
-        params.set("gene", newGenes);
+        params.set("gene", JSON.stringify(SelectedState.value.selectedGenes));
       } else {
         params.delete("gene");
       }
@@ -365,10 +359,7 @@ export class SceneInitializer {
       updateLoadingState(true);
       showAtacFilters();
       if (SelectedState.value.selectedAtacs.length > 0) {
-        const newAtacs = encodeURIComponent(
-          JSON.stringify(SelectedState.value.selectedAtacs)
-        );
-        params.set("atac", newAtacs);
+        params.set("atac", JSON.stringify(SelectedState.value.selectedAtacs));
       } else {
         params.delete("atac");
       }

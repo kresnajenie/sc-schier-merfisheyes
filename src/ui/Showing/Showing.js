@@ -60,7 +60,7 @@ export function updateBadge(label, gene_atac_value="") {
                 gene_atac_badge.title = select_value;
 
                 // Set background color based on index
-                gene_atac_badge.style.backgroundColor = index % 2 === 0 ? 'rgb(0, 200, 0)' : 'rgb(255, 0, 255)';
+                gene_atac_badge.style.backgroundColor = index % 2 === 0 ? 'rgb(255, 0, 255)' : 'rgb(0, 200, 0)';
 
                 const delete_button = createBadgeDelete(label, select_value, gene_atac_badge);
                 gene_atac_badge.appendChild(delete_button);
