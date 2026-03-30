@@ -13,9 +13,12 @@ canvas {
 footer {
   position: absolute;
   bottom: 0;
+  left: 0;
+  width: 100%;
   z-index: 999;
-
   opacity: 0.85;
+  box-sizing: border-box;
+  padding: 0 10px;
 }
 
 nav {
@@ -24,9 +27,26 @@ nav {
 
 footer p {
   margin: 5px;
-
   font-size: 13.5px;
   color: white;
+}
+
+@media (max-width: 768px) {
+  footer {
+    padding: 5px 8px;
+  }
+
+  footer p {
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 480px) {
+  footer p {
+    font-size: 10px;
+  }
 }
 a:link,
 a:visited {
